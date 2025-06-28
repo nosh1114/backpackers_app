@@ -1,0 +1,18 @@
+current directory: /Users/naoki/my_work/backpackers_app/backpackers_app/backend/.bundle/ruby/3.2.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+/Users/naoki/.rbenv/versions/3.2.8/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/naoki/my_work/backpackers_app/backpackers_app/backend/.bundle/ruby/3.2.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20250620-39584-c1o9rt sitelibdir\=./.gem.20250620-39584-c1o9rt clean
+
+current directory: /Users/naoki/my_work/backpackers_app/backpackers_app/backend/.bundle/ruby/3.2.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20250620-39584-c1o9rt sitelibdir\=./.gem.20250620-39584-c1o9rt
+compiling websocket_mask.c
+linking shared-object websocket_mask.bundle
+
+current directory: /Users/naoki/my_work/backpackers_app/backpackers_app/backend/.bundle/ruby/3.2.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20250620-39584-c1o9rt sitelibdir\=./.gem.20250620-39584-c1o9rt install
+/usr/bin/install -c -m 0755 websocket_mask.bundle ./.gem.20250620-39584-c1o9rt
+
+current directory: /Users/naoki/my_work/backpackers_app/backpackers_app/backend/.bundle/ruby/3.2.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20250620-39584-c1o9rt sitelibdir\=./.gem.20250620-39584-c1o9rt clean

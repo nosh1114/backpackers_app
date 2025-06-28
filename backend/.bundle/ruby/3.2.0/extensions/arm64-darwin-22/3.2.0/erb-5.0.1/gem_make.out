@@ -1,0 +1,18 @@
+current directory: /Users/naoki/my_work/backpackers_app/backpackers_app/backend/.bundle/ruby/3.2.0/gems/erb-5.0.1/ext/erb/escape
+/Users/naoki/.rbenv/versions/3.2.8/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/naoki/my_work/backpackers_app/backpackers_app/backend/.bundle/ruby/3.2.0/gems/erb-5.0.1/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20250620-39584-tksiek sitelibdir\=./.gem.20250620-39584-tksiek clean
+
+current directory: /Users/naoki/my_work/backpackers_app/backpackers_app/backend/.bundle/ruby/3.2.0/gems/erb-5.0.1/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20250620-39584-tksiek sitelibdir\=./.gem.20250620-39584-tksiek
+compiling escape.c
+linking shared-object erb/escape.bundle
+
+current directory: /Users/naoki/my_work/backpackers_app/backpackers_app/backend/.bundle/ruby/3.2.0/gems/erb-5.0.1/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20250620-39584-tksiek sitelibdir\=./.gem.20250620-39584-tksiek install
+/usr/bin/install -c -m 0755 escape.bundle ./.gem.20250620-39584-tksiek/erb
+
+current directory: /Users/naoki/my_work/backpackers_app/backpackers_app/backend/.bundle/ruby/3.2.0/gems/erb-5.0.1/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20250620-39584-tksiek sitelibdir\=./.gem.20250620-39584-tksiek clean
