@@ -50,6 +50,54 @@ module Types
     end
 
     # --------------------------
+    # プロフィール関連フィールド
+    # --------------------------
+    field :current_user_profile, Types::UserType,     null: true,
+          description: "Get current user profile"
+
+    def current_user_profile
+      context[:current_user]
+    end
+
+    # --------------------------
+    # 投稿関連フィールド
+    # --------------------------
+    field :posts, [Types::PostType],                  null: false,
+          description: "List all posts" do
+      argument :page,  Integer, required: false
+      argument :items, Integer, required: false
+      argument :country_code, String, required: false
+    end
+
+    def posts(page: nil, items: nil, country_code: nil)
+      scope = Post.includes(:user).order(created_at: :desc)
+      scope = scope.where(country_code: country_code) if country_code.present?
+      return scope unless page && items
+      scope.limit(items).offset(items * (page - 1))
+    end
+
+    field :post, Types::PostType,                     null: true,
+          description: "Find Post by ID" do
+      argument :id, ID, required: true
+    end
+
+    def post(id:)
+      Post.includes(:user).find_by(id: id)
+    end
+
+    # --------------------------
+    # 国関連フィールド
+    # --------------------------
+    field :countries, [Types::CountryType],           null: false,
+          description: "List all countries"
+
+    def countries
+      Countries::COUNTRIES.map do |country|
+        OpenStruct.new(code: country[:code], name: country[:name])
+      end
+    end
+
+    # --------------------------
     # テスト用フィールド
     # --------------------------
     field :test_field, String,                        null: false,

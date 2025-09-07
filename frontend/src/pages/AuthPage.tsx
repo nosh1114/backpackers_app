@@ -1,183 +1,298 @@
 import React, { useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Backpack, Eye, EyeOff, Mail, User, Lock } from 'lucide-react'
+import { useNavigate, useSearchParams, useLocation, Link } from 'react-router-dom'
+import { Backpack, Eye, EyeOff, Mail, User, Lock, ArrowRight } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 
 export function AuthPage() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const { signIn, signUp } = useAuth()
   
   const [mode, setMode] = useState(searchParams.get('mode') === 'signup' ? 'signup' : 'signin')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [username, setUsername] = useState('')
+  const [passwordConfirmation, setPasswordConfirmation] = useState('')
+  const [name, setName] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+
+  // ログイン後にリダイレクトするページを取得
+  const from = location.state?.from?.pathname || '/'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError('')
+    setSuccess('')
 
     try {
       if (mode === 'signup') {
-        if (!username.trim()) {
-          throw new Error('ユーザー名を入力してください')
-        }
-        await signUp(email, password, username)
-        navigate('/')
+        if (!validateSignup()) return
+        
+        await signUp(name, email, password)
+        setSuccess('アカウントが作成されました！')
+        setTimeout(() => {
+          navigate(from, { replace: true })
+        }, 1000)
       } else {
+        if (!validateSignin()) return
+        
         await signIn(email, password)
-        navigate('/')
+        setSuccess('ログインしました！')
+        setTimeout(() => {
+          navigate(from, { replace: true })
+        }, 1000)
       }
-    } catch (err: any) {
-      setError(err.message || 'エラーが発生しました')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'エラーが発生しました')
     } finally {
       setLoading(false)
     }
   }
 
+  const validateSignup = () => {
+    if (!name.trim()) {
+      setError('名前を入力してください')
+      return false
+    }
+    if (!email.trim()) {
+      setError('メールアドレスを入力してください')
+      return false
+    }
+    if (!password) {
+      setError('パスワードを入力してください')
+      return false
+    }
+    if (password.length < 8) {
+      setError('パスワードは8文字以上で入力してください')
+      return false
+    }
+    if (password !== passwordConfirmation) {
+      setError('パスワードが一致しません')
+      return false
+    }
+    return true
+  }
+
+  const validateSignin = () => {
+    if (!email.trim()) {
+      setError('メールアドレスを入力してください')
+      return false
+    }
+    if (!password) {
+      setError('パスワードを入力してください')
+      return false
+    }
+    return true
+  }
+
+  const toggleMode = () => {
+    setMode(mode === 'signin' ? 'signup' : 'signin')
+    setError('')
+    setSuccess('')
+    setEmail('')
+    setPassword('')
+    setPasswordConfirmation('')
+    setName('')
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-600 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Backpack className="h-10 w-10 text-white" />
-            <h1 className="text-2xl font-bold text-white">バックパッカーTIPS</h1>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        {/* ヘッダー */}
+        <div className="text-center">
+          <div className="flex justify-center">
+            <div className="bg-blue-600 p-3 rounded-full">
+              <Backpack className="h-8 w-8 text-white" />
+            </div>
           </div>
-          <p className="text-primary-100">旅の知恵を共有しよう</p>
+          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+            {mode === 'signin' ? 'ログイン' : 'アカウント作成'}
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            {mode === 'signin' 
+              ? 'アカウントにログインして旅の情報を共有しましょう' 
+              : '新しいアカウントを作成して旅の情報を共有しましょう'
+            }
+          </p>
         </div>
 
-        {/* Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">
-              {mode === 'signup' ? 'アカウント作成' : 'ログイン'}
-            </h2>
-            <p className="text-gray-600 mt-2">
-              {mode === 'signup' 
-                ? '新しいアカウントを作成してTIPSを共有しましょう'
-                : 'アカウントにログインしてTIPSにアクセス'
-              }
-            </p>
-          </div>
-
+        {/* フォーム */}
+        <div className="bg-white py-8 px-6 shadow-xl rounded-lg">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-              {error}
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
+          
+          {success && (
+            <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-md">
+              <p className="text-sm text-green-600">{success}</p>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             {mode === 'signup' && (
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
-                  ユーザー名
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                  名前
                 </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <div className="mt-1 relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <User className="h-5 w-5 text-gray-400" />
+                  </div>
                   <input
-                    id="username"
+                    id="name"
+                    name="name"
                     type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                    placeholder="旅人太郎"
                     required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="appearance-none relative block w-full pl-10 pr-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                    placeholder="お名前"
                   />
                 </div>
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 メールアドレス
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <div className="mt-1 relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-gray-400" />
+                </div>
                 <input
                   id="email"
+                  name="email"
                   type="email"
+                  autoComplete="email"
+                  required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                  placeholder="your@email.com"
-                  required
+                  className="appearance-none relative block w-full pl-10 pr-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  placeholder="メールアドレス"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 パスワード
               </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <div className="mt-1 relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
                 <input
                   id="password"
+                  name="password"
                   type={showPassword ? 'text' : 'password'}
+                  autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                  placeholder="••••••••"
-                  required
+                  className="appearance-none relative block w-full pl-10 pr-10 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  placeholder="パスワード"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
+                </div>
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-primary-500 to-secondary-500 text-white py-3 px-4 rounded-lg hover:from-primary-600 hover:to-secondary-600 focus:ring-4 focus:ring-primary-200 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-            >
-              {loading ? (
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="w-5 h-5 border-t-2 border-b-2 border-white rounded-full animate-spin"></div>
-                  <span>処理中...</span>
+            {mode === 'signup' && (
+              <div>
+                <label htmlFor="passwordConfirmation" className="block text-sm font-medium text-gray-700">
+                  パスワード確認
+                </label>
+                <div className="mt-1 relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    id="passwordConfirmation"
+                    name="passwordConfirmation"
+                    type={showPasswordConfirmation ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    required
+                    value={passwordConfirmation}
+                    onChange={(e) => setPasswordConfirmation(e.target.value)}
+                    className="appearance-none relative block w-full pl-10 pr-10 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                    placeholder="パスワード確認"
+                  />
+                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      {showPasswordConfirmation ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    </button>
+                  </div>
                 </div>
-              ) : (
-                mode === 'signup' ? 'アカウント作成' : 'ログイン'
-              )}
-            </button>
-          </form>
+              </div>
+            )}
 
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => setMode(mode === 'signup' ? 'signin' : 'signup')}
-              className="text-primary-600 hover:text-primary-700 font-medium transition-colors"
-            >
-              {mode === 'signup' 
-                ? '既にアカウントをお持ちの方はこちら'
-                : 'アカウントをお持ちでない方はこちら'
-              }
-            </button>
-          </div>
+            <div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {loading ? (
+                  <div className="flex items-center">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    {mode === 'signin' ? 'ログイン中...' : '作成中...'}
+                  </div>
+                ) : (
+                  <div className="flex items-center">
+                    {mode === 'signin' ? 'ログイン' : 'アカウント作成'}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </div>
+                )}
+              </button>
+            </div>
+
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={toggleMode}
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors"
+              >
+                {mode === 'signin' 
+                  ? 'アカウントをお持ちでない方はこちら' 
+                  : 'すでにアカウントをお持ちの方はこちら'
+                }
+              </button>
+            </div>
+          </form>
         </div>
 
-        {/* Features */}
-        <div className="mt-8 grid grid-cols-3 gap-4 text-center">
-          <div className="text-white">
-            <div className="text-2xl font-bold">10K+</div>
-            <div className="text-sm text-primary-200">ユーザー</div>
-          </div>
-          <div className="text-white">
-            <div className="text-2xl font-bold">50K+</div>
-            <div className="text-sm text-primary-200">TIPS</div>
-          </div>
-          <div className="text-white">
-            <div className="text-2xl font-bold">20+</div>
-            <div className="text-sm text-primary-200">対応国</div>
-          </div>
+        {/* フッター */}
+        <div className="text-center">
+          <p className="text-xs text-gray-500">
+            アカウントを作成することで、
+            <Link to="/terms" className="text-blue-600 hover:text-blue-800">
+              利用規約
+            </Link>
+            および
+            <Link to="/privacy" className="text-blue-600 hover:text-blue-800">
+              プライバシーポリシー
+            </Link>
+            に同意したものとみなされます。
+          </p>
         </div>
       </div>
     </div>

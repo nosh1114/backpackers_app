@@ -1,11 +1,24 @@
 Rails.application.routes.draw do
-  post "/graphql", to: "graphql#execute"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # API routes
+  namespace :api do
+    namespace :v1 do
+      # Auth routes
+      post 'auth/login', to: 'auth#login'
+      post 'auth/signup', to: 'auth#signup'
+      
+      # User routes
+      resources :users, only: [:index, :show, :create, :update, :destroy] do
+        get 'profile', on: :collection
+      end
+      
+      # Post routes
+      resources :posts, only: [:index, :show, :create, :update, :destroy]
+      
+      # Country routes
+      get 'countries', to: 'countries#index'
+    end
+  end
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Health check
   get "up" => "rails/health#show", as: :rails_health_check
-
-  # Defines the root path route ("/")
-  # root "posts#index"
 end

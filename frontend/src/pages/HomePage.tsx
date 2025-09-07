@@ -97,7 +97,7 @@ export function HomePage() {
                 <div className="text-primary-200">対応国数</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-bold mb-2">{}</div>
+                <div className="text-3xl sm:text-4xl font-bold mb-2">100</div>
                 <div className="text-primary-200">ユーザー数</div>
               </div>
               <div className="text-center">
@@ -159,11 +159,11 @@ export function HomePage() {
           <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4 sm:mb-0">国別TIPS</h2>
             <Link
-              to="/post"
+              to="/posts"
               className="flex items-center space-x-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-6 py-3 rounded-full hover:from-primary-600 hover:to-secondary-600 transition-all transform hover:scale-105"
             >
               <Plus className="h-5 w-5" />
-              <span>TIPS投稿</span>
+              <span>投稿一覧</span>
             </Link>
           </div>
 
