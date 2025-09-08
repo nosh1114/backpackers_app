@@ -6779,3 +6779,163 @@ Processing by ApiV1CountriesController#index as */*
 Completed 200 OK in 1ms (Views: 0.4ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
 
 
+Started POST "/api/v1/auth/login" for ::1 at 2025-09-08 19:59:40 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (3.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='BackpackersApp'*/[0m
+Processing by ApiV1AuthController#login as */*
+  Parameters: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "api_v1_auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (4.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'nao.shiba.2003@gmail.com' LIMIT 1 /*action='login',application='BackpackersApp',controller='api_v1_auth'*/[0m
+  ↳ app/controllers/api_v1_auth_controller.rb:6:in `login'
+Completed 200 OK in 620ms (Views: 0.2ms | ActiveRecord: 50.9ms (1 query, 0 cached) | GC: 3.7ms)
+
+
+Started GET "/api/v1/users/profile" for ::1 at 2025-09-08 19:59:41 +0900
+Processing by ApiV1UsersController#profile as */*
+  Parameters: {"api_v1_user"=>{}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 10 LIMIT 1 /*action='profile',application='BackpackersApp',controller='api_v1_users'*/[0m
+  ↳ app/controllers/api_v1_users_controller.rb:125:in `authenticate_user'
+Completed 200 OK in 2ms (Views: 0.2ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/api/v1/users/profile" for ::1 at 2025-09-08 19:59:56 +0900
+Started GET "/api/v1/posts?page=1&per_page=10" for ::1 at 2025-09-08 19:59:56 +0900
+Processing by ApiV1UsersController#profile as */*
+  Parameters: {"api_v1_user"=>{}}
+  [1m[36mUser Load (2.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 10 LIMIT 1 /*action='profile',application='BackpackersApp',controller='api_v1_users'*/[0m
+  ↳ app/controllers/api_v1_users_controller.rb:125:in `authenticate_user'
+Completed 200 OK in 10ms (Views: 0.3ms | ActiveRecord: 2.9ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/users/profile" for ::1 at 2025-09-08 19:59:56 +0900
+Processing by ApiV1PostsController#index as */*
+  Parameters: {"page"=>"1", "per_page"=>"10", "api_v1_post"=>{}}
+  [1m[36mPost Load (3.6ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."created_at" DESC LIMIT 10 OFFSET 0 /*action='index',application='BackpackersApp',controller='api_v1_posts'*/[0m
+  ↳ app/controllers/api_v1_posts_controller.rb:16:in `map'
+Processing by ApiV1UsersController#profile as */*
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IN (11, 10) /*action='index',application='BackpackersApp',controller='api_v1_posts'*/[0m
+  Parameters: {"api_v1_user"=>{}}
+  ↳ app/controllers/api_v1_posts_controller.rb:16:in `map'
+Completed 200 OK in 63ms (Views: 0.2ms | ActiveRecord: 7.9ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/posts?page=1&per_page=10" for ::1 at 2025-09-08 19:59:56 +0900
+  [1m[36mUser Load (21.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 10 LIMIT 1 /*action='profile',application='BackpackersApp',controller='api_v1_users'*/[0m
+  ↳ app/controllers/api_v1_users_controller.rb:125:in `authenticate_user'
+Completed 200 OK in 23ms (Views: 0.1ms | ActiveRecord: 29.8ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Processing by ApiV1PostsController#index as */*
+  Parameters: {"page"=>"1", "per_page"=>"10", "api_v1_post"=>{}}
+  [1m[36mPost Load (1.3ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."created_at" DESC LIMIT 10 OFFSET 0 /*action='index',application='BackpackersApp',controller='api_v1_posts'*/[0m
+  ↳ app/controllers/api_v1_posts_controller.rb:16:in `map'
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IN (11, 10) /*action='index',application='BackpackersApp',controller='api_v1_posts'*/[0m
+  ↳ app/controllers/api_v1_posts_controller.rb:16:in `map'
+Completed 200 OK in 4ms (Views: 0.2ms | ActiveRecord: 1.9ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/posts?page=1&per_page=20" for ::1 at 2025-09-08 20:00:00 +0900
+Processing by ApiV1PostsController#index as */*
+  Parameters: {"page"=>"1", "per_page"=>"20", "api_v1_post"=>{}}
+  [1m[36mPost Load (0.5ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."created_at" DESC LIMIT 20 OFFSET 0 /*action='index',application='BackpackersApp',controller='api_v1_posts'*/[0m
+  ↳ app/controllers/api_v1_posts_controller.rb:16:in `map'
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IN (11, 10) /*action='index',application='BackpackersApp',controller='api_v1_posts'*/[0m
+  ↳ app/controllers/api_v1_posts_controller.rb:16:in `map'
+Completed 200 OK in 3ms (Views: 0.2ms | ActiveRecord: 0.8ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/posts?page=1&per_page=20" for ::1 at 2025-09-08 20:00:00 +0900
+Started GET "/api/v1/countries" for ::1 at 2025-09-08 20:00:00 +0900
+Processing by ApiV1PostsController#index as */*
+  Parameters: {"page"=>"1", "per_page"=>"20", "api_v1_post"=>{}}
+  [1m[36mPost Load (0.4ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."created_at" DESC LIMIT 20 OFFSET 0 /*action='index',application='BackpackersApp',controller='api_v1_posts'*/[0m
+  ↳ app/controllers/api_v1_posts_controller.rb:16:in `map'
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IN (11, 10) /*action='index',application='BackpackersApp',controller='api_v1_posts'*/[0m
+  ↳ app/controllers/api_v1_posts_controller.rb:16:in `map'
+Completed 200 OK in 4ms (Views: 0.4ms | ActiveRecord: 0.7ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Processing by ApiV1CountriesController#index as */*
+  Parameters: {"api_v1_country"=>{}}
+Completed 200 OK in 0ms (Views: 0.4ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/countries" for ::1 at 2025-09-08 20:00:00 +0900
+Processing by ApiV1CountriesController#index as */*
+  Parameters: {"api_v1_country"=>{}}
+Completed 200 OK in 0ms (Views: 0.3ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/countries" for ::1 at 2025-09-08 20:02:05 +0900
+Processing by ApiV1CountriesController#index as */*
+Completed 200 OK in 1ms (Views: 0.7ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/users/profile" for ::1 at 2025-09-08 20:02:35 +0900
+Processing by ApiV1UsersController#profile as */*
+  Parameters: {"api_v1_user"=>{}}
+  [1m[36mUser Load (1.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 10 LIMIT 1 /*action='profile',application='BackpackersApp',controller='api_v1_users'*/[0m
+  ↳ app/controllers/api_v1_users_controller.rb:125:in `authenticate_user'
+Completed 200 OK in 10ms (Views: 1.3ms | ActiveRecord: 1.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/users/profile" for ::1 at 2025-09-08 20:02:35 +0900
+Processing by ApiV1UsersController#profile as */*
+  Parameters: {"api_v1_user"=>{}}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 10 LIMIT 1 /*action='profile',application='BackpackersApp',controller='api_v1_users'*/[0m
+  ↳ app/controllers/api_v1_users_controller.rb:125:in `authenticate_user'
+Completed 200 OK in 3ms (Views: 0.2ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/users/profile" for ::1 at 2025-09-08 20:03:51 +0900
+Processing by ApiV1UsersController#profile as */*
+  Parameters: {"api_v1_user"=>{}}
+  [1m[36mUser Load (1.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 10 LIMIT 1 /*action='profile',application='BackpackersApp',controller='api_v1_users'*/[0m
+  ↳ app/controllers/api_v1_users_controller.rb:125:in `authenticate_user'
+Completed 200 OK in 10ms (Views: 0.4ms | ActiveRecord: 1.8ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/users/profile" for ::1 at 2025-09-08 20:03:51 +0900
+Processing by ApiV1UsersController#profile as */*
+  Parameters: {"api_v1_user"=>{}}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 10 LIMIT 1 /*action='profile',application='BackpackersApp',controller='api_v1_users'*/[0m
+  ↳ app/controllers/api_v1_users_controller.rb:125:in `authenticate_user'
+Completed 200 OK in 2ms (Views: 0.1ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/countries" for ::1 at 2025-09-08 20:04:51 +0900
+Processing by ApiV1CountriesController#index as */*
+Completed 200 OK in 6ms (Views: 1.7ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/users/profile" for ::1 at 2025-09-08 20:06:57 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (1.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='BackpackersApp'*/[0m
+Processing by ApiV1UsersController#profile as */*
+  Parameters: {"api_v1_user"=>{}}
+  [1m[36mUser Load (1.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 10 LIMIT 1 /*action='profile',application='BackpackersApp',controller='api_v1_users'*/[0m
+  ↳ app/controllers/api_v1_users_controller.rb:125:in `authenticate_user'
+Completed 200 OK in 93ms (Views: 0.3ms | ActiveRecord: 24.8ms (1 query, 0 cached) | GC: 8.3ms)
+
+
+Started GET "/api/v1/users/profile" for ::1 at 2025-09-08 20:06:58 +0900
+Processing by ApiV1UsersController#profile as */*
+  Parameters: {"api_v1_user"=>{}}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 10 LIMIT 1 /*action='profile',application='BackpackersApp',controller='api_v1_users'*/[0m
+  ↳ app/controllers/api_v1_users_controller.rb:125:in `authenticate_user'
+Completed 200 OK in 2ms (Views: 0.1ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.4ms)
+
+
+Started POST "/api/v1/auth/login" for ::1 at 2025-09-08 20:07:00 +0900
+Processing by ApiV1AuthController#login as */*
+  Parameters: {"email"=>"[FILTERED]", "password"=>"[FILTERED]", "api_v1_auth"=>{"email"=>"[FILTERED]", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'nao.shiba.2003@gmail.com' LIMIT 1 /*action='login',application='BackpackersApp',controller='api_v1_auth'*/[0m
+  ↳ app/controllers/api_v1_auth_controller.rb:6:in `login'
+Completed 200 OK in 733ms (Views: 0.2ms | ActiveRecord: 0.7ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/users/profile" for ::1 at 2025-09-08 20:07:01 +0900
+Processing by ApiV1UsersController#profile as */*
+  Parameters: {"api_v1_user"=>{}}
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 10 LIMIT 1 /*action='profile',application='BackpackersApp',controller='api_v1_users'*/[0m
+  ↳ app/controllers/api_v1_users_controller.rb:125:in `authenticate_user'
+Completed 200 OK in 3ms (Views: 0.2ms | ActiveRecord: 0.7ms (1 query, 0 cached) | GC: 0.1ms)
+
+
