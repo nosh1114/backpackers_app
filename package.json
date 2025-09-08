@@ -1,0 +1,15 @@
+{
+  "name": "backpackers-app",
+  "version": "1.0.0",
+  "description": "Backpackers App - Frontend and Backend Development",
+  "scripts": {
+    "dev": "foreman start -f Procfile.dev",
+    "up": "foreman start -f Procfile.dev",
+    "down": "pkill -f foreman || true",
+    "install-all": "cd frontend && npm install && cd ../backend && bundle install",
+    "setup": "npm run install-all && cd backend && rails db:create && rails db:migrate"
+  },
+  "devDependencies": {
+    "foreman": "^3.0.1"
+  }
+}
