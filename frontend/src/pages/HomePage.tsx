@@ -97,7 +97,7 @@ export function HomePage() {
                 <div className="text-primary-200">対応国数</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-bold mb-2">100</div>
+                <div className="text-3xl sm:text-4xl font-bold mb-2"></div>
                 <div className="text-primary-200">ユーザー数</div>
               </div>
               <div className="text-center">

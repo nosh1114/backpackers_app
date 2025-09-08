@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { useSearchParams, Link } from 'react-router-dom'
-import { REQUEST_PASSWORD_RESET, RESET_PASSWORD } from '../graphql/mutations'
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react'
 
 const PasswordResetPage: React.FC = () => {

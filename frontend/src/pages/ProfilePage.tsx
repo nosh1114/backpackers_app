@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import { GET_CURRENT_USER_PROFILE, GET_POSTS } from '../graphql/queries';
-import { UPDATE_PROFILE } from '../graphql/mutations';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { apiClient } from '../lib/api';
 import { User, Edit, Save, X, Globe, MapPin, Camera, Plus, Calendar, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -10,26 +8,34 @@ interface UserProfile {
   id: string;
   name: string;
   email: string;
-  createdAt: string;
-  updatedAt: string;
-  bio: string;
-  location: string;
-  website: string;
-  avatarUrl: string;
+  created_at: string;
+  updated_at: string;
+  bio?: string;
+  location?: string;
+  website?: string;
+  avatar_url?: string;
 }
 
 interface Post {
   id: string;
   title: string;
   content: string;
-  countryCode: string;
-  createdAt: string;
+  country_code: string;
+  created_at: string;
+  user: {
+    id: string;
+    name: string;
+    avatar_url?: string;
+  };
 }
 
 const ProfilePage: React.FC = () => {
   const { user, refreshUser } = useAuth();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [postsLoading, setPostsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -40,31 +46,63 @@ const ProfilePage: React.FC = () => {
     bio: '',
     location: '',
     website: '',
-    avatarUrl: ''
+    avatar_url: ''
   });
 
-  const { data, loading: queryLoading, refetch } = useQuery<{ currentUserProfile: UserProfile }>(GET_CURRENT_USER_PROFILE, {
-    onCompleted: (data) => {
-      if (data?.currentUserProfile) {
-        const profile = data.currentUserProfile;
-        setFormData({
-          name: profile.name || '',
-          email: profile.email || '',
-          bio: profile.bio || '',
-          location: profile.location || '',
-          website: profile.website || '',
-          avatarUrl: profile.avatarUrl || ''
-        });
+  // プロフィール情報を取得
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        const response = await apiClient.getCurrentUser();
+        
+        if (response.data) {
+          const profileData = response.data.user;
+          setProfile(profileData);
+          setFormData({
+            name: profileData.name || '',
+            email: profileData.email || '',
+            bio: profileData.bio || '',
+            location: profileData.location || '',
+            website: profileData.website || '',
+            avatar_url: profileData.avatar_url || ''
+          });
+        } else {
+          setError(response.error || 'プロフィールの取得に失敗しました');
+        }
+      } catch (err) {
+        setError('プロフィールの取得に失敗しました');
+      } finally {
+        setLoading(false);
       }
-    }
-  });
+    };
+
+    fetchProfile();
+  }, []);
 
   // ユーザーの投稿を取得
-  const { data: postsData, loading: postsLoading } = useQuery<{ posts: Post[] }>(GET_POSTS, {
-    variables: { page: 1, items: 10 }
-  });
+  useEffect(() => {
+    const fetchUserPosts = async () => {
+      try {
+        setPostsLoading(true);
+        const response = await apiClient.getPosts({ page: 1, per_page: 10 });
+        
+        if (response.data) {
+          // 現在のユーザーの投稿のみをフィルタリング
+          const currentUserPosts = response.data.posts.filter(post => post.user.id === user?.id);
+          setUserPosts(currentUserPosts);
+        }
+      } catch (err) {
+        console.error('投稿の取得に失敗しました:', err);
+      } finally {
+        setPostsLoading(false);
+      }
+    };
 
-  const [updateProfile] = useMutation(UPDATE_PROFILE);
+    if (user) {
+      fetchUserPosts();
+    }
+  }, [user]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -80,42 +118,39 @@ const ProfilePage: React.FC = () => {
     setSuccess('');
 
     try {
-      const { data } = await updateProfile({
-        variables: {
-          name: formData.name,
-          email: formData.email,
-          bio: formData.bio,
-          location: formData.location,
-          website: formData.website,
-          avatarUrl: formData.avatarUrl
-        }
+      const response = await apiClient.updateUser({
+        name: formData.name,
+        email: formData.email,
+        bio: formData.bio,
+        location: formData.location,
+        website: formData.website,
+        avatar_url: formData.avatar_url
       });
 
-      if (data?.updateProfile?.errors && data.updateProfile.errors.length > 0) {
-        setError(data.updateProfile.errors.join(', '));
-      } else {
+      if (response.data) {
         setSuccess('プロフィールが更新されました');
         setIsEditing(false);
+        setProfile(response.data.user);
         await refreshUser();
-        refetch();
+      } else {
+        setError(response.error || 'プロフィールの更新に失敗しました');
       }
-    } catch (err: any) {
-      setError(err.message || 'プロフィールの更新に失敗しました');
+    } catch (err) {
+      setError('プロフィールの更新に失敗しました');
     } finally {
       setLoading(false);
     }
   };
 
   const handleCancel = () => {
-    if (data?.currentUserProfile) {
-      const profile = data.currentUserProfile;
+    if (profile) {
       setFormData({
         name: profile.name || '',
         email: profile.email || '',
         bio: profile.bio || '',
         location: profile.location || '',
         website: profile.website || '',
-        avatarUrl: profile.avatarUrl || ''
+        avatar_url: profile.avatar_url || ''
       });
     }
     setIsEditing(false);
@@ -132,7 +167,7 @@ const ProfilePage: React.FC = () => {
     });
   };
 
-  if (queryLoading) {
+  if (loading) {
     return (
       <div className="max-w-4xl mx-auto p-6">
         <div className="flex justify-center items-center min-h-64">
@@ -141,9 +176,6 @@ const ProfilePage: React.FC = () => {
       </div>
     );
   }
-
-  const profile = data?.currentUserProfile;
-  const userPosts = postsData?.posts?.filter(post => post.user?.id === profile?.id) || [];
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -250,8 +282,8 @@ const ProfilePage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">アバターURL</label>
                   <input
                     type="url"
-                    name="avatarUrl"
-                    value={formData.avatarUrl}
+                    name="avatar_url"
+                    value={formData.avatar_url}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="https://example.com/avatar.jpg"
@@ -279,9 +311,9 @@ const ProfilePage: React.FC = () => {
               <div className="space-y-4">
                 <div className="flex items-center space-x-4">
                   <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                    {profile?.avatarUrl ? (
+                    {profile?.avatar_url ? (
                       <img
-                        src={profile.avatarUrl}
+                        src={profile.avatar_url}
                         alt={profile.name}
                         className="w-16 h-16 rounded-full object-cover"
                       />
@@ -323,7 +355,7 @@ const ProfilePage: React.FC = () => {
                   )}
                   <div className="flex items-center space-x-2 text-gray-600">
                     <Calendar className="h-4 w-4" />
-                    <span>登録日: {formatDate(profile?.createdAt || '')}</span>
+                    <span>登録日: {formatDate(profile?.created_at || '')}</span>
                   </div>
                 </div>
               </div>
@@ -361,9 +393,9 @@ const ProfilePage: React.FC = () => {
                       }
                     </p>
                     <div className="flex items-center justify-between text-sm text-gray-500">
-                      <span>{formatDate(post.createdAt)}</span>
+                      <span>{formatDate(post.created_at)}</span>
                       <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                        {post.countryCode}
+                        {post.country_code}
                       </span>
                     </div>
                   </div>
