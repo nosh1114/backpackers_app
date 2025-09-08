@@ -6739,3 +6739,43 @@ Processing by ApiV1CountriesController#index as */*
 Completed 200 OK in 1ms (Views: 0.5ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
 
 
+Started GET "/api/v1/countries" for ::1 at 2025-09-08 09:24:34 +0900
+Processing by ApiV1CountriesController#index as */*
+  Parameters: {"api_v1_country"=>{}}
+Completed 200 OK in 1ms (Views: 0.8ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/countries" for ::1 at 2025-09-08 09:24:34 +0900
+Processing by ApiV1CountriesController#index as */*
+  Parameters: {"api_v1_country"=>{}}
+Completed 200 OK in 1ms (Views: 0.6ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/users/profile" for ::1 at 2025-09-08 09:24:37 +0900
+Processing by ApiV1UsersController#profile as */*
+  Parameters: {"api_v1_user"=>{}}
+  [1m[36mUser Load (1.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 10 LIMIT 1 /*action='profile',application='BackpackersApp',controller='api_v1_users'*/[0m
+  ↳ app/controllers/api_v1_users_controller.rb:125:in `authenticate_user'
+Completed 200 OK in 12ms (Views: 0.9ms | ActiveRecord: 1.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/users/profile" for ::1 at 2025-09-08 09:24:37 +0900
+Processing by ApiV1UsersController#profile as */*
+  Parameters: {"api_v1_user"=>{}}
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 10 LIMIT 1 /*action='profile',application='BackpackersApp',controller='api_v1_users'*/[0m
+  ↳ app/controllers/api_v1_users_controller.rb:125:in `authenticate_user'
+Completed 200 OK in 3ms (Views: 0.2ms | ActiveRecord: 0.7ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/countries" for ::1 at 2025-09-08 09:24:37 +0900
+Processing by ApiV1CountriesController#index as */*
+  Parameters: {"api_v1_country"=>{}}
+Completed 200 OK in 1ms (Views: 0.7ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/countries" for ::1 at 2025-09-08 09:24:37 +0900
+Processing by ApiV1CountriesController#index as */*
+  Parameters: {"api_v1_country"=>{}}
+Completed 200 OK in 1ms (Views: 0.4ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
