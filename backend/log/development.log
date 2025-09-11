@@ -6939,3 +6939,1010 @@ Processing by ApiV1UsersController#profile as */*
 Completed 200 OK in 3ms (Views: 0.2ms | ActiveRecord: 0.7ms (1 query, 0 cached) | GC: 0.1ms)
 
 
+  [1m[35m (1.5ms)[0m  [1m[34mSELECT pg_try_advisory_lock(8059343574570391110) /*application='BackpackersApp'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (3.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='BackpackersApp'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (3.5ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='BackpackersApp'*/[0m
+Migrating to CreateCountries (20250908203027)
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[35m (35.8ms)[0m  [1m[35mCREATE TABLE "countries" ("id" bigserial primary key, "code" character varying NOT NULL, "name" character varying NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL) /*application='BackpackersApp'*/[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_countries_on_code" ON "countries" ("code") /*application='BackpackersApp'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20250908203027') RETURNING "version" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT pg_advisory_unlock(8059343574570391110) /*application='BackpackersApp'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (2.0ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'iceland' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'iceland' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (3.0ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('iceland', 'アイスランド', '2025-09-11 00:03:26.066623', '2025-09-11 00:03:26.066623') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.9ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'ireland' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'ireland' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('ireland', 'アイルランド', '2025-09-11 00:03:26.083374', '2025-09-11 00:03:26.083374') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'azerbaijan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'azerbaijan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('azerbaijan', 'アゼルバイジャン', '2025-09-11 00:03:26.088798', '2025-09-11 00:03:26.088798') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'afghanistan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'afghanistan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('afghanistan', 'アフガニスタン', '2025-09-11 00:03:26.094557', '2025-09-11 00:03:26.094557') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'united_states' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'united_states' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('united_states', 'アメリカ合衆国', '2025-09-11 00:03:26.100341', '2025-09-11 00:03:26.100341') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'united_arab_emirates' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (20.4ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'united_arab_emirates' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('united_arab_emirates', 'アラブ首長国連邦', '2025-09-11 00:03:26.124658', '2025-09-11 00:03:26.124658') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'algeria' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'algeria' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('algeria', 'アルジェリア', '2025-09-11 00:03:26.130070', '2025-09-11 00:03:26.130070') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'argentina' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'argentina' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('argentina', 'アルゼンチン', '2025-09-11 00:03:26.134544', '2025-09-11 00:03:26.134544') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'albania' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'albania' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('albania', 'アルバニア', '2025-09-11 00:03:26.139080', '2025-09-11 00:03:26.139080') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'armenia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'armenia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('armenia', 'アルメニア', '2025-09-11 00:03:26.143251', '2025-09-11 00:03:26.143251') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'angola' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'angola' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('angola', 'アンゴラ', '2025-09-11 00:03:26.148035', '2025-09-11 00:03:26.148035') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'antigua_and_barbuda' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'antigua_and_barbuda' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('antigua_and_barbuda', 'アンティグア・バーブーダ', '2025-09-11 00:03:26.153034', '2025-09-11 00:03:26.153034') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'andorra' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'andorra' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('andorra', 'アンドラ', '2025-09-11 00:03:26.157227', '2025-09-11 00:03:26.157227') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'yemen' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'yemen' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('yemen', 'イエメン', '2025-09-11 00:03:26.161168', '2025-09-11 00:03:26.161168') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'united_kingdom' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'united_kingdom' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('united_kingdom', 'イギリス', '2025-09-11 00:03:26.165422', '2025-09-11 00:03:26.165422') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'israel' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'israel' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('israel', 'イスラエル', '2025-09-11 00:03:26.169618', '2025-09-11 00:03:26.169618') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'italy' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (2.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'italy' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('italy', 'イタリア', '2025-09-11 00:03:26.174932', '2025-09-11 00:03:26.174932') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'iraq' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'iraq' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('iraq', 'イラク', '2025-09-11 00:03:26.180063', '2025-09-11 00:03:26.180063') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'iran' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'iran' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('iran', 'イラン', '2025-09-11 00:03:26.184625', '2025-09-11 00:03:26.184625') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'india' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'india' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('india', 'インド', '2025-09-11 00:03:26.189307', '2025-09-11 00:03:26.189307') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'indonesia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'indonesia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('indonesia', 'インドネシア', '2025-09-11 00:03:26.194035', '2025-09-11 00:03:26.194035') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'uganda' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'uganda' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('uganda', 'ウガンダ', '2025-09-11 00:03:26.198140', '2025-09-11 00:03:26.198140') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'ukraine' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'ukraine' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('ukraine', 'ウクライナ', '2025-09-11 00:03:26.202206', '2025-09-11 00:03:26.202206') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'uzbekistan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'uzbekistan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('uzbekistan', 'ウズベキスタン', '2025-09-11 00:03:26.206604', '2025-09-11 00:03:26.206604') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'uruguay' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'uruguay' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('uruguay', 'ウルグアイ', '2025-09-11 00:03:26.210591', '2025-09-11 00:03:26.210591') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'ecuador' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'ecuador' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('ecuador', 'エクアドル', '2025-09-11 00:03:26.214772', '2025-09-11 00:03:26.214772') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'egypt' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'egypt' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('egypt', 'エジプト', '2025-09-11 00:03:26.220956', '2025-09-11 00:03:26.220956') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'estonia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'estonia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('estonia', 'エストニア', '2025-09-11 00:03:26.226744', '2025-09-11 00:03:26.226744') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'eswatini' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'eswatini' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('eswatini', 'エスワティニ', '2025-09-11 00:03:26.231621', '2025-09-11 00:03:26.231621') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'ethiopia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'ethiopia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('ethiopia', 'エチオピア', '2025-09-11 00:03:26.236779', '2025-09-11 00:03:26.236779') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'eritrea' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'eritrea' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('eritrea', 'エリトリア', '2025-09-11 00:03:26.241396', '2025-09-11 00:03:26.241396') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'el_salvador' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'el_salvador' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('el_salvador', 'エルサルバドル', '2025-09-11 00:03:26.245721', '2025-09-11 00:03:26.245721') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'oman' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'oman' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('oman', 'オマーン', '2025-09-11 00:03:26.250181', '2025-09-11 00:03:26.250181') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'netherlands' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'netherlands' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('netherlands', 'オランダ', '2025-09-11 00:03:26.255501', '2025-09-11 00:03:26.255501') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'australia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'australia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('australia', 'オーストラリア', '2025-09-11 00:03:26.260136', '2025-09-11 00:03:26.260136') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'austria' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'austria' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('austria', 'オーストリア', '2025-09-11 00:03:26.264751', '2025-09-11 00:03:26.264751') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'kazakhstan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'kazakhstan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('kazakhstan', 'カザフスタン', '2025-09-11 00:03:26.268946', '2025-09-11 00:03:26.268946') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'qatar' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'qatar' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('qatar', 'カタール', '2025-09-11 00:03:26.273176', '2025-09-11 00:03:26.273176') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'canada' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'canada' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('canada', 'カナダ', '2025-09-11 00:03:26.278717', '2025-09-11 00:03:26.278717') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'cameroon' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'cameroon' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('cameroon', 'カメルーン', '2025-09-11 00:03:26.283403', '2025-09-11 00:03:26.283403') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'cambodia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'cambodia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('cambodia', 'カンボジア', '2025-09-11 00:03:26.288505', '2025-09-11 00:03:26.288505') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'cape_verde' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'cape_verde' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.1ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('cape_verde', 'カーボベルデ', '2025-09-11 00:03:26.292917', '2025-09-11 00:03:26.292917') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'guyana' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'guyana' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('guyana', 'ガイアナ', '2025-09-11 00:03:26.297085', '2025-09-11 00:03:26.297085') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'gabon' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'gabon' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.1ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('gabon', 'ガボン', '2025-09-11 00:03:26.301308', '2025-09-11 00:03:26.301308') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'gambia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'gambia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('gambia', 'ガンビア', '2025-09-11 00:03:26.306196', '2025-09-11 00:03:26.306196') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'ghana' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'ghana' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.1ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('ghana', 'ガーナ', '2025-09-11 00:03:26.310579', '2025-09-11 00:03:26.310579') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'cyprus' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'cyprus' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('cyprus', 'キプロス', '2025-09-11 00:03:26.315107', '2025-09-11 00:03:26.315107') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'cuba' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'cuba' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.5ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('cuba', 'キューバ', '2025-09-11 00:03:26.319319', '2025-09-11 00:03:26.319319') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'kiribati' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'kiribati' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('kiribati', 'キリバス', '2025-09-11 00:03:26.324093', '2025-09-11 00:03:26.324093') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'kyrgyzstan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'kyrgyzstan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('kyrgyzstan', 'キルギス', '2025-09-11 00:03:26.328623', '2025-09-11 00:03:26.328623') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'guinea' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'guinea' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('guinea', 'ギニア', '2025-09-11 00:03:26.334454', '2025-09-11 00:03:26.334454') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'guinea_bissau' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'guinea_bissau' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('guinea_bissau', 'ギニアビサウ', '2025-09-11 00:03:26.339637', '2025-09-11 00:03:26.339637') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'greece' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'greece' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('greece', 'ギリシャ', '2025-09-11 00:03:26.344382', '2025-09-11 00:03:26.344382') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'kuwait' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'kuwait' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('kuwait', 'クウェート', '2025-09-11 00:03:26.348840', '2025-09-11 00:03:26.348840') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'croatia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'croatia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('croatia', 'クロアチア', '2025-09-11 00:03:26.353205', '2025-09-11 00:03:26.353205') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'guatemala' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'guatemala' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('guatemala', 'グアテマラ', '2025-09-11 00:03:26.358103', '2025-09-11 00:03:26.358103') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'grenada' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'grenada' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('grenada', 'グレナダ', '2025-09-11 00:03:26.362446', '2025-09-11 00:03:26.362446') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'kenya' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'kenya' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('kenya', 'ケニア', '2025-09-11 00:03:26.366685', '2025-09-11 00:03:26.366685') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'costa_rica' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'costa_rica' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('costa_rica', 'コスタリカ', '2025-09-11 00:03:26.370936', '2025-09-11 00:03:26.370936') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'comoros' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'comoros' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('comoros', 'コモロ', '2025-09-11 00:03:26.375463', '2025-09-11 00:03:26.375463') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'colombia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'colombia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('colombia', 'コロンビア', '2025-09-11 00:03:26.379810', '2025-09-11 00:03:26.379810') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'congo' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'congo' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('congo', 'コンゴ共和国', '2025-09-11 00:03:26.385275', '2025-09-11 00:03:26.385275') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'congo_democratic_republic' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'congo_democratic_republic' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('congo_democratic_republic', 'コンゴ民主共和国', '2025-09-11 00:03:26.391190', '2025-09-11 00:03:26.391190') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'cote_d_ivoire' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'cote_d_ivoire' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('cote_d_ivoire', 'コートジボワール', '2025-09-11 00:03:26.395595', '2025-09-11 00:03:26.395595') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'saudi_arabia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'saudi_arabia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('saudi_arabia', 'サウジアラビア', '2025-09-11 00:03:26.400063', '2025-09-11 00:03:26.400063') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'samoa' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'samoa' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('samoa', 'サモア', '2025-09-11 00:03:26.405039', '2025-09-11 00:03:26.405039') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'sao_tome_and_principe' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'sao_tome_and_principe' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('sao_tome_and_principe', 'サントメ・プリンシペ', '2025-09-11 00:03:26.409477', '2025-09-11 00:03:26.409477') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'san_marino' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'san_marino' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.9ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('san_marino', 'サンマリノ', '2025-09-11 00:03:26.414001', '2025-09-11 00:03:26.414001') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'zambia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'zambia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('zambia', 'ザンビア', '2025-09-11 00:03:26.419447', '2025-09-11 00:03:26.419447') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'sierra_leone' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'sierra_leone' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('sierra_leone', 'シエラレオネ', '2025-09-11 00:03:26.424233', '2025-09-11 00:03:26.424233') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'syria' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'syria' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('syria', 'シリア', '2025-09-11 00:03:26.428616', '2025-09-11 00:03:26.428616') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'singapore' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'singapore' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.1ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('singapore', 'シンガポール', '2025-09-11 00:03:26.432947', '2025-09-11 00:03:26.432947') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.4ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'djibouti' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'djibouti' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('djibouti', 'ジブチ', '2025-09-11 00:03:26.438685', '2025-09-11 00:03:26.438685') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'jamaica' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'jamaica' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('jamaica', 'ジャマイカ', '2025-09-11 00:03:26.443493', '2025-09-11 00:03:26.443493') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.5ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'georgia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'georgia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('georgia', 'ジョージア', '2025-09-11 00:03:26.449069', '2025-09-11 00:03:26.449069') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'zimbabwe' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'zimbabwe' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('zimbabwe', 'ジンバブエ', '2025-09-11 00:03:26.454520', '2025-09-11 00:03:26.454520') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'switzerland' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'switzerland' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('switzerland', 'スイス', '2025-09-11 00:03:26.459275', '2025-09-11 00:03:26.459275') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'sweden' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'sweden' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('sweden', 'スウェーデン', '2025-09-11 00:03:26.463549', '2025-09-11 00:03:26.463549') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'spain' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'spain' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.1ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('spain', 'スペイン', '2025-09-11 00:03:26.467716', '2025-09-11 00:03:26.467716') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'suriname' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'suriname' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('suriname', 'スリナム', '2025-09-11 00:03:26.471963', '2025-09-11 00:03:26.471963') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'sri_lanka' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'sri_lanka' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.1ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('sri_lanka', 'スリランカ', '2025-09-11 00:03:26.476491', '2025-09-11 00:03:26.476491') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.4ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'slovakia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'slovakia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('slovakia', 'スロバキア', '2025-09-11 00:03:26.481081', '2025-09-11 00:03:26.481081') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'slovenia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'slovenia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('slovenia', 'スロベニア', '2025-09-11 00:03:26.485553', '2025-09-11 00:03:26.485553') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'sudan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'sudan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('sudan', 'スーダン', '2025-09-11 00:03:26.490936', '2025-09-11 00:03:26.490936') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'senegal' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'senegal' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('senegal', 'セネガル', '2025-09-11 00:03:26.495743', '2025-09-11 00:03:26.495743') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'serbia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'serbia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('serbia', 'セルビア', '2025-09-11 00:03:26.500493', '2025-09-11 00:03:26.500493') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'saint_kitts_and_nevis' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'saint_kitts_and_nevis' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('saint_kitts_and_nevis', 'セントクリストファー・ネイビス', '2025-09-11 00:03:26.505116', '2025-09-11 00:03:26.505116') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'saint_vincent_and_the_grenadines' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'saint_vincent_and_the_grenadines' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('saint_vincent_and_the_grenadines', 'セントビンセント・グレナディーン', '2025-09-11 00:03:26.509655', '2025-09-11 00:03:26.509655') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'saint_lucia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'saint_lucia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('saint_lucia', 'セントルシア', '2025-09-11 00:03:26.514514', '2025-09-11 00:03:26.514514') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'seychelles' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'seychelles' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('seychelles', 'セーシェル', '2025-09-11 00:03:26.518971', '2025-09-11 00:03:26.518971') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'somalia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'somalia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('somalia', 'ソマリア', '2025-09-11 00:03:26.523856', '2025-09-11 00:03:26.523856') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'solomon_islands' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'solomon_islands' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('solomon_islands', 'ソロモン諸島', '2025-09-11 00:03:26.528367', '2025-09-11 00:03:26.528367') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'thailand' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'thailand' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.1ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('thailand', 'タイ', '2025-09-11 00:03:26.532630', '2025-09-11 00:03:26.532630') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'tajikistan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'tajikistan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('tajikistan', 'タジキスタン', '2025-09-11 00:03:26.537197', '2025-09-11 00:03:26.537197') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'tanzania' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (2.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'tanzania' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('tanzania', 'タンザニア', '2025-09-11 00:03:26.542686', '2025-09-11 00:03:26.542686') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'czech_republic' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'czech_republic' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('czech_republic', 'チェコ', '2025-09-11 00:03:26.547449', '2025-09-11 00:03:26.547449') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'chad' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'chad' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('chad', 'チャド', '2025-09-11 00:03:26.552280', '2025-09-11 00:03:26.552280') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'tunisia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'tunisia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('tunisia', 'チュニジア', '2025-09-11 00:03:26.557075', '2025-09-11 00:03:26.557075') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'chile' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'chile' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('chile', 'チリ', '2025-09-11 00:03:26.561418', '2025-09-11 00:03:26.561418') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'tuvalu' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'tuvalu' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('tuvalu', 'ツバル', '2025-09-11 00:03:26.566151', '2025-09-11 00:03:26.566151') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'denmark' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'denmark' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (1.7ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('denmark', 'デンマーク', '2025-09-11 00:03:26.570054', '2025-09-11 00:03:26.570054') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'trinidad_and_tobago' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'trinidad_and_tobago' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('trinidad_and_tobago', 'トリニダード・トバゴ', '2025-09-11 00:03:26.576446', '2025-09-11 00:03:26.576446') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'turkmenistan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'turkmenistan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('turkmenistan', 'トルクメニスタン', '2025-09-11 00:03:26.580795', '2025-09-11 00:03:26.580795') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'turkey' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'turkey' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('turkey', 'トルコ', '2025-09-11 00:03:26.585001', '2025-09-11 00:03:26.585001') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'tonga' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'tonga' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('tonga', 'トンガ', '2025-09-11 00:03:26.589809', '2025-09-11 00:03:26.589809') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'togo' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (2.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'togo' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('togo', 'トーゴ', '2025-09-11 00:03:26.594971', '2025-09-11 00:03:26.594971') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'germany' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'germany' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('germany', 'ドイツ', '2025-09-11 00:03:26.599731', '2025-09-11 00:03:26.599731') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'dominica' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'dominica' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('dominica', 'ドミニカ', '2025-09-11 00:03:26.604935', '2025-09-11 00:03:26.604935') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'dominican_republic' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'dominican_republic' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('dominican_republic', 'ドミニカ共和国', '2025-09-11 00:03:26.609418', '2025-09-11 00:03:26.609418') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'nigeria' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'nigeria' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('nigeria', 'ナイジェリア', '2025-09-11 00:03:26.613957', '2025-09-11 00:03:26.613957') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'nauru' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'nauru' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('nauru', 'ナウル', '2025-09-11 00:03:26.618201', '2025-09-11 00:03:26.618201') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'namibia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'namibia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('namibia', 'ナミビア', '2025-09-11 00:03:26.622776', '2025-09-11 00:03:26.622776') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'nicaragua' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (4.4ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'nicaragua' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('nicaragua', 'ニカラグア', '2025-09-11 00:03:26.630707', '2025-09-11 00:03:26.630707') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'niger' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'niger' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('niger', 'ニジェール', '2025-09-11 00:03:26.635048', '2025-09-11 00:03:26.635048') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'new_zealand' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'new_zealand' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('new_zealand', 'ニュージーランド', '2025-09-11 00:03:26.639911', '2025-09-11 00:03:26.639911') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'nepal' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'nepal' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.4ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('nepal', 'ネパール', '2025-09-11 00:03:26.644219', '2025-09-11 00:03:26.644219') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'norway' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'norway' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('norway', 'ノルウェー', '2025-09-11 00:03:26.649533', '2025-09-11 00:03:26.649533') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'haiti' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.8ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'haiti' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('haiti', 'ハイチ', '2025-09-11 00:03:26.654794', '2025-09-11 00:03:26.654794') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'hungary' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'hungary' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('hungary', 'ハンガリー', '2025-09-11 00:03:26.660029', '2025-09-11 00:03:26.660029') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.4ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'vatican_city' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'vatican_city' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('vatican_city', 'バチカン市国', '2025-09-11 00:03:26.664620', '2025-09-11 00:03:26.664620') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'vanuatu' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'vanuatu' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('vanuatu', 'バヌアツ', '2025-09-11 00:03:26.669027', '2025-09-11 00:03:26.669027') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'bahamas' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'bahamas' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('bahamas', 'バハマ', '2025-09-11 00:03:26.673743', '2025-09-11 00:03:26.673743') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'barbados' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'barbados' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('barbados', 'バルバドス', '2025-09-11 00:03:26.678145', '2025-09-11 00:03:26.678145') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'bangladesh' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'bangladesh' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('bangladesh', 'バングラデシュ', '2025-09-11 00:03:26.682406', '2025-09-11 00:03:26.682406') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'bahrain' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'bahrain' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('bahrain', 'バーレーン', '2025-09-11 00:03:26.687075', '2025-09-11 00:03:26.687075') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'pakistan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'pakistan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('pakistan', 'パキスタン', '2025-09-11 00:03:26.691500', '2025-09-11 00:03:26.691500') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'panama' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'panama' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('panama', 'パナマ', '2025-09-11 00:03:26.695545', '2025-09-11 00:03:26.695545') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'papua_new_guinea' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'papua_new_guinea' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.4ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('papua_new_guinea', 'パプアニューギニア', '2025-09-11 00:03:26.701114', '2025-09-11 00:03:26.701114') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.4ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'palau' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'palau' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('palau', 'パラオ', '2025-09-11 00:03:26.706854', '2025-09-11 00:03:26.706854') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'paraguay' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.8ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'paraguay' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('paraguay', 'パラグアイ', '2025-09-11 00:03:26.711801', '2025-09-11 00:03:26.711801') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'fiji' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'fiji' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('fiji', 'フィジー', '2025-09-11 00:03:26.716273', '2025-09-11 00:03:26.716273') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'philippines' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'philippines' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('philippines', 'フィリピン', '2025-09-11 00:03:26.720709', '2025-09-11 00:03:26.720709') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'finland' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'finland' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('finland', 'フィンランド', '2025-09-11 00:03:26.725014', '2025-09-11 00:03:26.725014') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'france' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'france' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('france', 'フランス', '2025-09-11 00:03:26.729337', '2025-09-11 00:03:26.729337') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'brazil' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'brazil' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('brazil', 'ブラジル', '2025-09-11 00:03:26.733694', '2025-09-11 00:03:26.733694') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'bulgaria' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'bulgaria' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('bulgaria', 'ブルガリア', '2025-09-11 00:03:26.738140', '2025-09-11 00:03:26.738140') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'burkina_faso' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'burkina_faso' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('burkina_faso', 'ブルキナファソ', '2025-09-11 00:03:26.742667', '2025-09-11 00:03:26.742667') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'brunei' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'brunei' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('brunei', 'ブルネイ', '2025-09-11 00:03:26.746855', '2025-09-11 00:03:26.746855') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'burundi' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'burundi' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('burundi', 'ブルンジ', '2025-09-11 00:03:26.751250', '2025-09-11 00:03:26.751250') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'bhutan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'bhutan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('bhutan', 'ブータン', '2025-09-11 00:03:26.757638', '2025-09-11 00:03:26.757638') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'vietnam' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'vietnam' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('vietnam', 'ベトナム', '2025-09-11 00:03:26.762425', '2025-09-11 00:03:26.762425') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'benin' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'benin' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.4ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('benin', 'ベナン', '2025-09-11 00:03:26.766952', '2025-09-11 00:03:26.766952') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'venezuela' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'venezuela' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('venezuela', 'ベネズエラ', '2025-09-11 00:03:26.771839', '2025-09-11 00:03:26.771839') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'belarus' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'belarus' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('belarus', 'ベラルーシ', '2025-09-11 00:03:26.776252', '2025-09-11 00:03:26.776252') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'belize' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'belize' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('belize', 'ベリーズ', '2025-09-11 00:03:26.780507', '2025-09-11 00:03:26.780507') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'belgium' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'belgium' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('belgium', 'ベルギー', '2025-09-11 00:03:26.784655', '2025-09-11 00:03:26.784655') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'peru' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'peru' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('peru', 'ペルー', '2025-09-11 00:03:26.789307', '2025-09-11 00:03:26.789307') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'honduras' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'honduras' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('honduras', 'ホンジュラス', '2025-09-11 00:03:26.793530', '2025-09-11 00:03:26.793530') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'bosnia_and_herzegovina' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'bosnia_and_herzegovina' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('bosnia_and_herzegovina', 'ボスニア・ヘルツェゴビナ', '2025-09-11 00:03:26.797836', '2025-09-11 00:03:26.797836') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'botswana' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'botswana' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('botswana', 'ボツワナ', '2025-09-11 00:03:26.802203', '2025-09-11 00:03:26.802203') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'bolivia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'bolivia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('bolivia', 'ボリビア', '2025-09-11 00:03:26.807732', '2025-09-11 00:03:26.807732') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'portugal' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'portugal' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('portugal', 'ポルトガル', '2025-09-11 00:03:26.813230', '2025-09-11 00:03:26.813230') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'poland' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'poland' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('poland', 'ポーランド', '2025-09-11 00:03:26.817608', '2025-09-11 00:03:26.817608') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'madagascar' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'madagascar' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('madagascar', 'マダガスカル', '2025-09-11 00:03:26.822356', '2025-09-11 00:03:26.822356') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'malawi' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'malawi' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.1ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('malawi', 'マラウイ', '2025-09-11 00:03:26.826918', '2025-09-11 00:03:26.826918') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'mali' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'mali' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('mali', 'マリ', '2025-09-11 00:03:26.831502', '2025-09-11 00:03:26.831502') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'malta' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'malta' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('malta', 'マルタ', '2025-09-11 00:03:26.836112', '2025-09-11 00:03:26.836112') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'malaysia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'malaysia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('malaysia', 'マレーシア', '2025-09-11 00:03:26.840613', '2025-09-11 00:03:26.840613') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'marshall_islands' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'marshall_islands' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('marshall_islands', 'マーシャル諸島', '2025-09-11 00:03:26.844624', '2025-09-11 00:03:26.844624') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'micronesia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'micronesia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('micronesia', 'ミクロネシア', '2025-09-11 00:03:26.849001', '2025-09-11 00:03:26.849001') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'myanmar' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (2.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'myanmar' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('myanmar', 'ミャンマー', '2025-09-11 00:03:26.854683', '2025-09-11 00:03:26.854683') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'mexico' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'mexico' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('mexico', 'メキシコ', '2025-09-11 00:03:26.860452', '2025-09-11 00:03:26.860452') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'mozambique' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'mozambique' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('mozambique', 'モザンビーク', '2025-09-11 00:03:26.865521', '2025-09-11 00:03:26.865521') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'monaco' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (2.7ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'monaco' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('monaco', 'モナコ', '2025-09-11 00:03:26.873469', '2025-09-11 00:03:26.873469') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'maldives' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'maldives' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('maldives', 'モルディブ', '2025-09-11 00:03:26.878781', '2025-09-11 00:03:26.878781') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'moldova' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'moldova' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('moldova', 'モルドバ', '2025-09-11 00:03:26.883129', '2025-09-11 00:03:26.883129') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'morocco' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'morocco' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('morocco', 'モロッコ', '2025-09-11 00:03:26.888111', '2025-09-11 00:03:26.888111') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'mongolia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'mongolia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('mongolia', 'モンゴル', '2025-09-11 00:03:26.893137', '2025-09-11 00:03:26.893137') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'montenegro' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'montenegro' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('montenegro', 'モンテネグロ', '2025-09-11 00:03:26.897865', '2025-09-11 00:03:26.897865') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'mauritius' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'mauritius' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('mauritius', 'モーリシャス', '2025-09-11 00:03:26.902238', '2025-09-11 00:03:26.902238') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'mauritania' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'mauritania' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('mauritania', 'モーリタニア', '2025-09-11 00:03:26.906777', '2025-09-11 00:03:26.906777') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'jordan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'jordan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('jordan', 'ヨルダン', '2025-09-11 00:03:26.911248', '2025-09-11 00:03:26.911248') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'laos' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (2.1ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'laos' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('laos', 'ラオス', '2025-09-11 00:03:26.916357', '2025-09-11 00:03:26.916357') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'latvia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'latvia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('latvia', 'ラトビア', '2025-09-11 00:03:26.921653', '2025-09-11 00:03:26.921653') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'lithuania' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'lithuania' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('lithuania', 'リトアニア', '2025-09-11 00:03:26.926717', '2025-09-11 00:03:26.926717') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'liechtenstein' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'liechtenstein' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('liechtenstein', 'リヒテンシュタイン', '2025-09-11 00:03:26.931122', '2025-09-11 00:03:26.931122') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'libya' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'libya' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('libya', 'リビア', '2025-09-11 00:03:26.935341', '2025-09-11 00:03:26.935341') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'liberia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'liberia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('liberia', 'リベリア', '2025-09-11 00:03:26.940407', '2025-09-11 00:03:26.940407') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'luxembourg' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'luxembourg' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('luxembourg', 'ルクセンブルク', '2025-09-11 00:03:26.944651', '2025-09-11 00:03:26.944651') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'rwanda' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'rwanda' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('rwanda', 'ルワンダ', '2025-09-11 00:03:26.948842', '2025-09-11 00:03:26.948842') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'romania' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'romania' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('romania', 'ルーマニア', '2025-09-11 00:03:26.953330', '2025-09-11 00:03:26.953330') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'lesotho' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'lesotho' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('lesotho', 'レソト', '2025-09-11 00:03:26.957907', '2025-09-11 00:03:26.957907') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'lebanon' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'lebanon' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('lebanon', 'レバノン', '2025-09-11 00:03:26.962469', '2025-09-11 00:03:26.962469') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'russia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (2.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'russia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.1ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('russia', 'ロシア', '2025-09-11 00:03:26.967273', '2025-09-11 00:03:26.967273') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'china' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'china' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('china', '中国', '2025-09-11 00:03:26.972106', '2025-09-11 00:03:26.972106') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'central_african_republic' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'central_african_republic' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('central_african_republic', '中央アフリカ共和国', '2025-09-11 00:03:26.976824', '2025-09-11 00:03:26.976824') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'north_macedonia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'north_macedonia' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('north_macedonia', '北マケドニア', '2025-09-11 00:03:26.981212', '2025-09-11 00:03:26.981212') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'korea_north' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'korea_north' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('korea_north', '北朝鮮', '2025-09-11 00:03:26.985853', '2025-09-11 00:03:26.985853') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'south_africa' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'south_africa' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('south_africa', '南アフリカ', '2025-09-11 00:03:26.990872', '2025-09-11 00:03:26.990872') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'south_sudan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'south_sudan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('south_sudan', '南スーダン', '2025-09-11 00:03:26.994785', '2025-09-11 00:03:26.994785') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'japan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'japan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('japan', '日本', '2025-09-11 00:03:26.999268', '2025-09-11 00:03:26.999268') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'timor_leste' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'timor_leste' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('timor_leste', '東ティモール', '2025-09-11 00:03:27.003732', '2025-09-11 00:03:27.003732') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'equatorial_guinea' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'equatorial_guinea' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('equatorial_guinea', '赤道ギニア', '2025-09-11 00:03:27.008771', '2025-09-11 00:03:27.008771') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Count (1.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "countries" /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (1.1ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'korea_south' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'korea_south' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.7ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('korea_south', '韓国', '2025-09-11 00:03:56.522272', '2025-09-11 00:03:56.522272') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (21.8ms)[0m  [1m[34mSELECT "countries".* FROM "countries" /* loading for pp */ LIMIT 11 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Count (20.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "countries" /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (1.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'korea_south' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'palestine' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'palestine' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.8ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('palestine', 'パレスチナ', '2025-09-11 00:04:09.966115', '2025-09-11 00:04:09.966115') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'taiwan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'taiwan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.2ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('taiwan', '台湾', '2025-09-11 00:04:09.971948', '2025-09-11 00:04:09.971948') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'kosovo' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "countries" WHERE "countries"."code" = 'kosovo' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Create (0.3ms)[0m  [1m[32mINSERT INTO "countries" ("code", "name", "created_at", "updated_at") VALUES ('kosovo', 'コソボ', '2025-09-11 00:04:09.975948', '2025-09-11 00:04:09.975948') RETURNING "id" /*application='BackpackersApp'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "countries" /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (20.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" LIMIT 5 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.6ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'japan' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.2ms)[0m  [1m[34mSELECT "countries".* FROM "countries" WHERE "countries"."code" = 'korea_south' LIMIT 1 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Count (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "countries" /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (1.3ms)[0m  [1m[34mSELECT "countries".* FROM "countries" /* loading for pp */ LIMIT 11 /*application='BackpackersApp'*/[0m
+  [1m[36mCountry Load (0.8ms)[0m  [1m[34mSELECT "countries".* FROM "countries" ORDER BY "countries"."id" ASC LIMIT 1 /*application='BackpackersApp'*/[0m
