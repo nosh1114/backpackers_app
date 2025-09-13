@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   delete '/api/v1/posts/:id', to: 'api_v1_posts#destroy'
   
   get '/api/v1/countries', to: 'api_v1_countries#index'
+  get '/api/v1/countries/stats', to: 'api_v1_countries#stats'
 
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check

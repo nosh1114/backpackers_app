@@ -7,6 +7,7 @@ import { COUNTRIES } from '../lib/constants'
 
 interface CountryStats {
   country: string
+  flagEmoji?: string
   tipCount: number
   lastPostDate: string
   recentTips: Array<{
@@ -31,9 +32,11 @@ export function HomePage() {
       if (data) {
         // すべての国を含むように調整
         const allCountries = COUNTRIES.map(country => {
+          console.log(country)
           const existingData = data.find((d: any) => d.country === country)
           return existingData || {
             country,
+            flagEmoji: '🌍',
             tipCount: 0,
             lastPostDate: new Date().toISOString(),
             recentTips: []

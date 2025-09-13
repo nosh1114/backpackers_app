@@ -151,7 +151,7 @@ class ApiClient {
 
   // Countries API
   async getCountries() {
-    return this.request<{ countries: Array<{ code: string; name: string }> }>('/countries');
+    return this.request<{ countries: Array<{ code: string; name: string; flag_emoji: string }> }>('/countries');
   }
 }
 
