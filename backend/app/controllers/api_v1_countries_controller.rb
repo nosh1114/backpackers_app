@@ -1,6 +1,5 @@
 class ApiV1CountriesController < ApplicationController
   def index
-    binding.break
     countries = Country.ordered.map do |country|
       {
         code: country.code,

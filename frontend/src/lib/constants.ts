@@ -1,11 +1,11 @@
-export const COUNTRIES = [
-  'タイ', 'ベトナム', 'カンボジア', 'ラオス', 
-  'インド', 'ネパール', 'ミャンマー', 
-  'マレーシア', 'インドネシア', 'フィリピン',
-  'シンガポール', '台湾', '韓国', '中国',
-  'モンゴル', 'トルコ', 'イラン', 'ウズベキスタン',
-  'カザフスタン', 'キルギス', 'タジキスタン'
-] as const
+// export const COUNTRIES = [
+//   'タイ', 'ベトナム', 'カンボジア', 'ラオス', 
+//   'インド', 'ネパール', 'ミャンマー', 
+//   'マレーシア', 'インドネシア', 'フィリピン',
+//   'シンガポール', '台湾', '韓国', '中国',
+//   'モンゴル', 'トルコ', 'イラン', 'ウズベキスタン',
+//   'カザフスタン', 'キルギス', 'タジキスタン'
+// ] as const
 
 export const CATEGORIES = [
   '交通', '宿', '食事', 'SIM', 'ビザ', 
@@ -26,7 +26,7 @@ export const REPORT_REASONS = [
   'その他'
 ] as const
 
-export type Country = typeof COUNTRIES[number]
+// export type Country = typeof COUNTRIES[number]
 export type Category = typeof CATEGORIES[number]
 export type SortOption = typeof SORT_OPTIONS[number]['value']
 export type ReportReason = typeof REPORT_REASONS[number]

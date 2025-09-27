@@ -153,6 +153,17 @@ class ApiClient {
   async getCountries() {
     return this.request<{ countries: Array<{ code: string; name: string; flag_emoji: string }> }>('/countries');
   }
+
+  async getCountryStats() {
+    return this.request<{ countries: Array<{ 
+      code: string; 
+      name: string; 
+      flag_emoji: string; 
+      tip_count: number; 
+      last_post_date: string; 
+      recent_tips: Array<{ title: string; category: string }> 
+    }> }>('/countries/stats');
+  }
 }
 
 export const apiClient = new ApiClient(API_BASE_URL);
