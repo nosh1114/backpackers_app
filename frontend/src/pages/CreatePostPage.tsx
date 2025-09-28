@@ -4,7 +4,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { apiClient } from '../lib/api';
 import { Search, ChevronDown, X } from 'lucide-react';
 
+// interfaceとは、型を定義するためのもの
 interface Country {
+  id: number;
   code: string;
   name: string;
   flag_emoji: string;
@@ -13,7 +15,7 @@ interface Country {
 export function CreatePostPage() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [countryCode, setCountryCode] = useState('');
+  const [countryId, setCountryId] = useState<number | null>(null);
   const [countries, setCountries] = useState<Country[]>([]);
   const [countrySearch, setCountrySearch] = useState('');
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
@@ -55,11 +57,12 @@ export function CreatePostPage() {
   }, [countries, countrySearch]);
 
   // 選択された国を取得
-  const selectedCountry = countries.find(country => country.code === countryCode);
+  const selectedCountry = countries.find(country => country.id === countryId);
 
   // 選択された国をセット
   const handleCountrySelect = (country: Country) => {
-    setCountryCode(country.code);
+    console.log('国を選択しました:', country);
+    setCountryId(country.id);
     setCountrySearch(country.name);
     setIsCountryDropdownOpen(false);
   };
@@ -71,12 +74,12 @@ export function CreatePostPage() {
     
     // 検索値が選択された国と一致しない場合、選択をクリア
     if (selectedCountry && value !== selectedCountry.name) {
-      setCountryCode('');
+      setCountryId(null);
     }
   };
 
   const clearCountrySelection = () => {
-    setCountryCode('');
+    setCountryId(null);
     setCountrySearch('');
     setIsCountryDropdownOpen(false);
   };
@@ -86,8 +89,14 @@ export function CreatePostPage() {
     setErrors([]);
     setLoading(true);
 
-    if (!title.trim() || !content.trim() || !countryCode) {
-      setErrors(['タイトル、内容、国を入力してください']);
+    console.log('送信データ:', {
+      title: title.trim(),
+      content: content.trim(),
+      countryId: countryId
+    });
+
+    if (!title.trim() || countryId === null || !content.trim()) {
+      setErrors(['タイトル、国、内容を入力してください']);
       setLoading(false);
       return;
     }
@@ -96,7 +105,7 @@ export function CreatePostPage() {
       const response = await apiClient.createPost({
         title: title.trim(),
         content: content.trim(),
-        country_code: countryCode
+        country_id: countryId,
       });
 
       if (response.data) {
@@ -201,7 +210,7 @@ export function CreatePostPage() {
                     placeholder="国名または国コードで検索..."
                     autoComplete="off"
                   />
-                  {countryCode && (
+                  {countryId && (
                     <button
                       type="button"
                       onClick={clearCountrySelection}
@@ -224,11 +233,11 @@ export function CreatePostPage() {
                     {filteredCountries.length > 0 ? (
                       filteredCountries.map((country) => (
                         <button
-                          key={country.code}
+                          key={country.id}
                           type="button"
                           onClick={() => handleCountrySelect(country)}
                           className={`w-full text-left px-4 py-2 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none ${
-                            countryCode === country.code ? 'bg-blue-50 text-blue-700' : 'text-gray-900'
+                            countryId === country.id ? 'bg-blue-50 text-blue-700' : 'text-gray-900'
                           }`}
                         >
                           <div className="flex justify-between items-center">
@@ -250,6 +259,9 @@ export function CreatePostPage() {
                   選択中: {selectedCountry.name} ({selectedCountry.code})
                 </p>
               )}
+              <p className="mt-1 text-sm text-gray-500">
+                現在のcountryId: {countryId}
+              </p>
             </div>
 
             <div>

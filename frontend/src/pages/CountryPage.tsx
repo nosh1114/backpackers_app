@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Search, Filter, MapPin, Plus } from 'lucide-react'
+import { Search, Filter, MapPin } from 'lucide-react'
 import { TipCard } from '../components/TipCard'
+import { PostForm } from '../components/PostForm'
 import { mockApi } from '../lib/mockData'
 import { apiClient } from '../lib/api'
 import { CATEGORIES, SORT_OPTIONS } from '../lib/constants'
@@ -28,6 +29,7 @@ interface Tip {
 }
 
 interface Country {
+  id: number
   code: string
   name: string
   flag_emoji: string
@@ -111,6 +113,11 @@ export function CountryPage() {
     alert('通報を受け付けました。確認後、適切に対処いたします。')
   }
 
+  const handlePostCreated = () => {
+    // TIPSを再取得
+    fetchTips()
+  }
+
   const filteredTips = tips.filter(tip => {
     const matchesSearch = !searchQuery || 
       tip.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -135,6 +142,7 @@ export function CountryPage() {
                 </p>
               </div>
             </div>
+            
             {/* Search and Filters */}
             <div className="flex flex-col lg:flex-row gap-4">
               {/* Search */}
@@ -198,6 +206,23 @@ export function CountryPage() {
         </div>
       </div>
 
+      {/* Post Form Section - Always visible for logged in users */}
+      {user && countryData && (
+        <div className="bg-gray-50 border-b border-gray-200">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              {countryData.name}にTIPSを投稿
+            </h2>
+            <PostForm 
+              fixedCountryId={countryData.id}
+              onPostCreated={handlePostCreated}
+              placeholder={`${countryData.name}での体験やTIPSを共有しましょう...`}
+              compact={true}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {loading ? (
@@ -233,15 +258,6 @@ export function CountryPage() {
                 : `${decodedCountry}の最初のTIPSを投稿しませんか？`
               }
             </p>
-            {user && (
-              <a
-                href={`/post?country=${encodeURIComponent(decodedCountry)}`}
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-6 py-3 rounded-full hover:from-primary-600 hover:to-secondary-600 transition-all transform hover:scale-105"
-              >
-                <Plus className="h-5 w-5" />
-                <span>TIPS投稿</span>
-              </a>
-            )}
           </div>
         )}
       </div>

@@ -97,14 +97,14 @@ class ApiClient {
     return this.request<{ post: any }>(`/posts/${id}`);
   }
 
-  async createPost(postData: { title: string; content: string; country_code: string }) {
+  async createPost(postData: { title: string; content: string; country_id: number }) {
     return this.request<{ post: any }>('/posts', {
       method: 'POST',
       body: JSON.stringify({ post: postData }),
     });
   }
 
-  async updatePost(id: string, postData: { title?: string; content?: string; country_code?: string }) {
+  async updatePost(id: string, postData: { title?: string; content?: string; country_id?: number }) {
     return this.request<{ post: any }>(`/posts/${id}`, {
       method: 'PUT',
       body: JSON.stringify({ post: postData }),
@@ -151,16 +151,17 @@ class ApiClient {
 
   // Countries API
   async getCountries() {
-    return this.request<{ countries: Array<{ code: string; name: string; flag_emoji: string }> }>('/countries');
+    return this.request<{ countries: Array<{ id: number; code: string; name: string; flag_emoji: string }> }>('/countries');
   }
 
   async getCountryStats() {
     return this.request<{ countries: Array<{ 
+      id: number;
       code: string; 
-      name: string; 
-      flag_emoji: string; 
-      tip_count: number; 
-      last_post_date: string; 
+      name: string;
+      flag_emoji: string;
+      tip_count: number;
+      last_post_date: string;
       recent_tips: Array<{ title: string; category: string }> 
     }> }>('/countries/stats');
   }
