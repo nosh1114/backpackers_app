@@ -7,6 +7,7 @@ import { Search, ChevronDown, X } from 'lucide-react';
 interface Country {
   code: string;
   name: string;
+  flag_emoji: string;
 }
 
 export function CreatePostPage() {
@@ -28,6 +29,7 @@ export function CreatePostPage() {
       try {
         const response = await apiClient.getCountries();
         if (response.data) {
+          // APIでバックエンドから取得したデータをセット
           setCountries(response.data.countries);
         } else {
           setErrors([response.error || '国一覧の取得に失敗しました']);
@@ -55,12 +57,14 @@ export function CreatePostPage() {
   // 選択された国を取得
   const selectedCountry = countries.find(country => country.code === countryCode);
 
+  // 選択された国をセット
   const handleCountrySelect = (country: Country) => {
     setCountryCode(country.code);
     setCountrySearch(country.name);
     setIsCountryDropdownOpen(false);
   };
 
+  // 国を検索
   const handleCountrySearchChange = (value: string) => {
     setCountrySearch(value);
     setIsCountryDropdownOpen(true);

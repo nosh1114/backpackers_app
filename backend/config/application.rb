@@ -43,5 +43,8 @@ module BackpackersApp
 
     # 自動読み込みを無効にして手動読み込みに切り替え
     config.autoloader = :classic
+
+    # 文字エンコーディングを設定
+    config.encoding = 'utf-8'
   end
 end

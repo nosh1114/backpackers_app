@@ -4,6 +4,7 @@ import { MapPin, Calendar, MessageCircle } from 'lucide-react'
 
 interface CountryCardProps {
   country: string
+  flagEmoji?: string
   tipCount: number
   lastPostDate: string
   recentTips: Array<{
@@ -12,7 +13,7 @@ interface CountryCardProps {
   }>
 }
 
-export function CountryCard({ country, tipCount, lastPostDate, recentTips }: CountryCardProps) {
+export function CountryCard({ country, flagEmoji, tipCount, lastPostDate, recentTips }: CountryCardProps) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     const now = new Date()
@@ -25,33 +26,13 @@ export function CountryCard({ country, tipCount, lastPostDate, recentTips }: Cou
     return `${Math.floor(diffDays / 30)}ヶ月前`
   }
 
-  const getCountryFlag = (country: string) => {
-    const flags: Record<string, string> = {
-      'タイ': '🇹🇭',
-      'ベトナム': '🇻🇳',
-      'カンボジア': '🇰🇭',
-      'ラオス': '🇱🇦',
-      'インド': '🇮🇳',
-      'ネパール': '🇳🇵',
-      'ミャンマー': '🇲🇲',
-      'マレーシア': '🇲🇾',
-      'インドネシア': '🇮🇩',
-      'フィリピン': '🇵🇭',
-      'シンガポール': '🇸🇬',
-      '台湾': '🇹🇼',
-      '韓国': '🇰🇷',
-      '中国': '🇨🇳',
-    }
-    return flags[country] || '🌍'
-  }
-
   return (
     <Link to={`/country/${encodeURIComponent(country)}`}>
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md hover:border-primary-200 transition-all duration-300 transform hover:-translate-y-1 group">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
-            <span className="text-3xl">{getCountryFlag(country)}</span>
+            <span className="text-3xl">{flagEmoji || ''}</span>
             <h3 className="text-xl font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
               {country}
             </h3>
@@ -85,11 +66,8 @@ export function CountryCard({ country, tipCount, lastPostDate, recentTips }: Cou
 
         {/* View More Button */}
         <div className="mt-4 pt-4 border-t border-gray-100">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-500">
-              {recentTips.length > 2 && `他 ${recentTips.length - 2} 件`}
-            </span>
-            <span className="text-sm text-primary-600 font-medium group-hover:text-primary-700">
+          <div className="text-center">
+            <span className="text-sm text-primary-600 font-medium group-hover:text-primary-700 transition-colors">
               詳細を見る →
             </span>
           </div>

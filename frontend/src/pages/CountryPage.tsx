@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Search, Filter, SortAsc, MapPin, Plus } from 'lucide-react'
+import { Search, Filter, MapPin, Plus } from 'lucide-react'
 import { TipCard } from '../components/TipCard'
 import { mockApi } from '../lib/mockData'
+import { apiClient } from '../lib/api'
 import { CATEGORIES, SORT_OPTIONS } from '../lib/constants'
 import { useAuth } from '../contexts/AuthContext'
 
@@ -26,23 +27,47 @@ interface Tip {
   is_liked?: boolean
 }
 
+interface Country {
+  code: string
+  name: string
+  flag_emoji: string
+}
+
 export function CountryPage() {
   const { country } = useParams<{ country: string }>()
   const { user } = useAuth()
   const [tips, setTips] = useState<Tip[]>([])
+  const [countryData, setCountryData] = useState<Country | null>(null)
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [sortBy, setSortBy] = useState<string>('newest')
   const [showFilters, setShowFilters] = useState(false)
 
+  // decodedとは？
+  // decodedはエンコードされた文字列をデコードするための関数
   const decodedCountry = country ? decodeURIComponent(country) : ''
 
   useEffect(() => {
     if (decodedCountry) {
+      fetchCountryData()
       fetchTips()
     }
   }, [decodedCountry, selectedCategory, sortBy])
+
+  const fetchCountryData = async () => {
+    try {
+      const response = await apiClient.getCountries()
+      if (response.data) {
+        const country = response.data.countries.find(c => c.name === decodedCountry)
+        if (country) {
+          setCountryData(country)
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching country data:', error)
+    }
+  }
 
   const fetchTips = async () => {
     try {
@@ -95,63 +120,44 @@ export function CountryPage() {
     return matchesSearch
   })
 
-  const getCountryFlag = (country: string) => {
-    const flags: Record<string, string> = {
-      'タイ': '🇹🇭',
-      'ベトナム': '🇻🇳',
-      'カンボジア': '🇰🇭',
-      'ラオス': '🇱🇦',
-      'インド': '🇮🇳',
-      'ネパール': '🇳🇵',
-      'ミャンマー': '🇲🇲',
-      'マレーシア': '🇲🇾',
-      'インドネシア': '🇮🇩',
-      'フィリピン': '🇵🇭',
-      'シンガポール': '🇸🇬',
-      '台湾': '🇹🇼',
-      '韓国': '🇰🇷',
-      '中国': '🇨🇳',
-    }
-    return flags[country] || '🌍'
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex items-center space-x-4 mb-6">
-            <span className="text-6xl">{getCountryFlag(decodedCountry)}</span>
-            <div>
-              <h1 className="text-4xl font-bold">{decodedCountry}</h1>
-              <p className="text-xl text-primary-100 mt-2">
-                {filteredTips.length} 件のTIPSが見つかりました
-              </p>
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <span className="text-4xl">{countryData?.flag_emoji || '🌍'}</span>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">{decodedCountry}</h1>
+                <p className="text-gray-600 mt-1">
+                  {filteredTips.length}件のTIPS • {CATEGORIES.length}カテゴリ
+                </p>
+              </div>
             </div>
-          </div>
+            {/* Search and Filters */}
+            <div className="flex flex-col lg:flex-row gap-4">
+              {/* Search */}
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <input
+                  type="text"
+                  placeholder="キーワードやタグで検索..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 text-gray-900 rounded-lg border-0 focus:ring-2 focus:ring-white/50"
+                />
+              </div>
 
-          {/* Search and Filters */}
-          <div className="flex flex-col lg:flex-row gap-4">
-            {/* Search */}
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <input
-                type="text"
-                placeholder="キーワードやタグで検索..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 text-gray-900 rounded-lg border-0 focus:ring-2 focus:ring-white/50"
-              />
+              {/* Filter Toggle (Mobile) */}
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="lg:hidden flex items-center space-x-2 bg-white/20 text-white px-4 py-3 rounded-lg hover:bg-white/30 transition-colors"
+              >
+                <Filter className="h-5 w-5" />
+                <span>フィルター</span>
+              </button>
             </div>
-
-            {/* Filter Toggle (Mobile) */}
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="lg:hidden flex items-center space-x-2 bg-white/20 text-white px-4 py-3 rounded-lg hover:bg-white/30 transition-colors"
-            >
-              <Filter className="h-5 w-5" />
-              <span>フィルター</span>
-            </button>
           </div>
 
           {/* Filters */}

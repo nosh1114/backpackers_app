@@ -14,7 +14,7 @@ interface User {
 interface AuthContextType {
   user: User | null
   token: string | null
-  signUp: (email: string, password: string, name: string) => Promise<void>
+  signUp: (name: string, email: string, password: string) => Promise<void>
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
   setToken: (token: string) => void
@@ -60,7 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const signUp = async (email: string, password: string, name: string) => {
+  const signUp = async (name: string, email: string, password: string) => {
     setLoading(true)
     
     try {
@@ -73,12 +73,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error('パスワードは8文字以上で入力してください')
       }
 
-      const response = await apiClient.signup({
-        name,
-        email,
-        password,
-        password_confirmation: password
-      })
+      const response = await apiClient.signup({name: name, email: email, password: password, password_confirmation: password})
 
       if (response.data) {
         setToken(response.data.token)

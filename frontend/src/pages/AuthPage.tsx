@@ -29,6 +29,14 @@ export function AuthPage() {
     setError('')
     setSuccess('')
 
+    // デバッグログを追加
+    console.log('=== FORM DEBUG ===')
+    console.log('Name:', name)
+    console.log('Email:', email)
+    console.log('Password:', password)
+    console.log('Password Confirmation:', passwordConfirmation)
+    console.log('==================')
+
     try {
       if (mode === 'signup') {
         if (!validateSignup()) return
@@ -135,7 +143,7 @@ export function AuthPage() {
             </div>
           )}
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} autoComplete="off" className="space-y-6">
             {mode === 'signup' && (
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -149,6 +157,7 @@ export function AuthPage() {
                     id="name"
                     name="name"
                     type="text"
+                    autoComplete="off"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -171,7 +180,7 @@ export function AuthPage() {
                   id="email"
                   name="email"
                   type="email"
-                  autoComplete="email"
+                  autoComplete="off"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -193,7 +202,7 @@ export function AuthPage() {
                   id="password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
-                  autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+                  autoComplete="off"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -225,7 +234,7 @@ export function AuthPage() {
                     id="passwordConfirmation"
                     name="passwordConfirmation"
                     type={showPasswordConfirmation ? 'text' : 'password'}
-                    autoComplete="new-password"
+                    autoComplete="off"
                     required
                     value={passwordConfirmation}
                     onChange={(e) => setPasswordConfirmation(e.target.value)}
