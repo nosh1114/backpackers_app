@@ -56,8 +56,13 @@ class ApiV1PostsController < ApplicationController
   end
 
   def create
+    # デバッグログを追加
+    Rails.logger.debug "Raw params: #{params.inspect}"
+    Rails.logger.debug "Post params: #{params[:post].inspect}"
+    
     post = current_user.posts.build(post_params)
     
+    Rails.logger.debug "Post params: #{post.inspect}"
     if post.save
       render json: {
         post: {
@@ -138,6 +143,7 @@ class ApiV1PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :content, :country_code)
+    # フロントエンドから送信された元のpostパラメーターを使用
+    params.require(:post).permit(:title, :content, :country_code, :category)
   end
 end

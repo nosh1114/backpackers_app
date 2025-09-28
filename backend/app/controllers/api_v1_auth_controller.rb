@@ -25,6 +25,7 @@ class ApiV1AuthController < ApplicationController
   end
 
   def signup
+    Rails.logger.debug "Signup params: #{params.inspect}"
     user = User.new(user_params)
     
     if user.save
@@ -49,6 +50,8 @@ class ApiV1AuthController < ApplicationController
   private
 
   def user_params
+    # フロントエンドから送信される正しいパラメータを取得
+    # フロントエンドは { user: { name, email, password, password_confirmation } } の形式で送信
     params.require(:user).permit(:name, :email, :password, :password_confirmation, :bio, :location, :website, :avatar_url)
   end
 end
