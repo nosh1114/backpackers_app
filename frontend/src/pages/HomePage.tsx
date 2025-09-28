@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, TrendingUp, Globe, Users, Plus } from 'lucide-react'
+import { Search, TrendingUp, Globe, Users } from 'lucide-react'
 import { CountryCard } from '../components/CountryCard'
+import { PostForm } from '../components/PostForm'
 import { apiClient } from '../lib/api'
 // COUNTRIESのimportを削除
 // import { COUNTRIES } from '../lib/constants'
@@ -60,6 +61,11 @@ export function HomePage() {
   const totalTips = countries.reduce((sum, country) => sum + country.tipCount, 0)
   const activeCountries = countries.filter(country => country.tipCount > 0).length
 
+  const handlePostCreated = () => {
+    // 統計情報を再取得
+    fetchCountryStats()
+  }
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -77,10 +83,16 @@ export function HomePage() {
               あなたの旅をより安全で楽しいものに
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-50 transition-colors">
+              <button 
+                onClick={() => document.getElementById('post-form-section')?.scrollIntoView({ behavior: 'smooth' })}
+                className="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-50 transition-colors"
+              >
                 投稿を始める
               </button>
-              <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary-600 transition-colors">
+              <button 
+                onClick={() => document.getElementById('search-section')?.scrollIntoView({ behavior: 'smooth' })}
+                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary-600 transition-colors"
+              >
                 国を探す
               </button>
             </div>
@@ -117,8 +129,22 @@ export function HomePage() {
         </div>
       </div>
 
+      {/* Post Form Section - Always visible for logged in users */}
+      <div id="post-form-section" className="bg-gray-50 border-b border-gray-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">旅の体験を共有しよう</h2>
+            <p className="text-gray-600">世界中のバックパッカーとあなたのTIPSを共有してください</p>
+          </div>
+          <PostForm 
+            onPostCreated={handlePostCreated}
+            placeholder="旅の体験やTIPSを共有しましょう..."
+          />
+        </div>
+      </div>
+
       {/* Search Section */}
-      <div className="bg-gray-50 border-b border-gray-200">
+      <div id="search-section" className="bg-gray-50 border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 relative">

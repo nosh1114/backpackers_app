@@ -2,8 +2,8 @@ class ApiV1PostsController < ApplicationController
   before_action :authenticate_user, except: [:index, :show]
 
   def index
-    posts = Post.includes(:user).order(created_at: :desc)
-    posts = posts.where(country_code: params[:country_code]) if params[:country_code].present?
+    posts = Post.includes(:user, :country).order(created_at: :desc)
+    posts = posts.where(country_id: params[:country_id]) if params[:country_id].present?
     
     # ページネーション
     if params[:page] && params[:per_page]
@@ -18,7 +18,12 @@ class ApiV1PostsController < ApplicationController
           id: post.id,
           title: post.title,
           content: post.content,
-          country_code: post.country_code,
+          country: {
+            id: post.country.id,
+            code: post.country.code,
+            name: post.country.name,
+            flag_emoji: post.country.flag_emoji
+          },
           user: {
             id: post.user.id,
             name: post.user.name,
@@ -32,7 +37,7 @@ class ApiV1PostsController < ApplicationController
   end
 
   def show
-    post = Post.includes(:user).find_by(id: params[:id])
+    post = Post.includes(:user, :country).find_by(id: params[:id])
     
     if post
       render json: {
@@ -40,7 +45,12 @@ class ApiV1PostsController < ApplicationController
           id: post.id,
           title: post.title,
           content: post.content,
-          country_code: post.country_code,
+          country: {
+            id: post.country.id,
+            code: post.country.code,
+            name: post.country.name,
+            flag_emoji: post.country.flag_emoji
+          },
           user: {
             id: post.user.id,
             name: post.user.name,
@@ -56,20 +66,20 @@ class ApiV1PostsController < ApplicationController
   end
 
   def create
-    # デバッグログを追加
-    Rails.logger.debug "Raw params: #{params.inspect}"
-    Rails.logger.debug "Post params: #{params[:post].inspect}"
-    
     post = current_user.posts.build(post_params)
     
-    Rails.logger.debug "Post params: #{post.inspect}"
     if post.save
       render json: {
         post: {
           id: post.id,
           title: post.title,
           content: post.content,
-          country_code: post.country_code,
+          country: {
+            id: post.country.id,
+            code: post.country.code,
+            name: post.country.name,
+            flag_emoji: post.country.flag_emoji
+          },
           user: {
             id: post.user.id,
             name: post.user.name,
@@ -94,7 +104,12 @@ class ApiV1PostsController < ApplicationController
             id: post.id,
             title: post.title,
             content: post.content,
-            country_code: post.country_code,
+            country: {
+              id: post.country.id,
+              code: post.country.code,
+              name: post.country.name,
+              flag_emoji: post.country.flag_emoji
+            },
             user: {
               id: post.user.id,
               name: post.user.name,
@@ -143,7 +158,6 @@ class ApiV1PostsController < ApplicationController
   end
 
   def post_params
-    # フロントエンドから送信された元のpostパラメーターを使用
-    params.require(:post).permit(:title, :content, :country_code, :category)
+    params.require(:post).permit(:title, :content, :country_id, :category)
   end
 end

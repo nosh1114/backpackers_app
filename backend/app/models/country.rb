@@ -1,4 +1,5 @@
 class Country < ApplicationRecord
+  belongs_to :area
   has_many :posts, dependent: :destroy
 
   validates :code, presence: true, uniqueness: true

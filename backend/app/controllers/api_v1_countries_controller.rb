@@ -2,6 +2,7 @@ class ApiV1CountriesController < ApplicationController
   def index
     countries = Country.ordered.map do |country|
       {
+        id: country.id,
         code: country.code,
         name: country.name,
         flag_emoji: country.flag_emoji
@@ -19,6 +20,7 @@ class ApiV1CountriesController < ApplicationController
       recent_posts = posts.order(created_at: :desc).limit(2)
       
       {
+        id: country.id,
         code: country.code,
         name: country.name,
         flag_emoji: country.flag_emoji,
