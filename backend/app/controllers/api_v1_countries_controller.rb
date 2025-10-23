@@ -28,8 +28,11 @@ class ApiV1CountriesController < ApplicationController
         last_post_date: posts.maximum(:created_at) || country.created_at,
         recent_tips: recent_posts.map do |post|
           {
+            id: post.id,
             title: post.title,
-            category: post.category
+            category: post.category || 'その他',
+            author_name: post.user.name,
+            created_at: post.created_at
           }
         end
       }

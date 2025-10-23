@@ -8,8 +8,11 @@ interface CountryCardProps {
   tipCount: number
   lastPostDate: string
   recentTips: Array<{
+    id: number
     title: string
     category: string
+    author_name: string
+    created_at: string
   }>
 }
 
@@ -53,15 +56,21 @@ export function CountryCard({ country, flagEmoji, tipCount, lastPostDate, recent
 
         {/* Recent Tips Preview */}
         <div className="space-y-2">
-          <h4 className="text-sm font-medium text-gray-700 mb-2">最近のTIPS</h4>
+          <h4 className="text-sm font-medium text-gray-700 mb-2">最近の投稿</h4>
           {recentTips.slice(0, 2).map((tip, index) => (
-            <div key={index} className="flex items-center space-x-2 text-sm">
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-secondary-100 text-secondary-800">
-                {tip.category}
-              </span>
-              <span className="text-gray-600 truncate flex-1">{tip.title}</span>
+            <div key={tip.id} className="space-y-1">
+              <div className="flex items-center space-x-2 text-sm">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-secondary-100 text-secondary-800">
+                  {tip.category}
+                </span>
+                <span className="text-gray-500 text-xs">by {tip.author_name}</span>
+              </div>
+              <div className="text-gray-600 text-sm truncate">{tip.title}</div>
             </div>
           ))}
+          {recentTips.length === 0 && (
+            <div className="text-sm text-gray-500 italic">まだ投稿がありません</div>
+          )}
         </div>
 
         {/* View More Button */}

@@ -86,5 +86,10 @@ users_data.each do |user_data|
   end
 end
 
+# ダミーデータの読み込み
+load Rails.root.join('db', 'seeds', 'dummy_data.rb')
+
 puts "🎉 Seeding completed!"
 puts "📊 Total users: #{User.count}"
+puts "📊 Total posts: #{Post.count}"
+puts "📊 Total countries: #{Country.count}"
