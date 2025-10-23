@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { useMutation } from '@apollo/client'
 import { useSearchParams, Link } from 'react-router-dom'
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react'
+import { apiClient } from '../lib/api'
 
 const PasswordResetPage: React.FC = () => {
   const [searchParams] = useSearchParams()
@@ -14,38 +14,8 @@ const PasswordResetPage: React.FC = () => {
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false)
   const [message, setMessage] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
-
-  const [requestReset, { loading: requestLoading }] = useMutation(REQUEST_PASSWORD_RESET, {
-    onCompleted: (data) => {
-      if (data.requestPasswordReset.success) {
-        setMessage(data.requestPasswordReset.message)
-        setIsSuccess(true)
-      } else {
-        setMessage(data.requestPasswordReset.message)
-        setIsSuccess(false)
-      }
-    },
-    onError: () => {
-      setMessage('エラーが発生しました。もう一度お試しください。')
-      setIsSuccess(false)
-    }
-  })
-
-  const [resetPassword, { loading: resetLoading }] = useMutation(RESET_PASSWORD, {
-    onCompleted: (data) => {
-      if (data.resetPassword.success) {
-        setMessage(data.resetPassword.message)
-        setIsSuccess(true)
-      } else {
-        setMessage(data.resetPassword.message)
-        setIsSuccess(false)
-      }
-    },
-    onError: () => {
-      setMessage('エラーが発生しました。もう一度お試しください。')
-      setIsSuccess(false)
-    }
-  })
+  const [requestLoading, setRequestLoading] = useState(false)
+  const [resetLoading, setResetLoading] = useState(false)
 
   const handleRequestReset = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -55,7 +25,22 @@ const PasswordResetPage: React.FC = () => {
       return
     }
     
-    await requestReset({ variables: { email } })
+    setRequestLoading(true)
+    try {
+      const response = await apiClient.requestPasswordReset(email)
+      if (response.data) {
+        setMessage(response.data.message || 'リセットメールを送信しました')
+        setIsSuccess(true)
+      } else {
+        setMessage(response.error || 'エラーが発生しました')
+        setIsSuccess(false)
+      }
+    } catch (error) {
+      setMessage('エラーが発生しました。もう一度お試しください。')
+      setIsSuccess(false)
+    } finally {
+      setRequestLoading(false)
+    }
   }
 
   const handleResetPassword = async (e: React.FormEvent) => {
@@ -78,13 +63,22 @@ const PasswordResetPage: React.FC = () => {
       return
     }
     
-    await resetPassword({ 
-      variables: { 
-        token, 
-        password, 
-        passwordConfirmation 
-      } 
-    })
+    setResetLoading(true)
+    try {
+      const response = await apiClient.resetPassword(token!, password, passwordConfirmation)
+      if (response.data) {
+        setMessage(response.data.message || 'パスワードを更新しました')
+        setIsSuccess(true)
+      } else {
+        setMessage(response.error || 'エラーが発生しました')
+        setIsSuccess(false)
+      }
+    } catch (error) {
+      setMessage('エラーが発生しました。もう一度お試しください。')
+      setIsSuccess(false)
+    } finally {
+      setResetLoading(false)
+    }
   }
 
   return (

@@ -83,13 +83,26 @@ class ApiClient {
   }
 
   // Posts API
-  async getPosts(params?: { page?: number; per_page?: number; country_code?: string }) {
+  async getPosts(params?: { page?: number; per_page?: number; country_id?: number }) {
     const queryParams = new URLSearchParams();
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.per_page) queryParams.append('per_page', params.per_page.toString());
-    if (params?.country_code) queryParams.append('country_code', params.country_code);
+    if (params?.country_id) queryParams.append('country_id', params.country_id.toString());
 
     const endpoint = `/posts${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    return this.request<{ posts: any[] }>(endpoint);
+  }
+
+  async getPostsByCountry(countryId: number, params?: { page?: number; per_page?: number }) {
+    return this.getPosts({ ...params, country_id: countryId });
+  }
+
+  async getUserPosts(userId: string, params?: { page?: number; per_page?: number }) {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.per_page) queryParams.append('per_page', params.per_page.toString());
+
+    const endpoint = `/users/${userId}/posts${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
     return this.request<{ posts: any[] }>(endpoint);
   }
 
@@ -164,6 +177,25 @@ class ApiClient {
       last_post_date: string;
       recent_tips: Array<{ title: string; category: string }> 
     }> }>('/countries/stats');
+  }
+
+  // Password Reset API
+  async requestPasswordReset(email: string) {
+    return this.request<{ message: string }>('/auth/password_reset', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
+  }
+
+  async resetPassword(token: string, password: string, passwordConfirmation: string) {
+    return this.request<{ message: string }>('/auth/password_reset/confirm', {
+      method: 'POST',
+      body: JSON.stringify({ 
+        token, 
+        password, 
+        password_confirmation: passwordConfirmation 
+      }),
+    });
   }
 }
 

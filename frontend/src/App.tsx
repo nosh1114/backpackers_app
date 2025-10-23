@@ -14,6 +14,7 @@ import UserList from './components/UserList'
 import CreateUser from './components/CreateUser'
 import { PostsPage } from './pages/PostsPage'
 import { CreatePostPage } from './pages/CreatePostPage'
+import { UserPage } from './pages/UserPage'
 
 function App() {
   return (
@@ -42,6 +43,11 @@ function App() {
           <Route path="/country/:country" element={
             <Layout>
               <CountryPage />
+            </Layout>
+          } />
+          <Route path="/user/:userId" element={
+            <Layout>
+              <UserPage />
             </Layout>
           } />
           <Route path="/graphql-test" element={
