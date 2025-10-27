@@ -23,15 +23,11 @@ graph TB
         end
         
         subgraph "Database"
-            L[PostgreSQL] --> M[Solid Cache]
-            M --> N[Solid Queue]
-            N --> O[Solid Cable]
+            L[PostgreSQL]
         end
         
         subgraph "Infrastructure"
-            P[Docker Container] --> Q[Auto Deploy]
-            Q --> R[SSL Certificate]
-            R --> S[Custom Domain]
+            M[Render Hosting]
         end
     end
     
@@ -42,9 +38,9 @@ graph TB
     
     A --> K
     K --> L
-    P --> A
-    P --> G
-    P --> L
+    M --> A
+    M --> G
+    M --> L
 ```
 
 ## 🚀 開発環境の起動
