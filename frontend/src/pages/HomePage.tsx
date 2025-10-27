@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Search, TrendingUp, Globe, Users, Clock, MessageCircle, Heart } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Search, TrendingUp, Globe, Users, MessageCircle } from 'lucide-react'
 import { CountryCard } from '../components/CountryCard'
 import { PostCard } from '../components/PostCard'
 import { PostForm } from '../components/PostForm'
@@ -14,8 +13,11 @@ interface CountryStats {
   tipCount: number
   lastPostDate: string
   recentTips: Array<{
+    id: number
     title: string
     category: string
+    author_name: string
+    created_at: string
   }>
 }
 
@@ -63,12 +65,18 @@ export function HomePage() {
       const response = await apiClient.getCountryStats()
       
       if (response.data) {
-        const countryStats = response.data.countries.map(country => ({
+        const countryStats = response.data.countries.map((country, index) => ({
           country: country.name,
           flagEmoji: country.flag_emoji,
           tipCount: country.tip_count,
           lastPostDate: country.last_post_date,
-          recentTips: country.recent_tips
+          recentTips: country.recent_tips?.map((tip: { title: string; category: string }, tipIndex: number) => ({
+            id: index * 1000 + tipIndex,
+            title: tip.title,
+            category: tip.category,
+            author_name: 'ユーザー',
+            created_at: new Date().toISOString()
+          })) || []
         }))
         
         // TIPS数でソート（投稿数が多い順）
@@ -110,72 +118,19 @@ export function HomePage() {
     fetchRecentPosts()
   }
 
-  const handleLike = async (postId: number) => {
-    try {
-      // TODO: いいね機能の実装
-      console.log('Like post:', postId)
-      
-      // ローカル状態を更新
-      setPosts(posts.map(p => 
-        p.id === postId 
-          ? { 
-              ...p, 
-              is_liked: !p.is_liked,
-              likes_count: (p.likes_count || 0) + (p.is_liked ? -1 : 1)
-            }
-          : p
-      ))
-    } catch (error) {
-      console.error('Error toggling like:', error)
-    }
-  }
-
-  const handleComment = async (postId: number) => {
-    // TODO: コメント機能の実装
-    console.log('Comment on post:', postId)
-  }
-
-  const handleShare = async (postId: number) => {
-    // TODO: 共有機能の実装
-    console.log('Share post:', postId)
-  }
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-primary-600 to-primary-700 text-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      {/* Hero Section - Simplified */}
+      <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              世界のバックパッカーと
-              <br />
-              旅の知恵を共有しよう
+            <h1 className="text-3xl md:text-5xl font-bold mb-4">
+              バックパッカーの旅を共有
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-primary-100">
-              {countries.length}カ国から集まった実体験に基づくTIPSで、
-              <br />
-              あなたの旅をより安全で楽しいものに
+            <p className="text-base md:text-lg mb-6 text-blue-100">
+              世界中の旅人の実体験TIPSで、より安全で楽しい旅を
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button 
-                onClick={() => document.getElementById('recent-posts-section')?.scrollIntoView({ behavior: 'smooth' })}
-                className="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-50 transition-colors"
-              >
-                最新投稿を見る
-              </button>
-              <button 
-                onClick={() => document.getElementById('post-form-section')?.scrollIntoView({ behavior: 'smooth' })}
-                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary-600 transition-colors"
-              >
-                投稿を始める
-              </button>
-              <button 
-                onClick={() => document.getElementById('search-section')?.scrollIntoView({ behavior: 'smooth' })}
-                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary-600 transition-colors"
-              >
-                国を探す
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -247,9 +202,6 @@ export function HomePage() {
                 <PostCard
                   key={post.id}
                   post={post}
-                  onLike={handleLike}
-                  onComment={handleComment}
-                  onShare={handleShare}
                 />
               ))}
               

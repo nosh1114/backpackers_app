@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Filter, Search } from 'lucide-react';
 import { apiClient } from '../lib/api';
@@ -41,7 +41,7 @@ export function PostsPage() {
         const postsResponse = await apiClient.getPosts({
           page: 1,
           per_page: 20,
-          country_code: selectedCountry || undefined
+          country_id: selectedCountry ? parseInt(selectedCountry) : undefined
         });
 
         // 国一覧を取得

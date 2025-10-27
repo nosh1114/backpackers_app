@@ -1,4 +1,3 @@
-import React from 'react';
 import { Heart, MessageCircle, Share2, Flag, User, Calendar } from 'lucide-react';
 
 interface Post {

@@ -1,6 +1,5 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
-import { MapPin, Calendar, MessageCircle } from 'lucide-react'
+import { Calendar } from 'lucide-react'
 
 interface CountryCardProps {
   country: string
@@ -57,7 +56,7 @@ export function CountryCard({ country, flagEmoji, tipCount, lastPostDate, recent
         {/* Recent Tips Preview */}
         <div className="space-y-2">
           <h4 className="text-sm font-medium text-gray-700 mb-2">最近の投稿</h4>
-          {recentTips.slice(0, 2).map((tip, index) => (
+          {recentTips.slice(0, 2).map((tip) => (
             <div key={tip.id} className="space-y-1">
               <div className="flex items-center space-x-2 text-sm">
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-secondary-100 text-secondary-800">
