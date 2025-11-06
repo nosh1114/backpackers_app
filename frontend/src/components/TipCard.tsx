@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Heart, MessageCircle, MapPin, Calendar, User, Flag, ExternalLink } from 'lucide-react'
+import { Heart, MessageCircle, MapPin, User, ExternalLink } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 
 interface TipCardProps {
@@ -24,12 +23,10 @@ interface TipCardProps {
     is_liked?: boolean
   }
   onLike?: (tipId: string) => void
-  onReport?: (tipId: string) => void
 }
 
-export function TipCard({ tip, onLike, onReport }: TipCardProps) {
+export function TipCard({ tip, onLike }: TipCardProps) {
   const { user } = useAuth()
-  const [showReportMenu, setShowReportMenu] = useState(false)
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -104,30 +101,6 @@ export function TipCard({ tip, onLike, onReport }: TipCardProps) {
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                 ✓ 認証済み
               </span>
-            )}
-          </div>
-          
-          {/* Report button */}
-          <div className="relative">
-            <button
-              onClick={() => setShowReportMenu(!showReportMenu)}
-              className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              <Flag className="h-4 w-4" />
-            </button>
-            
-            {showReportMenu && (
-              <div className="absolute right-0 mt-1 w-32 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
-                <button
-                  onClick={() => {
-                    onReport?.(tip.id)
-                    setShowReportMenu(false)
-                  }}
-                  className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                >
-                  通報する
-                </button>
-              </div>
             )}
           </div>
         </div>
