@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Search, TrendingUp, Globe, Users, MessageCircle } from 'lucide-react'
+import { Search, MessageCircle } from 'lucide-react'
 import { CountryCard } from '../components/CountryCard'
 import { PostCard } from '../components/PostCard'
 import { PostForm } from '../components/PostForm'
+import { CategorySection } from '../components/CategorySection'
 import { apiClient } from '../lib/api'
 // COUNTRIESのimportを削除
 // import { COUNTRIES } from '../lib/constants'
@@ -94,9 +95,6 @@ export function HomePage() {
     country.country.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  const totalTips = countries.reduce((sum, country) => sum + country.tipCount, 0)
-  const activeCountries = countries.filter(country => country.tipCount > 0).length
-
   const fetchRecentPosts = async () => {
     try {
       setPostsLoading(true)
@@ -121,49 +119,6 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section - Simplified */}
-      <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4">
-              バックパッカーの旅を共有
-            </h1>
-            <p className="text-base md:text-lg mb-6 text-blue-100">
-              世界中の旅人の実体験TIPSで、より安全で楽しい旅を
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Section */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="flex items-center justify-center w-12 h-12 bg-primary-100 rounded-lg mx-auto mb-4">
-                <Globe className="h-6 w-6 text-primary-600" />
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">{countries.length}</div>
-              <div className="text-gray-600">対応国数</div>
-            </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center w-12 h-12 bg-secondary-100 rounded-lg mx-auto mb-4">
-                <TrendingUp className="h-6 w-6 text-secondary-600" />
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">{totalTips}</div>
-              <div className="text-gray-600">総TIPS数</div>
-            </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center w-12 h-12 bg-accent-100 rounded-lg mx-auto mb-4">
-                <Users className="h-6 w-6 text-accent-600" />
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">{activeCountries}</div>
-              <div className="text-gray-600">アクティブ者数</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Post Form Section - Always visible for logged in users */}
       <div id="post-form-section" className="bg-gray-50 border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -177,6 +132,9 @@ export function HomePage() {
           />
         </div>
       </div>
+
+      {/* Category Section */}
+      <CategorySection />
 
       {/* Recent Posts Section */}
       <div className="bg-white border-b border-gray-200">
