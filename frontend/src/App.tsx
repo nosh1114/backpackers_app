@@ -15,6 +15,9 @@ import CreateUser from './components/CreateUser'
 import { PostsPage } from './pages/PostsPage'
 import { CreatePostPage } from './pages/CreatePostPage'
 import { UserPage } from './pages/UserPage'
+import { BappaNaviPage } from './pages/BappaNaviPage'
+import { SearchPage } from './pages/SearchPage'
+import { PostDetailPage } from './pages/PostDetailPage'
 
 function App() {
   return (
@@ -81,6 +84,14 @@ function App() {
               </ProtectedRoute>
             } 
           />
+          <Route 
+            path="/bappanavi" 
+            element={
+              <BappaNaviPage />
+            } 
+          />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/posts/:postId" element={<PostDetailPage />} />
         </Routes>
       </Router>
     </AuthProvider>

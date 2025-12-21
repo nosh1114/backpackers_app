@@ -68,7 +68,7 @@ export function CategorySection() {
   }
 
   return (
-    <div className="bg-white py-12">
+    <div className="bg-white py-6">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ヘッダー */}
         <div className="flex items-center justify-between mb-8">
@@ -77,7 +77,7 @@ export function CategorySection() {
             onClick={handleViewAll}
             className="relative text-blue-600 hover:text-blue-700 font-medium transition-colors group"
           >
-            <span className="relative z-10">一覧を見る</span>
+            <span className="relative z-10 text-xs text-blue-500 font-bold">一覧を見る</span>
           </button>
         </div>
 

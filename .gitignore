@@ -15,6 +15,7 @@ backend/public/packs-test/
 logs/
 frontend/logs/
 backend/log/
+backend/log/development.log
 
 # 環境変数ファイル
 .env

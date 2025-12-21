@@ -1,5 +1,5 @@
 class ApiV1PostsController < ApplicationController
-  before_action :authenticate_user, except: [:index, :show]
+  before_action :authenticate_user, except: [:index, :show, :search]
 
   def index
     posts = Post.includes(:user, :country).order(created_at: :desc)
@@ -29,6 +29,7 @@ class ApiV1PostsController < ApplicationController
             name: post.user.name,
             avatar_url: post.user.avatar_url
           },
+          view_count: post.view_count,
           created_at: post.created_at,
           updated_at: post.updated_at
         }
@@ -56,6 +57,7 @@ class ApiV1PostsController < ApplicationController
             name: post.user.name,
             avatar_url: post.user.avatar_url
           },
+          view_count: post.view_count,
           created_at: post.created_at,
           updated_at: post.updated_at
         }
@@ -136,6 +138,50 @@ class ApiV1PostsController < ApplicationController
     else
       render json: { error: '投稿が見つかりません' }, status: :not_found
     end
+  end
+
+  def search
+    Rails.logger.debug "検索パラメータ: #{params.inspect}"
+    Rails.logger.debug "検索キーワード: #{params[:q]}"
+    
+    # 検索クエリが空の場合は空配列を返す
+    if params[:q].blank?
+      render json: { posts: [] }
+      return
+    end
+    
+    search_term = "%#{params[:q]}%"
+    posts = Post.includes(:user, :country)
+                .left_outer_joins(:country)
+                .where('posts.title ILIKE ? OR posts.content ILIKE ? OR countries.name ILIKE ?', 
+                       search_term, search_term, search_term)
+                .order(created_at: :desc)
+    
+    Rails.logger.debug "検索結果数: #{posts.count}"
+    
+    render json: {
+      posts: posts.map do |post|
+        {
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          country: post.country ? {
+            id: post.country.id,
+            code: post.country.code,
+            name: post.country.name,
+            flag_emoji: post.country.flag_emoji
+          } : nil,
+          user: {
+            id: post.user.id,
+            name: post.user.name,
+            avatar_url: post.user.avatar_url
+          },
+          view_count: post.view_count,
+          created_at: post.created_at,
+          updated_at: post.updated_at
+        }
+      end
+    }
   end
 
   private
