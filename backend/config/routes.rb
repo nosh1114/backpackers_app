@@ -11,8 +11,9 @@ Rails.application.routes.draw do
   delete '/api/v1/users', to: 'api_v1_users#destroy'
   
   get '/api/v1/posts', to: 'api_v1_posts#index'
+  get '/api/v1/posts/search', to: 'api_v1_posts#search'  # 動的ルートの前に定義
   get '/api/v1/posts/:id', to: 'api_v1_posts#show'
-  post '/api/v1/posts', to: 'api_v1_posts#create'
+  post '/api/v1/posts', to: 'api_v1_posts#creapte'
   put '/api/v1/posts/:id', to: 'api_v1_posts#update'
   delete '/api/v1/posts/:id', to: 'api_v1_posts#destroy'
   

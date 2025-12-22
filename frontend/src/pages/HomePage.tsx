@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Search, MessageCircle } from 'lucide-react'
-import { CountryCard } from '../components/CountryCard'
-import { PostCard } from '../components/PostCard'
-import { PostForm } from '../components/PostForm'
 import { CategorySection } from '../components/CategorySection'
+import { CountryScrollSection } from '../components/CountryScrollSection'
+import { AreaSection } from '../components/AreaSection'
+import { FeaturedArticlesSection } from '../components/FeaturedArticlesSection'
 import { apiClient } from '../lib/api'
 // COUNTRIESのimportを削除
 // import { COUNTRIES } from '../lib/constants'
@@ -43,6 +42,7 @@ interface Post {
   likes_count?: number
   comments_count?: number
   is_liked?: boolean
+  view_count?: number
 }
 
 export function HomePage() {
@@ -120,140 +120,55 @@ export function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Post Form Section - Always visible for logged in users */}
-      <div id="post-form-section" className="bg-gray-50 border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">旅の体験を共有しよう</h2>
-            <p className="text-gray-600">世界中のバックパッカーとあなたのTIPSを共有してください</p>
-          </div>
-          <PostForm 
-            onPostCreated={handlePostCreated}
-            placeholder="旅の体験やTIPSを共有しましょう..."
-          />
-        </div>
-      </div>
-
       {/* Category Section */}
       <CategorySection />
 
+      {/* Country Scroll Section */}
+      {!loading && countries.length > 0 && (
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <CountryScrollSection 
+              countries={countries.slice(0, 10)} 
+              title="人気の国"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Area Section */}
+      <AreaSection 
+        areas={[
+          { name: 'アジア', img: 'https://images.unsplash.com/photo-1535139262971-c51845709a48?auto=format&fit=crop&w=600&q=80' },
+          { name: 'ヨーロッパ', img: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=600&q=80' },
+          { name: 'アフリカ', img: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=600&q=80' },
+          { name: '北米', img: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=600&q=80' },
+          { name: '南米', img: 'https://images.unsplash.com/photo-1587595431973-160d0d94add1?auto=format&fit=crop&w=600&q=80' },
+          { name: 'オセアニア', img: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=600&q=80' },
+        ]}
+        title="エリアで探す"
+      />
+
+      {/* Featured Articles Section */}
+      {!postsLoading && posts.length > 0 && (
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <FeaturedArticlesSection 
+              articles={posts.slice(0, 4).map(post => ({
+                id: post.id,
+                title: post.title,
+                views: post.view_count || 0,
+                user: {
+                  name: post.user.name,
+                  avatar_url: post.user.avatar_url,
+                },
+              }))}
+              title="特集記事"
+            />
+          </div>
+        </div>
+      )}
+
       {/* Recent Posts Section */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">最新の投稿</h2>
-            <p className="text-gray-600">世界中のバックパッカーからの最新TIPS</p>
-          </div>
-
-          {postsLoading ? (
-            <div className="space-y-6">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="bg-white rounded-xl shadow-sm p-6 animate-pulse">
-                  <div className="h-6 bg-gray-200 rounded mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                </div>
-              ))}
-            </div>
-          ) : posts.length > 0 ? (
-            <div className="space-y-6">
-              {(showAllPosts ? posts : posts.slice(0, 5)).map(post => (
-                <PostCard
-                  key={post.id}
-                  post={post}
-                />
-              ))}
-              
-              {posts.length > 5 && (
-                <div className="text-center pt-6">
-                  <button
-                    onClick={() => setShowAllPosts(!showAllPosts)}
-                    className="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
-                  >
-                    {showAllPosts ? '最新5件を表示' : `すべての投稿を表示 (${posts.length}件)`}
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <MessageCircle className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-gray-900 mb-2">
-                まだ投稿がありません
-              </h3>
-              <p className="text-gray-600">
-                最初の投稿をしてみませんか？
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Search Section */}
-      <div id="search-section" className="bg-gray-50 border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <input
-                type="text"
-                placeholder="国名で検索... (例: 日本、タイ、アメリカ)"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 text-gray-900 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
-            <div className="text-sm text-gray-500 flex items-center">
-              {filteredCountries.length} / {countries.length} カ国
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Countries Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-xl shadow-sm p-6 animate-pulse">
-                <div className="h-6 bg-gray-200 rounded mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCountries.map(country => (
-              <CountryCard
-                key={country.country}
-                country={country.country}
-                flagEmoji={country.flagEmoji}
-                tipCount={country.tipCount}
-                lastPostDate={country.lastPostDate}
-                recentTips={country.recentTips}
-              />
-            ))}
-          </div>
-        )}
-
-        {filteredCountries.length === 0 && !loading && (
-          <div className="text-center py-12">
-            <Search className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-medium text-gray-900 mb-2">
-              検索結果が見つかりませんでした
-            </h3>
-            <p className="text-gray-600">
-              「{searchQuery}」に一致する国が見つかりませんでした
-            </p>
-            <button 
-              onClick={() => setSearchQuery('')}
-              className="mt-4 text-primary-600 hover:text-primary-700 font-medium"
-            >
-              検索をクリア
-            </button>
-          </div>
-        )}
-      </div>
     </div>
   )
 }

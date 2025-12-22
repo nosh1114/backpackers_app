@@ -93,6 +93,11 @@ class ApiClient {
     return this.request<{ posts: any[] }>(endpoint);
   }
 
+  async searchPosts(query: string) {
+    const endpoint = `/posts/search?q=${encodeURIComponent(query)}`;
+    return this.request<{ posts: any[] }>(endpoint);
+  }
+
   async getPostsByCountry(countryId: number, params?: { page?: number; per_page?: number }) {
     return this.getPosts({ ...params, country_id: countryId });
   }
