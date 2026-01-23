@@ -6,9 +6,8 @@ interface User {
   email: string
   name: string
   bio?: string
-  location?: string
-  website?: string
   avatar_url?: string
+  admin?: boolean
 }
 
 interface AuthContextType {
@@ -27,6 +26,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  
   const [token, setTokenState] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (name: string, email: string, password: string) => {
     setLoading(true)
-    
+
     try {
       // バリデーション
       if (!email || !password || !name) {
@@ -91,7 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = async (email: string, password: string) => {
     setLoading(true)
     
-    try {
+   try {
       // バリデーション
       if (!email || !password) {
         throw new Error('メールアドレスとパスワードを入力してください')

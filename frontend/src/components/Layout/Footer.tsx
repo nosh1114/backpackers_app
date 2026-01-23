@@ -34,7 +34,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/post" className="text-gray-300 hover:text-white transition-colors">
+                <Link to="/create-post" className="text-gray-300 hover:text-white transition-colors">
                   TIPS投稿
                 </Link>
               </li>

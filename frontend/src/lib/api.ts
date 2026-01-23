@@ -17,7 +17,7 @@ class ApiClient {
 
   setToken(token: string) {
     this.token = token;
-    localStorage.setItem('token', token);
+  localStorage.setItem('token', token);
   }
 
   clearToken() {
@@ -25,14 +25,17 @@ class ApiClient {
     localStorage.removeItem('token');
   }
 
+  // requestメソッドは、endpointとoptionsを受け取り、Promise<ApiResponse<T>>を返す
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
+    // ここにendpointとoptionsを使用して、APIリクエストを送信するコードを書く
     const url = `${this.baseURL}${endpoint}`;
-    const headers: HeadersInit = {
+    // headersは、Content-Type: application/jsonとoptions.headersをマージしたオブジェクトを作成する
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...options.headers,
+      ...(options.headers as Record<string, string> || {}),
     };
 
     if (this.token) {
@@ -70,12 +73,20 @@ class ApiClient {
     });
   }
 
+  // userDataは
+  // { name: string;
+  //  email: string;
+  //  password: string;
+  //  password_confirmation: string }
+  // の形の引数を受け取る
   async signup(userData: {
     name: string;
     email: string;
     password: string;
     password_confirmation: string;
   }) {
+    // requestメソッドを使用する
+    // request成功時のresponseは{ token: string; user: any }の形のオブジェクトを返す
     return this.request<{ token: string; user: any }>('/auth/signup', {
       method: 'POST',
       body: JSON.stringify({ user: userData }),
@@ -83,14 +94,36 @@ class ApiClient {
   }
 
   // Posts API
-  async getPosts(params?: { page?: number; per_page?: number; country_id?: number }) {
+  async getPosts(params?: { 
+    page?: number; 
+    per_page?: number; 
+    country_id?: number;
+    category?: string | string[];
+    sort?: 'recent' | 'popular';
+  }) {
     const queryParams = new URLSearchParams();
     if (params?.page) queryParams.append('page', params.page.toString());
     if (params?.per_page) queryParams.append('per_page', params.per_page.toString());
     if (params?.country_id) queryParams.append('country_id', params.country_id.toString());
+    if (params?.category) {
+      if (Array.isArray(params.category)) {
+        params.category.forEach(cat => queryParams.append('category[]', cat));
+      } else {
+        queryParams.append('category', params.category);
+      }
+    }
+    if (params?.sort) queryParams.append('sort', params.sort);
 
     const endpoint = `/posts${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
-    return this.request<{ posts: any[] }>(endpoint);
+    return this.request<{ 
+      posts: any[];
+      pagination?: {
+        page: number;
+        per_page: number;
+        total_count: number;
+        total_pages: number;
+      };
+    }>(endpoint);
   }
 
   async searchPosts(query: string) {
@@ -98,8 +131,20 @@ class ApiClient {
     return this.request<{ posts: any[] }>(endpoint);
   }
 
-  async getPostsByCountry(countryId: number, params?: { page?: number; per_page?: number }) {
+  async getPostsByCountry(
+    countryId: number, 
+    params?: { 
+      page?: number; 
+      per_page?: number;
+      category?: string;
+      sort?: 'recent' | 'popular';
+    }
+  ) {
     return this.getPosts({ ...params, country_id: countryId });
+  }
+
+  async getPostCategories() {
+    return this.request<{ categories: string[] }>('/posts/categories');
   }
 
   async getUserPosts(userId: string, params?: { page?: number; per_page?: number }) {
@@ -111,11 +156,12 @@ class ApiClient {
     return this.request<{ posts: any[] }>(endpoint);
   }
 
-  async getPost(id: string) {
-    return this.request<{ post: any }>(`/posts/${id}`);
+  async getPost(id: string, countView: boolean = true) {
+    const endpoint = countView ? `/posts/${id}` : `/posts/${id}?count_view=false`;
+    return this.request<{ post: any }>(endpoint);
   }
 
-  async createPost(postData: { title: string; content: string; country_id: number }) {
+  async createPost(postData: { title: string; content: string; country_id: number; category?: string }) {
     return this.request<{ post: any }>('/posts', {
       method: 'POST',
       body: JSON.stringify({ post: postData }),
@@ -157,14 +203,93 @@ class ApiClient {
     name?: string;
     email?: string;
     bio?: string;
-    location?: string;
-    website?: string;
     avatar_url?: string;
   }) {
     return this.request<{ user: any }>('/users', {
       method: 'PUT',
       body: JSON.stringify({ user: userData }),
     });
+  }
+
+  // Comments API
+  async getComments(postId: string) {
+    return this.request<{
+      comments: Array<{
+        id: number;
+        content: string;
+        user: {
+          id: number;
+          name: string;
+          avatar_url?: string;
+          email?: string;
+        };
+        created_at: string;
+        updated_at: string;
+      }>;
+    }>(`/posts/${postId}/comments`);
+  }
+
+  async createComment(postId: string, content: string) {
+    return this.request<{
+      comment: {
+        id: number;
+        content: string;
+        user: {
+          id: number;
+          name: string;
+          avatar_url?: string;
+          email?: string;
+        };
+        created_at: string;
+        updated_at: string;
+      };
+    }>(`/posts/${postId}/comments`, {
+      method: 'POST',
+      body: JSON.stringify({ comment: { content } }),
+    });
+  }
+
+  async updateComment(postId: string, commentId: number, content: string) {
+    return this.request<{
+      comment: {
+        id: number;
+        content: string;
+        user: {
+          id: number;
+          name: string;
+          avatar_url?: string;
+          email?: string;
+        };
+        created_at: string;
+        updated_at: string;
+      };
+    }>(`/posts/${postId}/comments/${commentId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ comment: { content } }),
+    });
+  }
+
+  async deleteComment(postId: string, commentId: number) {
+    return this.request<{ message: string }>(`/posts/${postId}/comments/${commentId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Likes API
+  async toggleLike(postId: string) {
+    return this.request<{
+      liked: boolean;
+      likes_count: number;
+    }>(`/posts/${postId}/like`, {
+      method: 'POST',
+    });
+  }
+
+  async getLikeStatus(postId: string) {
+    return this.request<{
+      liked: boolean;
+      likes_count: number;
+    }>(`/posts/${postId}/like/status`);
   }
 
   // Countries API
@@ -184,6 +309,23 @@ class ApiClient {
     }> }>('/countries/stats');
   }
 
+  async getCountriesByAreas() {
+    return this.request<{ 
+      areas: Array<{
+        id: number;
+        name: string;
+        countries: Array<{
+          id: number;
+          code: string;
+          name: string;
+          flag_emoji: string;
+          tip_count: number;
+          view_count: number;
+        }>;
+      }>;
+    }>('/countries/by_areas');
+  }
+
   // Password Reset API
   async requestPasswordReset(email: string) {
     return this.request<{ message: string }>('/auth/password_reset', {
@@ -200,6 +342,154 @@ class ApiClient {
         password, 
         password_confirmation: passwordConfirmation 
       }),
+    });
+  }
+
+  // Admin API
+  async getAdminPosts(params?: {
+    page?: number;
+    per_page?: number;
+    q?: string;
+    sort?: 'recent' | 'popular';
+    country_id?: number;
+    category?: string;
+  }) {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.per_page) queryParams.append('per_page', params.per_page.toString());
+    if (params?.q) queryParams.append('q', params.q);
+    if (params?.sort) queryParams.append('sort', params.sort);
+    if (params?.country_id) queryParams.append('country_id', params.country_id.toString());
+    if (params?.category) queryParams.append('category', params.category);
+
+    const endpoint = `/admin/posts${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    return this.request<{
+      posts: any[];
+      pagination?: {
+        page: number;
+        per_page: number;
+        total_count: number;
+        total_pages: number;
+      };
+    }>(endpoint);
+  }
+
+  async getAdminPost(id: string) {
+    return this.request<{ post: any }>(`/admin/posts/${id}`);
+  }
+
+  async updateAdminPost(id: string, postData: {
+    title?: string;
+    content?: string;
+    category?: string;
+    featured?: boolean;
+    country_id?: number;
+  }) {
+    return this.request<{ post: any }>(`/admin/posts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ post: postData }),
+    });
+  }
+
+  async deleteAdminPost(id: string) {
+    return this.request<{ message: string }>(`/admin/posts/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async getAdminUsers(params?: {
+    page?: number;
+    per_page?: number;
+    q?: string;
+  }) {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.per_page) queryParams.append('per_page', params.per_page.toString());
+    if (params?.q) queryParams.append('q', params.q);
+
+    const endpoint = `/admin/users${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    return this.request<{
+      users: any[];
+      pagination?: {
+        page: number;
+        per_page: number;
+        total_count: number;
+        total_pages: number;
+      };
+    }>(endpoint);
+  }
+
+  async getAdminUser(id: string) {
+    return this.request<{ user: any }>(`/admin/users/${id}`);
+  }
+
+  async updateAdminUser(id: string, userData: {
+    name?: string;
+    email?: string;
+    bio?: string;
+    admin?: boolean;
+  }) {
+    return this.request<{ user: any }>(`/admin/users/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ user: userData }),
+    });
+  }
+
+  async deleteAdminUser(id: string) {
+    return this.request<{ message: string }>(`/admin/users/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Contact API
+  async submitContact(data: {
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+  }) {
+    return this.request<{ message: string; contact: any }>('/contacts', {
+      method: 'POST',
+      body: JSON.stringify({ contact: data }),
+    });
+  }
+
+  // Admin Contact API
+  async getAdminContacts(params?: {
+    page?: number;
+    per_page?: number;
+    status?: string;
+    unread?: boolean;
+  }) {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.per_page) queryParams.append('per_page', params.per_page.toString());
+    if (params?.status) queryParams.append('status', params.status);
+    if (params?.unread) queryParams.append('unread', 'true');
+
+    const endpoint = `/admin/contacts${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    return this.request<{
+      contacts: any[];
+      pagination?: {
+        page: number;
+        per_page: number;
+        total_count: number;
+        total_pages: number;
+      };
+      unread_count: number;
+    }>(endpoint);
+  }
+
+  async updateAdminContact(id: number, data: { status?: string; read?: boolean }) {
+    return this.request<{ contact: any }>(`/admin/contacts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ contact: data }),
+    });
+  }
+
+  async deleteAdminContact(id: number) {
+    return this.request<{ message: string }>(`/admin/contacts/${id}`, {
+      method: 'DELETE',
     });
   }
 }

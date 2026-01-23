@@ -15,7 +15,7 @@ class ApiV1CountriesController < ApplicationController
   end
 
   def stats
-    countries = Country.ordered.includes(:posts).map do |country|
+    countries = Country.ordered.includes(posts: :user).map do |country|
       posts = country.posts
       recent_posts = posts.order(created_at: :desc).limit(2)
       
@@ -32,6 +32,8 @@ class ApiV1CountriesController < ApplicationController
             title: post.title,
             category: post.category || 'その他',
             author_name: post.user.name,
+            author_avatar_url: post.user.avatar_url,
+            author_email: post.user.email,
             created_at: post.created_at
           }
         end
@@ -40,6 +42,36 @@ class ApiV1CountriesController < ApplicationController
 
     render json: {
       countries: countries
+    }
+  end
+
+  def by_areas
+    # エリアごとに国をグループ化し、投稿数でソート
+    areas = Area.includes(:countries).order(:name).map do |area|
+      countries_with_stats = area.countries.includes(:posts).map do |country|
+        posts = country.posts
+        {
+          id: country.id,
+          code: country.code,
+          name: country.name,
+          flag_emoji: country.flag_emoji,
+          tip_count: posts.count,
+          view_count: posts.sum(:view_count) || 0
+        }
+      end
+      
+      # 投稿数が多い順にソート（投稿数が同じ場合はview数でソート）
+      sorted_countries = countries_with_stats.sort_by { |c| [-c[:tip_count], -c[:view_count]] }
+      
+      {
+        id: area.id,
+        name: area.name,
+        countries: sorted_countries
+      }
+    end
+
+    render json: {
+      areas: areas
     }
   end
 end

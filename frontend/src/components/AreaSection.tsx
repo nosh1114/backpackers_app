@@ -42,7 +42,7 @@ export function AreaSection({ areas, title = 'エリアで探す' }: AreaSection
           {areas.map((area, index) => (
             <Link
               key={area.name}
-              to={`/area/${encodeURIComponent(area.name)}`}
+              to={`/countries?area=${encodeURIComponent(area.name)}`}
               className="relative rounded-xl overflow-hidden shadow-sm h-24 hover:shadow-md transition-shadow group"
             >
               <img 
@@ -61,4 +61,3 @@ export function AreaSection({ areas, title = 'エリアで探す' }: AreaSection
     </section>
   );
 }
-

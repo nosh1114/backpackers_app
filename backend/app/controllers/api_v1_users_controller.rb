@@ -18,9 +18,8 @@ class ApiV1UsersController < ApplicationController
           name: user.name,
           email: user.email,
           bio: user.bio,
-          location: user.location,
-          website: user.website,
           avatar_url: user.avatar_url,
+          admin: user.admin?,
           created_at: user.created_at,
           updated_at: user.updated_at
         }
@@ -38,8 +37,6 @@ class ApiV1UsersController < ApplicationController
           name: user.name,
           email: user.email,
           bio: user.bio,
-          location: user.location,
-          website: user.website,
           avatar_url: user.avatar_url,
           created_at: user.created_at,
           updated_at: user.updated_at
@@ -57,9 +54,8 @@ class ApiV1UsersController < ApplicationController
         name: current_user.name,
         email: current_user.email,
         bio: current_user.bio,
-        location: current_user.location,
-        website: current_user.website,
         avatar_url: current_user.avatar_url,
+        admin: current_user.admin?,
         created_at: current_user.created_at,
         updated_at: current_user.updated_at
       }
@@ -76,8 +72,6 @@ class ApiV1UsersController < ApplicationController
           name: user.name,
           email: user.email,
           bio: user.bio,
-          location: user.location,
-          website: user.website,
           avatar_url: user.avatar_url,
           created_at: user.created_at,
           updated_at: user.updated_at
@@ -96,8 +90,6 @@ class ApiV1UsersController < ApplicationController
           name: current_user.name,
           email: current_user.email,
           bio: current_user.bio,
-          location: current_user.location,
-          website: current_user.website,
           avatar_url: current_user.avatar_url,
           created_at: current_user.created_at,
           updated_at: current_user.updated_at
@@ -133,6 +125,6 @@ class ApiV1UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :bio, :location, :website, :avatar_url)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :bio, :avatar_url)
   end
 end

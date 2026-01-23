@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { User, MapPin, Calendar, Mail, Globe, Heart, MessageCircle, Share2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { User, Edit, Plus } from 'lucide-react';
 import { PostCard } from '../components/PostCard';
 import { apiClient } from '../lib/api';
+import { useAuth } from '../contexts/AuthContext';
 
 interface UserData {
   id: number;
   name: string;
   email: string;
   bio?: string;
-  location?: string;
-  website?: string;
   avatar_url?: string;
-  created_at: string;
   posts_count?: number;
 }
 
@@ -40,10 +38,17 @@ interface Post {
 
 export function UserPage() {
   const { userId } = useParams<{ userId: string }>();
+  const { user: currentUser } = useAuth();
+  const navigate = useNavigate();
   const [user, setUser] = useState<UserData | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [postsLoading, setPostsLoading] = useState(true);
+  const [editingPostId, setEditingPostId] = useState<number | null>(null);
+  const [editForm, setEditForm] = useState({
+    title: '',
+    content: '',
+  });
 
   useEffect(() => {
     if (userId) {
@@ -82,34 +87,36 @@ export function UserPage() {
     }
   };
 
-  const handleLike = async (postId: number) => {
+  const handleEditPost = (post: Post) => {
+    setEditingPostId(post.id);
+    setEditForm({
+      title: post.title,
+      content: post.content,
+    });
+  };
+
+  const handleSavePost = async (postId: number) => {
     try {
-      // TODO: いいね機能の実装
-      console.log('Like post:', postId);
-      
-      // ローカル状態を更新
-      setPosts(posts.map(p => 
-        p.id === postId 
-          ? { 
-              ...p, 
-              is_liked: !p.is_liked,
-              likes_count: (p.likes_count || 0) + (p.is_liked ? -1 : 1)
-            }
-          : p
-      ));
+      const response = await apiClient.updatePost(postId.toString(), {
+        title: editForm.title,
+        content: editForm.content,
+      });
+
+      if (response.data) {
+        setEditingPostId(null);
+        fetchUserPosts();
+      } else {
+        alert('更新に失敗しました: ' + (response.error || 'Unknown error'));
+      }
     } catch (error) {
-      console.error('Error toggling like:', error);
+      console.error('Error updating post:', error);
+      alert('更新に失敗しました');
     }
   };
 
-  const handleComment = async (postId: number) => {
-    // TODO: コメント機能の実装
-    console.log('Comment on post:', postId);
-  };
-
-  const handleShare = async (postId: number) => {
-    // TODO: 共有機能の実装
-    console.log('Share post:', postId);
+  const handleCancelEdit = () => {
+    setEditingPostId(null);
+    setEditForm({ title: '', content: '' });
   };
 
   const formatDate = (dateString: string) => {
@@ -170,34 +177,6 @@ export function UserPage() {
                 <p className="text-gray-600 mb-4">{user.bio}</p>
               )}
 
-              <div className="flex flex-wrap items-center space-x-6 text-sm text-gray-500 mb-4">
-                <div className="flex items-center space-x-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>{formatDate(user.created_at)}に参加</span>
-                </div>
-                
-                {user.location && (
-                  <div className="flex items-center space-x-1">
-                    <MapPin className="h-4 w-4" />
-                    <span>{user.location}</span>
-                  </div>
-                )}
-                
-                {user.website && (
-                  <div className="flex items-center space-x-1">
-                    <Globe className="h-4 w-4" />
-                    <a 
-                      href={user.website} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-700"
-                    >
-                      {user.website}
-                    </a>
-                  </div>
-                )}
-              </div>
-
               <div className="flex items-center space-x-6">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-gray-900">{posts.length}</div>
@@ -217,9 +196,20 @@ export function UserPage() {
 
       {/* Posts Section */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">投稿一覧</h2>
-          <p className="text-gray-600">{user.name}さんの投稿</p>
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">投稿一覧</h2>
+            <p className="text-gray-600">{user.name}さんの投稿</p>
+          </div>
+          {currentUser && currentUser.id.toString() === userId && (
+            <Link
+              to="/create-post"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 text-sm"
+            >
+              <Plus className="w-4 h-4" />
+              新しい投稿
+            </Link>
+          )}
         </div>
 
         {postsLoading ? (
@@ -235,13 +225,63 @@ export function UserPage() {
         ) : posts.length > 0 ? (
           <div className="space-y-6">
             {posts.map(post => (
-              <PostCard
-                key={post.id}
-                post={post}
-                onLike={handleLike}
-                onComment={handleComment}
-                onShare={handleShare}
-              />
+              <div key={post.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                {editingPostId === post.id ? (
+                  <div className="p-6">
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">タイトル</label>
+                        <input
+                          type="text"
+                          value={editForm.title}
+                          onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">内容</label>
+                        <textarea
+                          value={editForm.content}
+                          onChange={(e) => setEditForm({ ...editForm, content: e.target.value })}
+                          rows={8}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleSavePost(post.id)}
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                          保存
+                        </button>
+                        <button
+                          onClick={handleCancelEdit}
+                          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                        >
+                          キャンセル
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <PostCard
+                      post={post}
+                    />
+                    {currentUser && currentUser.id.toString() === userId && (
+                      <div className="px-6 py-3 border-t border-gray-200 flex justify-end">
+                        <button
+                          onClick={() => handleEditPost(post)}
+                          className="flex items-center gap-2 px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        >
+                          <Edit className="w-4 h-4" />
+                          <span>編集</span>
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
             ))}
           </div>
         ) : (

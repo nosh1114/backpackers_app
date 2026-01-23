@@ -11,14 +11,42 @@ Rails.application.routes.draw do
   delete '/api/v1/users', to: 'api_v1_users#destroy'
   
   get '/api/v1/posts', to: 'api_v1_posts#index'
+  get '/api/v1/posts/categories', to: 'api_v1_posts#categories'
   get '/api/v1/posts/search', to: 'api_v1_posts#search'  # 動的ルートの前に定義
   get '/api/v1/posts/:id', to: 'api_v1_posts#show'
-  post '/api/v1/posts', to: 'api_v1_posts#creapte'
+  post '/api/v1/posts', to: 'api_v1_posts#create'
   put '/api/v1/posts/:id', to: 'api_v1_posts#update'
   delete '/api/v1/posts/:id', to: 'api_v1_posts#destroy'
   
+  # Comments
+  get '/api/v1/posts/:post_id/comments', to: 'api_v1_comments#index'
+  post '/api/v1/posts/:post_id/comments', to: 'api_v1_comments#create'
+  put '/api/v1/posts/:post_id/comments/:id', to: 'api_v1_comments#update'
+  delete '/api/v1/posts/:post_id/comments/:id', to: 'api_v1_comments#destroy'
+  
+  # Likes
+  post '/api/v1/posts/:post_id/like', to: 'api_v1_likes#toggle'
+  get '/api/v1/posts/:post_id/like/status', to: 'api_v1_likes#status'
+  
   get '/api/v1/countries', to: 'api_v1_countries#index'
   get '/api/v1/countries/stats', to: 'api_v1_countries#stats'
+  get '/api/v1/countries/by_areas', to: 'api_v1_countries#by_areas'
+
+  # Contact
+  post '/api/v1/contacts', to: 'api_v1_contacts#create'
+
+  # Admin API
+  get '/api/v1/admin/posts', to: 'api_v1_admin#posts'
+  get '/api/v1/admin/posts/:id', to: 'api_v1_admin#show_post'
+  put '/api/v1/admin/posts/:id', to: 'api_v1_admin#update_post'
+  delete '/api/v1/admin/posts/:id', to: 'api_v1_admin#delete_post'
+  get '/api/v1/admin/users', to: 'api_v1_admin#users'
+  get '/api/v1/admin/users/:id', to: 'api_v1_admin#show_user'
+  put '/api/v1/admin/users/:id', to: 'api_v1_admin#update_user'
+  delete '/api/v1/admin/users/:id', to: 'api_v1_admin#delete_user'
+  get '/api/v1/admin/contacts', to: 'api_v1_admin#contacts'
+  put '/api/v1/admin/contacts/:id', to: 'api_v1_admin#update_contact'
+  delete '/api/v1/admin/contacts/:id', to: 'api_v1_admin#delete_contact'
 
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check

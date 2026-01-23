@@ -14,9 +14,8 @@ class ApiV1AuthController < ApplicationController
           name: user.name,
           email: user.email,
           bio: user.bio,
-          location: user.location,
-          website: user.website,
-          avatar_url: user.avatar_url
+          avatar_url: user.avatar_url,
+          admin: user.admin?
         }
       }
     else
@@ -37,9 +36,8 @@ class ApiV1AuthController < ApplicationController
           name: user.name,
           email: user.email,
           bio: user.bio,
-          location: user.location,
-          website: user.website,
-          avatar_url: user.avatar_url
+          avatar_url: user.avatar_url,
+          admin: user.admin?
         }
       }, status: :created
     else
@@ -52,6 +50,6 @@ class ApiV1AuthController < ApplicationController
   def user_params
     # フロントエンドから送信される正しいパラメータを取得
     # フロントエンドは { user: { name, email, password, password_confirmation } } の形式で送信
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :bio, :location, :website, :avatar_url)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :bio, :avatar_url)
   end
 end

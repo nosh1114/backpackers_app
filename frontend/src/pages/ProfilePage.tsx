@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { apiClient } from '../lib/api';
-import { User, Edit, Save, X, Globe, MapPin, Camera, Plus, Calendar, Mail } from 'lucide-react';
+import { User, Edit, Save, X, Camera, Plus, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface UserProfile {
@@ -11,8 +11,6 @@ interface UserProfile {
   created_at: string;
   updated_at: string;
   bio?: string;
-  location?: string;
-  website?: string;
   avatar_url?: string;
 }
 
@@ -44,8 +42,6 @@ const ProfilePage: React.FC = () => {
     name: '',
     email: '',
     bio: '',
-    location: '',
-    website: '',
     avatar_url: ''
   });
 
@@ -63,8 +59,6 @@ const ProfilePage: React.FC = () => {
             name: profileData.name || '',
             email: profileData.email || '',
             bio: profileData.bio || '',
-            location: profileData.location || '',
-            website: profileData.website || '',
             avatar_url: profileData.avatar_url || ''
           });
         } else {
@@ -122,8 +116,6 @@ const ProfilePage: React.FC = () => {
         name: formData.name,
         email: formData.email,
         bio: formData.bio,
-        location: formData.location,
-        website: formData.website,
         avatar_url: formData.avatar_url
       });
 
@@ -148,8 +140,6 @@ const ProfilePage: React.FC = () => {
         name: profile.name || '',
         email: profile.email || '',
         bio: profile.bio || '',
-        location: profile.location || '',
-        website: profile.website || '',
         avatar_url: profile.avatar_url || ''
       });
     }
@@ -257,28 +247,6 @@ const ProfilePage: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">所在地</label>
-                  <input
-                    type="text"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="例: 東京, 日本"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">ウェブサイト</label>
-                  <input
-                    type="url"
-                    name="website"
-                    value={formData.website}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="https://example.com"
-                  />
-                </div>
-                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">アバターURL</label>
                   <input
                     type="url"
@@ -334,28 +302,9 @@ const ProfilePage: React.FC = () => {
                 )}
 
                 <div className="space-y-2">
-                  {profile?.location && (
-                    <div className="flex items-center space-x-2 text-gray-600">
-                      <MapPin className="h-4 w-4" />
-                      <span>{profile.location}</span>
-                    </div>
-                  )}
-                  {profile?.website && (
-                    <div className="flex items-center space-x-2 text-gray-600">
-                      <Globe className="h-4 w-4" />
-                      <a
-                        href={profile.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800"
-                      >
-                        {profile.website}
-                      </a>
-                    </div>
-                  )}
                   <div className="flex items-center space-x-2 text-gray-600">
-                    <Calendar className="h-4 w-4" />
-                    <span>登録日: {formatDate(profile?.created_at || '')}</span>
+                    <Mail className="h-4 w-4" />
+                    <span>{profile?.email}</span>
                   </div>
                 </div>
               </div>

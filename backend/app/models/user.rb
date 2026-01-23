@@ -4,7 +4,6 @@ class User < ApplicationRecord
   has_secure_password
 
   # 関連付け
-  belongs_to :role
   has_many :posts, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
@@ -30,5 +29,9 @@ class User < ApplicationRecord
     self.reset_password_token = nil
     self.reset_password_sent_at = nil
     save!
+  end
+
+  def admin?
+    admin == true
   end
 end

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { getAvatarUrl } from '../lib/gravatar';
 
 interface CountryStats {
   country: string;
@@ -10,6 +11,8 @@ interface CountryStats {
     title: string;
     category: string;
     author_name: string;
+    author_avatar_url?: string;
+    author_email?: string;
     created_at: string;
   }>;
 }
@@ -87,7 +90,12 @@ export function CountryScrollSection({
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold text-gray-800">{title}</h2>
         {showViewAll && (
-          <span className="text-xs text-blue-500 font-bold">一覧を見る</span>
+          <Link 
+            to="/countries"
+            className="text-xs text-blue-500 font-bold hover:text-blue-700 transition-colors"
+          >
+            一覧を見る →
+          </Link>
         )}
       </div>
       <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
@@ -111,11 +119,13 @@ export function CountryScrollSection({
               <h3 className="font-bold text-sm text-gray-800 mb-1">{country.country}</h3>
               <div className="flex items-center mt-1">
                 <div className="flex -space-x-2 mr-2">
-                  {country.recentTips.slice(0, 2).map((tip, i) => (
-                    <div 
-                      key={tip.id} 
-                      className="w-5 h-5 rounded-full bg-gray-200 border border-white"
-                    ></div>
+                  {country.recentTips.slice(0, 2).map((tip) => (
+                    <img 
+                      key={tip.id}
+                      src={getAvatarUrl(tip.author_avatar_url, tip.author_email, 20)}
+                      alt={tip.author_name}
+                      className="w-5 h-5 rounded-full border border-white object-cover"
+                    />
                   ))}
                   {country.recentTips.length === 0 && (
                     <>

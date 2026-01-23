@@ -58,12 +58,12 @@ export function CategorySection() {
   const navigate = useNavigate()
 
   const handleCategoryClick = (categoryId: string) => {
-    // カテゴリでフィルタリングされた投稿一覧ページに遷移
-    // または、カテゴリ名をクエリパラメータとして渡す
-    navigate(`/posts?category=${categoryId}`)
+    // カテゴリーページに遷移
+    navigate(`/category/${categoryId}`)
   }
 
   const handleViewAll = () => {
+    // 全カテゴリーの投稿一覧ページに遷移（カテゴリーフィルターなし）
     navigate('/posts')
   }
 
@@ -77,7 +77,6 @@ export function CategorySection() {
             onClick={handleViewAll}
             className="relative text-blue-600 hover:text-blue-700 font-medium transition-colors group"
           >
-            <span className="relative z-10 text-xs text-blue-500 font-bold">一覧を見る</span>
           </button>
         </div>
 

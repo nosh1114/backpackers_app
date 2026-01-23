@@ -120,9 +120,7 @@ export function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Post Form Section - Always visible for logged in users */}
-      {/* Category Section */}
-      <CategorySection />
-
+      
       {/* Country Scroll Section */}
       {!loading && countries.length > 0 && (
         <div className="bg-white border-b border-gray-200">
@@ -168,7 +166,8 @@ export function HomePage() {
         </div>
       )}
 
-      {/* Recent Posts Section */}
+      {/* Category Section - 下に移動 */}
+      <CategorySection />
     </div>
   )
 }
