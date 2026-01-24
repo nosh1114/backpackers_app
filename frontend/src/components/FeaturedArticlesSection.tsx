@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
+import { getCountryImageUrl } from '../lib/countryImages';
 
 interface Article {
   id: number;
@@ -11,6 +12,10 @@ interface Article {
   };
   img?: string;
   view_count?: number;
+  country?: {
+    name: string;
+    image_url?: string;
+  };
 }
 
 interface FeaturedArticlesSectionProps {
@@ -18,25 +23,20 @@ interface FeaturedArticlesSectionProps {
   title?: string;
 }
 
-// 記事に画像がない場合のデフォルト画像を生成
+// 記事の画像URL取得（投稿画像 > 国のAPI画像 > フォールバック）
 const getArticleImageUrl = (article: Article): string => {
   if (article.img) {
     return article.img;
   }
   
-  // タイトルに基づいて適切な画像を選択
-  const title = article.title.toLowerCase();
-  if (title.includes('イタリア')) {
-    return 'https://images.unsplash.com/photo-1498522544924-8fcd7e24b7bf?auto=format&fit=crop&w=400&q=80';
+  // 国のAPI画像を優先
+  if (article.country?.image_url) {
+    return article.country.image_url;
   }
-  if (title.includes('ギリシャ')) {
-    return 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=400&q=80';
-  }
-  if (title.includes('日本')) {
-    return 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=400&q=80';
-  }
-  if (title.includes('タイ')) {
-    return 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=400&q=80';
+  
+  // フォールバック：国名からフロントエンドの画像マッピングを使用
+  if (article.country?.name) {
+    return getCountryImageUrl(article.country.name, 400);
   }
   
   // デフォルト画像

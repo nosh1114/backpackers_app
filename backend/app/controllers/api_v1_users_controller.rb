@@ -1,5 +1,5 @@
 class ApiV1UsersController < ApplicationController
-  before_action :authenticate_user, except: [:create]
+  before_action :authenticate_user, except: [:create, :show, :posts]
 
   def index
     users = User.all.order(id: :asc)
@@ -18,9 +18,8 @@ class ApiV1UsersController < ApplicationController
           name: user.name,
           email: user.email,
           bio: user.bio,
-          location: user.location,
-          website: user.website,
           avatar_url: user.avatar_url,
+          admin: user.admin?,
           created_at: user.created_at,
           updated_at: user.updated_at
         }
@@ -38,8 +37,6 @@ class ApiV1UsersController < ApplicationController
           name: user.name,
           email: user.email,
           bio: user.bio,
-          location: user.location,
-          website: user.website,
           avatar_url: user.avatar_url,
           created_at: user.created_at,
           updated_at: user.updated_at
@@ -50,6 +47,59 @@ class ApiV1UsersController < ApplicationController
     end
   end
 
+  # ユーザーの投稿一覧を取得
+  def posts
+    user = User.find_by(id: params[:id])
+    
+    unless user
+      return render json: { error: 'ユーザーが見つかりません' }, status: :not_found
+    end
+
+    posts = user.posts.includes(:country, :user, :comments, :likes).order(created_at: :desc)
+    
+    # ページネーション
+    page = (params[:page] || 1).to_i
+    per_page = (params[:per_page] || 20).to_i
+    total_count = posts.count
+    posts = posts.limit(per_page).offset((page - 1) * per_page)
+
+    render json: {
+      posts: posts.map do |post|
+        {
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          category: post.category,
+          featured: post.featured || false,
+          images: post.image_urls,
+          country: {
+            id: post.country.id,
+            code: post.country.code,
+            name: post.country.name,
+            flag_emoji: post.country.flag_emoji
+          },
+          user: {
+            id: post.user.id,
+            name: post.user.name,
+            avatar_url: post.user.avatar_url,
+            email: post.user.email
+          },
+          view_count: post.view_count || 0,
+          likes_count: post.likes_count || post.likes.count,
+          comments_count: post.comments.count,
+          created_at: post.created_at,
+          updated_at: post.updated_at
+        }
+      end,
+      pagination: {
+        page: page,
+        per_page: per_page,
+        total_count: total_count,
+        total_pages: (total_count.to_f / per_page).ceil
+      }
+    }
+  end
+
   def profile
     render json: {
       user: {
@@ -57,9 +107,8 @@ class ApiV1UsersController < ApplicationController
         name: current_user.name,
         email: current_user.email,
         bio: current_user.bio,
-        location: current_user.location,
-        website: current_user.website,
         avatar_url: current_user.avatar_url,
+        admin: current_user.admin?,
         created_at: current_user.created_at,
         updated_at: current_user.updated_at
       }
@@ -76,8 +125,6 @@ class ApiV1UsersController < ApplicationController
           name: user.name,
           email: user.email,
           bio: user.bio,
-          location: user.location,
-          website: user.website,
           avatar_url: user.avatar_url,
           created_at: user.created_at,
           updated_at: user.updated_at
@@ -96,8 +143,6 @@ class ApiV1UsersController < ApplicationController
           name: current_user.name,
           email: current_user.email,
           bio: current_user.bio,
-          location: current_user.location,
-          website: current_user.website,
           avatar_url: current_user.avatar_url,
           created_at: current_user.created_at,
           updated_at: current_user.updated_at
@@ -133,6 +178,6 @@ class ApiV1UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :bio, :location, :website, :avatar_url)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :bio, :avatar_url)
   end
 end

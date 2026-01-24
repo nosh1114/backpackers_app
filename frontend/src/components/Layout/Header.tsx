@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { User, LogOut, Menu, X, Search } from 'lucide-react'
+import { User, LogOut, Menu, X, Search, Globe, FolderOpen, PenSquare, Settings, Shield } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 
 const Header: React.FC = () => {
@@ -104,74 +104,124 @@ const Header: React.FC = () => {
 
         {/* モバイルメニュー */}
         {isMenuOpen && (
-          <div className="md:hidden pb-4">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white rounded-lg shadow-lg mt-2">
+          <div className="pb-4">
+            <div className="px-2 pt-2 pb-3 bg-white rounded-lg shadow-lg mt-2 border border-gray-100">
+              {/* 探す */}
+              <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                探す
+              </div>
               <Link
-                to="/"
-                className="text-gray-700 hover:text-purple-600 block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                to="/countries"
+                className="flex items-center gap-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 px-3 py-3 rounded-md text-base font-medium transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                ホーム
+                <Globe className="h-5 w-5" />
+                <span>国で探す</span>
               </Link>
               <Link
-                to="/posts"
-                className="text-gray-700 hover:text-purple-600 block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                to="/#categories"
+                className="flex items-center gap-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 px-3 py-3 rounded-md text-base font-medium transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                投稿一覧
+                <FolderOpen className="h-5 w-5" />
+                <span>カテゴリで探す</span>
               </Link>
-              {isAuthenticated ? (
-                <>
+
+              {/* 投稿 */}
+              <div className="border-t border-gray-100 mt-2 pt-2">
+                <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  投稿
+                </div>
+                {isAuthenticated ? (
                   <Link
                     to="/create-post"
-                    className="text-gray-700 hover:text-purple-600 block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                    className="flex items-center gap-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 px-3 py-3 rounded-md text-base font-medium transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    投稿作成
+                    <PenSquare className="h-5 w-5" />
+                    <span>情報を投稿する</span>
                   </Link>
+                ) : (
                   <Link
-                    to="/profile"
-                    className="text-gray-700 hover:text-purple-600 block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                    to="/auth"
+                    className="flex items-center gap-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 px-3 py-3 rounded-md text-base font-medium transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    プロフィール
+                    <PenSquare className="h-5 w-5" />
+                    <span>情報を投稿する</span>
+                    <span className="text-xs text-gray-400">(要ログイン)</span>
                   </Link>
-                  <div className="border-t border-gray-200 pt-4 mt-4">
-                    <div className="flex items-center space-x-2 px-3 py-2">
-                      {user?.avatar_url ? (
-                        <img
-                          src={user.avatar_url}
-                          alt={user.name}
-                          className="w-8 h-8 rounded-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
-                          <User className="h-4 w-4 text-purple-600" />
-                        </div>
-                      )}
-                      <span className="text-sm font-medium text-gray-700">{user?.name}</span>
-                    </div>
+                )}
+              </div>
+
+              {/* アカウント */}
+              <div className="border-t border-gray-100 mt-2 pt-2">
+                <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  アカウント
+                </div>
+                {isAuthenticated ? (
+                  <>
+                    <Link
+                      to="/profile"
+                      className="flex items-center gap-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 px-3 py-3 rounded-md text-base font-medium transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <User className="h-5 w-5" />
+                      <span>マイページ</span>
+                    </Link>
+                    {user?.admin && (
+                      <Link
+                        to="/admin"
+                        className="flex items-center gap-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 px-3 py-3 rounded-md text-base font-medium transition-colors"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <Shield className="h-5 w-5" />
+                        <span>管理画面</span>
+                      </Link>
+                    )}
                     <button
                       onClick={() => {
                         handleSignOut()
                         setIsMenuOpen(false)
                       }}
-                      className="flex items-center space-x-2 text-gray-700 hover:text-red-600 px-3 py-2 rounded-md text-base font-medium transition-colors w-full"
+                      className="flex items-center gap-3 text-gray-700 hover:bg-red-50 hover:text-red-600 px-3 py-3 rounded-md text-base font-medium transition-colors w-full"
                     >
-                      <LogOut className="h-4 w-4" />
+                      <LogOut className="h-5 w-5" />
                       <span>ログアウト</span>
                     </button>
-                  </div>
-                </>
-              ) : (
+                  </>
+                ) : (
+                  <Link
+                    to="/auth"
+                    className="flex items-center gap-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 px-3 py-3 rounded-md text-base font-medium transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <User className="h-5 w-5" />
+                    <span>ログイン / 新規登録</span>
+                  </Link>
+                )}
+              </div>
+
+              {/* その他 */}
+              <div className="border-t border-gray-100 mt-2 pt-2">
+                <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  その他
+                </div>
                 <Link
-                  to="/auth"
-                  className="text-gray-700 hover:text-purple-600 block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                  to="/about"
+                  className="flex items-center gap-3 text-gray-500 hover:bg-gray-50 hover:text-gray-700 px-3 py-2 rounded-md text-sm transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  ログイン
+                  <span>サイトについて</span>
                 </Link>
-              )}
+                <Link
+                  to="/contact"
+                  className="flex items-center gap-3 text-gray-500 hover:bg-gray-50 hover:text-gray-700 px-3 py-2 rounded-md text-sm transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span>お問い合わせ</span>
+                </Link>
+              </div>
             </div>
           </div>
         )}

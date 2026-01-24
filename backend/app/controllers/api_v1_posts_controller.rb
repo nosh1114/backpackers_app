@@ -1,16 +1,42 @@
 class ApiV1PostsController < ApplicationController
-  before_action :authenticate_user, except: [:index, :show, :search]
+  before_action :authenticate_user, except: [:index, :show, :search, :categories]
 
   def index
-    posts = Post.includes(:user, :country).order(created_at: :desc)
+    posts = Post.includes(:user, :country, :comments, :likes)
     posts = posts.where(country_id: params[:country_id]) if params[:country_id].present?
     
-    # ページネーション
-    if params[:page] && params[:per_page]
-      page = params[:page].to_i
-      per_page = params[:per_page].to_i
-      posts = posts.limit(per_page).offset(per_page * (page - 1))
+    # カテゴリーフィルター（複数対応）
+    if params[:category].present?
+      # category[]形式の配列パラメータまたは単一のcategoryパラメータに対応
+      categories = if params[:category].is_a?(Array)
+        params[:category]
+      elsif params[:'category[]'].present?
+        params[:'category[]']
+      else
+        [params[:category]]
+      end
+      posts = posts.where(category: categories)
     end
+    
+    # ソート機能
+    case params[:sort]
+    when 'recent'
+      posts = posts.recent
+    when 'popular', nil
+      # デフォルトは人気順（view数順）
+      # featuredを優先し、その後view数順
+      posts = posts.order(featured: :desc, view_count: :desc, created_at: :desc)
+    else
+      posts = posts.recent
+    end
+    
+    # 総件数を取得（ページネーション前）
+    total_count = posts.count
+    
+    # ページネーション
+    page = params[:page]&.to_i || 1
+    per_page = params[:per_page]&.to_i || 20
+    posts = posts.limit(per_page).offset(per_page * (page - 1))
 
     render json: {
       posts: posts.map do |post|
@@ -18,46 +44,84 @@ class ApiV1PostsController < ApplicationController
           id: post.id,
           title: post.title,
           content: post.content,
+          category: post.category,
+          featured: post.featured || false,
+          images: post.image_urls,
           country: {
             id: post.country.id,
             code: post.country.code,
             name: post.country.name,
-            flag_emoji: post.country.flag_emoji
+            flag_emoji: post.country.flag_emoji,
+            image_url: post.country.image_url
           },
           user: {
             id: post.user.id,
             name: post.user.name,
-            avatar_url: post.user.avatar_url
+            avatar_url: post.user.avatar_url,
+            email: post.user.email
           },
-          view_count: post.view_count,
+          view_count: post.view_count || 0,
+          likes_count: post.likes_count || post.likes.count,
+          comments_count: post.comments.count,
           created_at: post.created_at,
           updated_at: post.updated_at
         }
-      end
+      end,
+      pagination: {
+        page: page,
+        per_page: per_page,
+        total_count: total_count,
+        total_pages: (total_count.to_f / per_page).ceil
+      }
     }
   end
 
   def show
-    post = Post.includes(:user, :country).find_by(id: params[:id])
+    post = Post.includes(:user, :country, :comments, :likes).find_by(id: params[:id])
     
     if post
+      # view数をインクリメント（count_view=falseの場合はスキップ）
+      unless params[:count_view] == 'false'
+        post.increment_view_count!
+      end
+      
       render json: {
         post: {
           id: post.id,
           title: post.title,
           content: post.content,
+          category: post.category,
+          featured: post.featured || false,
+          images: post.image_urls,
           country: {
             id: post.country.id,
             code: post.country.code,
             name: post.country.name,
-            flag_emoji: post.country.flag_emoji
+            flag_emoji: post.country.flag_emoji,
+            image_url: post.country.image_url
           },
           user: {
             id: post.user.id,
             name: post.user.name,
-            avatar_url: post.user.avatar_url
+            avatar_url: post.user.avatar_url,
+            email: post.user.email
           },
-          view_count: post.view_count,
+          view_count: post.view_count || 0,
+          likes_count: post.likes_count || post.likes.count,
+          comments_count: post.comments.count,
+          comments: post.comments.order(created_at: :desc).map do |comment|
+            {
+              id: comment.id,
+              content: comment.content,
+              user: {
+                id: comment.user.id,
+                name: comment.user.name,
+                avatar_url: comment.user.avatar_url,
+                email: comment.user.email
+              },
+              created_at: comment.created_at
+            }
+          end,
           created_at: post.created_at,
           updated_at: post.updated_at
         }
@@ -76,17 +140,25 @@ class ApiV1PostsController < ApplicationController
           id: post.id,
           title: post.title,
           content: post.content,
+          category: post.category,
+          featured: post.featured || false,
+          images: post.image_urls,
           country: {
             id: post.country.id,
             code: post.country.code,
             name: post.country.name,
-            flag_emoji: post.country.flag_emoji
+            flag_emoji: post.country.flag_emoji,
+            image_url: post.country.image_url
           },
           user: {
             id: post.user.id,
             name: post.user.name,
-            avatar_url: post.user.avatar_url
+            avatar_url: post.user.avatar_url,
+            email: post.user.email
           },
+          view_count: post.view_count || 0,
+          likes_count: post.likes_count || 0,
+          comments_count: post.comments.count,
           created_at: post.created_at,
           updated_at: post.updated_at
         }
@@ -106,17 +178,25 @@ class ApiV1PostsController < ApplicationController
             id: post.id,
             title: post.title,
             content: post.content,
+            category: post.category,
+            featured: post.featured || false,
+            images: post.image_urls,
             country: {
               id: post.country.id,
               code: post.country.code,
               name: post.country.name,
-              flag_emoji: post.country.flag_emoji
+              flag_emoji: post.country.flag_emoji,
+              image_url: post.country.image_url
             },
             user: {
               id: post.user.id,
               name: post.user.name,
-              avatar_url: post.user.avatar_url
+              avatar_url: post.user.avatar_url,
+              email: post.user.email
             },
+            view_count: post.view_count || 0,
+            likes_count: post.likes_count || post.likes.count,
+            comments_count: post.comments.count,
             created_at: post.created_at,
             updated_at: post.updated_at
           }
@@ -165,22 +245,35 @@ class ApiV1PostsController < ApplicationController
           id: post.id,
           title: post.title,
           content: post.content,
+          category: post.category,
+          featured: post.featured || false,
+          images: post.image_urls,
           country: post.country ? {
             id: post.country.id,
             code: post.country.code,
             name: post.country.name,
-            flag_emoji: post.country.flag_emoji
+            flag_emoji: post.country.flag_emoji,
+            image_url: post.country.image_url
           } : nil,
           user: {
             id: post.user.id,
             name: post.user.name,
-            avatar_url: post.user.avatar_url
+            avatar_url: post.user.avatar_url,
+            email: post.user.email
           },
-          view_count: post.view_count,
+          view_count: post.view_count || 0,
+          likes_count: post.likes_count || post.likes.count,
+          comments_count: post.comments.count,
           created_at: post.created_at,
           updated_at: post.updated_at
         }
       end
+    }
+  end
+
+  def categories
+    render json: {
+      categories: Post::CATEGORIES
     }
   end
 
@@ -204,6 +297,6 @@ class ApiV1PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :content, :country_id, :category)
+    params.require(:post).permit(:title, :content, :country_id, :category, :featured, images: [])
   end
 end

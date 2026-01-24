@@ -1,31 +1,48 @@
 import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
+import { getCountryImageUrl } from '../lib/countryImages';
+import { getFullImageUrl } from '../lib/api';
 
 interface SearchResultCardProps {
   post: {
     id: number;
     title: string;
     content: string;
+    images?: string[];
+    country?: {
+      id: number;
+      code: string;
+      name: string;
+      flag_emoji: string;
+      image_url?: string;
+    };
     user: {
       name: string;
       avatar_url?: string;
     };
     view_count?: number;
-    img?: string; // 画像URL（オプション）
   };
 }
 
-// 記事に画像がない場合のデフォルト画像を生成
-const getArticleImageUrl = (title: string, img?: string): string => {
-  if (img) return img;
+// 記事の画像URLを取得（優先順位: 記事の画像 > 国の画像 > デフォルト）
+const getPostImageUrl = (post: SearchResultCardProps['post']): string => {
+  // 1. 記事に添付された画像があればそれを使う
+  if (post.images && post.images.length > 0 && post.images[0]) {
+    // 相対パスの場合はフルURLに変換
+    return getFullImageUrl(post.images[0]) || post.images[0];
+  }
   
-  const lowerTitle = title.toLowerCase();
-  if (lowerTitle.includes('イタリア')) return 'https://images.unsplash.com/photo-1498522544924-8fcd7e24b7bf?auto=format&fit=crop&w=400&q=80';
-  if (lowerTitle.includes('ギリシャ')) return 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=400&q=80';
-  if (lowerTitle.includes('日本')) return 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=400&q=80';
-  if (lowerTitle.includes('タイ')) return 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=400&q=80';
-  if (lowerTitle.includes('シンガポール')) return 'https://images.unsplash.com/photo-1565963036838-a79638f67464?auto=format&fit=crop&w=400&q=80';
+  // 2. 国の画像（DBから）を使う
+  if (post.country?.image_url) {
+    return post.country.image_url;
+  }
   
+  // 3. 国名からフォールバック画像を取得
+  if (post.country?.name) {
+    return getCountryImageUrl(post.country.name);
+  }
+  
+  // 4. デフォルト画像
   return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80';
 };
 
@@ -44,7 +61,7 @@ export function SearchResultCard({ post }: SearchResultCardProps) {
       <div className="flex h-32">
         <div className="w-1/3 relative">
           <img 
-            src={getArticleImageUrl(post.title, post.img)} 
+            src={getPostImageUrl(post)} 
             alt={post.title} 
             className="w-full h-full object-cover absolute inset-0"
           />

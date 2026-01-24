@@ -9,6 +9,14 @@ interface Post {
   id: number;
   title: string;
   content: string;
+  images?: string[];
+  country?: {
+    id: number;
+    code: string;
+    name: string;
+    flag_emoji: string;
+    image_url?: string;
+  };
   user: {
     id: number;
     name: string;
