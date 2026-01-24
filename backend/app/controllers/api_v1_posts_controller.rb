@@ -46,11 +46,13 @@ class ApiV1PostsController < ApplicationController
           content: post.content,
           category: post.category,
           featured: post.featured || false,
+          images: post.image_urls,
           country: {
             id: post.country.id,
             code: post.country.code,
             name: post.country.name,
-            flag_emoji: post.country.flag_emoji
+            flag_emoji: post.country.flag_emoji,
+            image_url: post.country.image_url
           },
           user: {
             id: post.user.id,
@@ -90,11 +92,13 @@ class ApiV1PostsController < ApplicationController
           content: post.content,
           category: post.category,
           featured: post.featured || false,
+          images: post.image_urls,
           country: {
             id: post.country.id,
             code: post.country.code,
             name: post.country.name,
-            flag_emoji: post.country.flag_emoji
+            flag_emoji: post.country.flag_emoji,
+            image_url: post.country.image_url
           },
           user: {
             id: post.user.id,
@@ -138,11 +142,13 @@ class ApiV1PostsController < ApplicationController
           content: post.content,
           category: post.category,
           featured: post.featured || false,
+          images: post.image_urls,
           country: {
             id: post.country.id,
             code: post.country.code,
             name: post.country.name,
-            flag_emoji: post.country.flag_emoji
+            flag_emoji: post.country.flag_emoji,
+            image_url: post.country.image_url
           },
           user: {
             id: post.user.id,
@@ -174,11 +180,13 @@ class ApiV1PostsController < ApplicationController
             content: post.content,
             category: post.category,
             featured: post.featured || false,
+            images: post.image_urls,
             country: {
               id: post.country.id,
               code: post.country.code,
               name: post.country.name,
-              flag_emoji: post.country.flag_emoji
+              flag_emoji: post.country.flag_emoji,
+              image_url: post.country.image_url
             },
             user: {
               id: post.user.id,
@@ -239,11 +247,13 @@ class ApiV1PostsController < ApplicationController
           content: post.content,
           category: post.category,
           featured: post.featured || false,
+          images: post.image_urls,
           country: post.country ? {
             id: post.country.id,
             code: post.country.code,
             name: post.country.name,
-            flag_emoji: post.country.flag_emoji
+            flag_emoji: post.country.flag_emoji,
+            image_url: post.country.image_url
           } : nil,
           user: {
             id: post.user.id,
@@ -287,6 +297,6 @@ class ApiV1PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :content, :country_id, :category, :featured)
+    params.require(:post).permit(:title, :content, :country_id, :category, :featured, images: [])
   end
 end

@@ -1,4 +1,16 @@
 const API_BASE_URL = 'http://localhost:3000/api/v1';
+const BACKEND_URL = 'http://localhost:3000';
+
+// 相対パスの画像URLをフルURLに変換するヘルパー
+export const getFullImageUrl = (url: string | undefined): string | undefined => {
+  if (!url) return undefined;
+  // すでにフルURL（httpで始まる）の場合はそのまま返す
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  // 相対パスの場合はバックエンドURLを付加
+  return `${BACKEND_URL}${url}`;
+};
 
 interface ApiResponse<T> {
   data?: T;
@@ -46,6 +58,43 @@ class ApiClient {
       const response = await fetch(url, {
         ...options,
         headers,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return {
+          error: data.error || data.errors?.join(', ') || 'エラーが発生しました',
+          errors: data.errors,
+        };
+      }
+
+      return { data };
+    } catch (error) {
+      return {
+        error: error instanceof Error ? error.message : 'ネットワークエラーが発生しました',
+      };
+    }
+  }
+
+  // FormDataを使うリクエスト（画像アップロード用）
+  private async requestWithFormData<T>(
+    endpoint: string,
+    formData: FormData,
+    method: string = 'POST'
+  ): Promise<ApiResponse<T>> {
+    const url = `${this.baseURL}${endpoint}`;
+    const headers: Record<string, string> = {};
+
+    if (this.token) {
+      headers.Authorization = `Bearer ${this.token}`;
+    }
+
+    try {
+      const response = await fetch(url, {
+        method,
+        headers,
+        body: formData,
       });
 
       const data = await response.json();
@@ -166,6 +215,10 @@ class ApiClient {
       method: 'POST',
       body: JSON.stringify({ post: postData }),
     });
+  }
+
+  async createPostWithImages(formData: FormData) {
+    return this.requestWithFormData<{ post: any }>('/posts', formData);
   }
 
   async updatePost(id: string, postData: { title?: string; content?: string; country_id?: number }) {
@@ -292,6 +345,27 @@ class ApiClient {
     }>(`/posts/${postId}/like/status`);
   }
 
+  // Bookmarks API
+  async getBookmarks() {
+    return this.request<{ posts: any[] }>('/bookmarks');
+  }
+
+  async addBookmark(postId: string) {
+    return this.request<{ bookmarked: boolean; bookmarks_count: number; message: string }>(`/posts/${postId}/bookmark`, {
+      method: 'POST',
+    });
+  }
+
+  async removeBookmark(postId: string) {
+    return this.request<{ bookmarked: boolean; bookmarks_count: number; message: string }>(`/posts/${postId}/bookmark`, {
+      method: 'DELETE',
+    });
+  }
+
+  async getBookmarkStatus(postId: string) {
+    return this.request<{ bookmarked: boolean; bookmarks_count: number }>(`/posts/${postId}/bookmark/status`);
+  }
+
   // Countries API
   async getCountries() {
     return this.request<{ countries: Array<{ id: number; code: string; name: string; flag_emoji: string }> }>('/countries');
@@ -303,6 +377,7 @@ class ApiClient {
       code: string; 
       name: string;
       flag_emoji: string;
+      image_url?: string;
       tip_count: number;
       last_post_date: string;
       recent_tips: Array<{ title: string; category: string }> 

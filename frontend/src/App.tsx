@@ -13,6 +13,7 @@ import UserList from './components/UserList'
 import CreateUser from './components/CreateUser'
 import { PostsPage } from './pages/PostsPage'
 import { CreatePostPage } from './pages/CreatePostPage'
+import { PostEditPage } from './pages/PostEditPage'
 import { UserPage } from './pages/UserPage'
 import { BappaNaviPage } from './pages/BappaNaviPage'
 import { SearchPage } from './pages/SearchPage'
@@ -132,15 +133,18 @@ function App() {
               <BappaNaviPage />
             } 
           />
-          <Route path="/search" element={
-            <Layout>
-              <SearchPage />
-            </Layout>
-          } />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/posts/:postId" element={
             <Layout>
               <PostDetailPage />
             </Layout>
+          } />
+          <Route path="/posts/:postId/edit" element={
+            <ProtectedRoute>
+              <Layout>
+                <PostEditPage />
+              </Layout>
+            </ProtectedRoute>
           } />
           <Route path="/about" element={
             <Layout>

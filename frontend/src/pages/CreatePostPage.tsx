@@ -43,7 +43,9 @@ export function CreatePostPage() {
   const [areas, setAreas] = useState<Area[]>([]);
   const [countrySearch, setCountrySearch] = useState('');
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
+  const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [categories, setCategories] = useState<string[]>([]);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
@@ -195,17 +197,69 @@ export function CreatePostPage() {
     }
   }, [isCountryDropdownOpen]);
 
-  // 画像を追加（後で実装予定）
+  // 画像を選択
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const newFiles: File[] = [];
+    const newPreviewUrls: string[] = [];
+    const errors: string[] = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      
+      // ファイル数制限チェック
+      if (images.length + newFiles.length >= MAX_IMAGES) {
+        errors.push(`画像は最大${MAX_IMAGES}枚までアップロードできます`);
+        break;
+      }
+
+      // ファイルサイズチェック（2MB）
+      if (file.size > 2 * 1024 * 1024) {
+        errors.push(`${file.name}は2MB以下にしてください`);
+        continue;
+      }
+
+      // ファイル形式チェック
+      const acceptableTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      if (!acceptableTypes.includes(file.type)) {
+        errors.push(`${file.name}はサポートされていない形式です（JPEG、PNG、GIF、WebPのみ）`);
+        continue;
+      }
+
+      newFiles.push(file);
+      newPreviewUrls.push(URL.createObjectURL(file));
+    }
+
+    if (errors.length > 0) {
+      setErrors(errors);
+    }
+
+    if (newFiles.length > 0) {
+      setImages([...images, ...newFiles]);
+      setImagePreviewUrls([...imagePreviewUrls, ...newPreviewUrls]);
+    }
+
+    // input をリセット
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  // 画像追加ボタンクリック
   const handleImageAdd = () => {
-    if (images.length < MAX_IMAGES) {
-      // TODO: 画像アップロード機能を実装
-      alert('画像アップロード機能は今後実装予定です');
+    if (images.length < MAX_IMAGES && fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
   // 画像を削除
   const handleImageRemove = (index: number) => {
+    // プレビューURLを解放
+    URL.revokeObjectURL(imagePreviewUrls[index]);
     setImages(images.filter((_, i) => i !== index));
+    setImagePreviewUrls(imagePreviewUrls.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -235,15 +289,26 @@ export function CreatePostPage() {
     setLoading(true);
 
     try {
-      const response = await apiClient.createPost({
-        title: title.trim(),
-        content: content.trim(),
-        country_id: countryId,
-        category: category || undefined,
+      // FormDataを使用して画像を含む投稿を作成
+      const formData = new FormData();
+      formData.append('post[title]', title.trim());
+      formData.append('post[content]', content.trim());
+      formData.append('post[country_id]', countryId.toString());
+      if (category) {
+        formData.append('post[category]', category);
+      }
+      
+      // 画像を追加
+      images.forEach((image) => {
+        formData.append('post[images][]', image);
       });
 
+      const response = await apiClient.createPostWithImages(formData);
+
       if (response.data) {
-        // 投稿成功後、投稿詳細ページまたは国ページにリダイレクト
+        // プレビューURLを解放
+        imagePreviewUrls.forEach(url => URL.revokeObjectURL(url));
+        // 投稿成功後、投稿詳細ページにリダイレクト
         navigate(`/posts/${response.data.post.id}`);
       } else {
         setErrors([response.error || '投稿に失敗しました']);
@@ -293,6 +358,16 @@ export function CreatePostPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 画像アップロードセクション */}
           <div>
+            {/* 非表示のファイル入力 */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/gif,image/webp"
+              multiple
+              onChange={handleImageSelect}
+              className="hidden"
+            />
+            
             <div className="flex gap-2 overflow-x-auto pb-2">
               {/* 画像追加ボタン */}
               {images.length < MAX_IMAGES && (
@@ -306,11 +381,11 @@ export function CreatePostPage() {
                 </button>
               )}
 
-              {/* アップロード済み画像 */}
-              {images.map((image, index) => (
+              {/* アップロード済み画像のプレビュー */}
+              {imagePreviewUrls.map((url, index) => (
                 <div key={index} className="relative flex-shrink-0 w-24 h-24">
                   <img
-                    src={image}
+                    src={url}
                     alt={`Upload ${index + 1}`}
                     className="w-full h-full object-cover rounded-lg"
                   />
@@ -325,7 +400,7 @@ export function CreatePostPage() {
               ))}
             </div>
             <p className="text-xs text-gray-500 mt-2">
-              ※ 画像アップロード機能は今後実装予定です
+              ※ JPEG、PNG、GIF、WebP形式（1枚あたり2MBまで、最大5枚）
             </p>
           </div>
 

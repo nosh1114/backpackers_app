@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { MapPin, ChevronRight } from 'lucide-react';
 import { apiClient } from '../lib/api';
+import { getAreaDbNameBySlug, AREAS } from '../lib/areaMapping';
 
 interface Country {
   id: number;
@@ -20,10 +21,16 @@ interface Area {
 
 export function CountriesPage() {
   const [searchParams] = useSearchParams();
-  const areaParam = searchParams.get('area');
+  const areaSlug = searchParams.get('area');
   const [areas, setAreas] = useState<Area[]>([]);
   const [loading, setLoading] = useState(true);
   const areaRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
+  // slugをDBの名前に変換
+  const areaDbName = useMemo(() => {
+    if (!areaSlug) return null;
+    return getAreaDbNameBySlug(areaSlug);
+  }, [areaSlug]);
 
   useEffect(() => {
     fetchCountriesByAreas();
@@ -31,12 +38,12 @@ export function CountriesPage() {
 
   // エリアパラメータがある場合、そのエリアにスクロール
   useEffect(() => {
-    if (!loading && areaParam && areaRefs.current[areaParam]) {
+    if (!loading && areaDbName && areaRefs.current[areaDbName]) {
       setTimeout(() => {
-        areaRefs.current[areaParam]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        areaRefs.current[areaDbName]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
     }
-  }, [loading, areaParam]);
+  }, [loading, areaDbName]);
 
   const fetchCountriesByAreas = async () => {
     try {
@@ -55,18 +62,8 @@ export function CountriesPage() {
 
   // エリア名に基づいて画像URLを取得
   const getAreaImageUrl = (areaName: string): string => {
-    const areaImageMap: { [key: string]: string } = {
-      'アジア': 'https://images.unsplash.com/photo-1535139262971-c51845709a48?auto=format&fit=crop&w=600&q=80',
-      'ヨーロッパ': 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=600&q=80',
-      'アフリカ': 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=600&q=80',
-      '北米': 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=600&q=80',
-      '南米': 'https://images.unsplash.com/photo-1587595431973-160d0d94add1?auto=format&fit=crop&w=600&q=80',
-      'オセアニア': 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=600&q=80',
-      '中東': 'https://images.unsplash.com/photo-1535139262971-c51845709a48?auto=format&fit=crop&w=600&q=80',
-      '中央アジア': 'https://images.unsplash.com/photo-1535139262971-c51845709a48?auto=format&fit=crop&w=600&q=80',
-    };
-
-    return areaImageMap[areaName] || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80';
+    const area = AREAS.find(a => a.dbName === areaName);
+    return area?.imageUrl || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80';
   };
 
   if (loading) {
@@ -115,7 +112,7 @@ export function CountriesPage() {
               <div 
                 key={area.id} 
                 ref={(el) => { areaRefs.current[area.name] = el; }}
-                className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 ${areaParam === area.name ? 'ring-2 ring-blue-500' : ''}`}
+                className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 ${areaDbName === area.name ? 'ring-2 ring-blue-500' : ''}`}
               >
                 {/* エリアヘッダー */}
                 <div className="flex items-center gap-4 mb-6">
@@ -137,7 +134,7 @@ export function CountriesPage() {
                   {countriesWithPosts.map((country) => (
                     <Link
                       key={country.id}
-                      to={`/country/${encodeURIComponent(country.name)}`}
+                      to={`/country/${country.code.toLowerCase()}`}
                       className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-colors group"
                     >
                       <span className="text-2xl flex-shrink-0">{country.flag_emoji}</span>

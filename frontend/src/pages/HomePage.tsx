@@ -8,8 +8,10 @@ import { apiClient } from '../lib/api'
 // import { COUNTRIES } from '../lib/constants'
 
 interface CountryStats {
+  code: string
   country: string
   flagEmoji: string
+  imageUrl?: string
   tipCount: number
   lastPostDate: string
   recentTips: Array<{
@@ -31,6 +33,7 @@ interface Post {
     code: string
     name: string
     flag_emoji: string
+    image_url?: string
   }
   user: {
     id: number
@@ -67,8 +70,10 @@ export function HomePage() {
       
       if (response.data) {
         const countryStats = response.data.countries.map((country, index) => ({
+          code: country.code,
           country: country.name,
           flagEmoji: country.flag_emoji,
+          imageUrl: country.image_url,
           tipCount: country.tip_count,
           lastPostDate: country.last_post_date,
           recentTips: country.recent_tips?.map((tip: { title: string; category: string }, tipIndex: number) => ({
@@ -134,17 +139,7 @@ export function HomePage() {
       )}
 
       {/* Area Section */}
-      <AreaSection 
-        areas={[
-          { name: 'アジア', img: 'https://images.unsplash.com/photo-1535139262971-c51845709a48?auto=format&fit=crop&w=600&q=80' },
-          { name: 'ヨーロッパ', img: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=600&q=80' },
-          { name: 'アフリカ', img: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=600&q=80' },
-          { name: '北米', img: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=600&q=80' },
-          { name: '南米', img: 'https://images.unsplash.com/photo-1587595431973-160d0d94add1?auto=format&fit=crop&w=600&q=80' },
-          { name: 'オセアニア', img: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=600&q=80' },
-        ]}
-        title="エリアで探す"
-      />
+      <AreaSection title="エリアで探す" />
 
       {/* Featured Articles Section */}
       {!postsLoading && posts.length > 0 && (
@@ -158,6 +153,10 @@ export function HomePage() {
                 user: {
                   name: post.user.name,
                   avatar_url: post.user.avatar_url,
+                },
+                country: {
+                  name: post.country.name,
+                  image_url: post.country.image_url,
                 },
               }))}
               title="特集記事"

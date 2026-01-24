@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Heart, Eye, MessageCircle, Send, MoreHorizontal, Pencil, Trash2, Loader2, X, Check } from 'lucide-react';
-import { apiClient } from '../lib/api';
+import { Heart, Eye, MessageCircle, Send, MoreHorizontal, Pencil, Trash2, Loader2, X, Check, Bookmark } from 'lucide-react';
+import { getCountryBackgroundUrl } from '../lib/countryImages';
+import { apiClient, getFullImageUrl } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 import { getAvatarUrl } from '../lib/gravatar';
 
@@ -23,6 +24,7 @@ interface Post {
   content: string;
   category?: string;
   featured?: boolean;
+  images?: string[];
   country: {
     id: number;
     code: string;
@@ -50,6 +52,7 @@ export const PostDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [relatedPosts, setRelatedPosts] = useState<Post[]>([]);
   
@@ -66,6 +69,11 @@ export const PostDetailPage = () => {
   const [menuOpenCommentId, setMenuOpenCommentId] = useState<number | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const viewCountedRef = useRef<string | null>(null);
+  
+  // 投稿編集・削除関連
+  const [isPostMenuOpen, setIsPostMenuOpen] = useState(false);
+  const [isDeletingPost, setIsDeletingPost] = useState(false);
+  const postMenuRef = useRef<HTMLDivElement>(null);
 
   // メニューの外をクリックしたら閉じる
   useEffect(() => {
@@ -73,11 +81,42 @@ export const PostDetailPage = () => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setMenuOpenCommentId(null);
       }
+      if (postMenuRef.current && !postMenuRef.current.contains(event.target as Node)) {
+        setIsPostMenuOpen(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // 投稿の編集・削除権限があるかチェック
+  const canEditOrDeletePost = () => {
+    if (!user || !post) return false;
+    return String(user.id) === String(post.user.id) || user.admin;
+  };
+
+  // 投稿削除ハンドラー
+  const handleDeletePost = async () => {
+    if (!confirm('この投稿を削除しますか？この操作は取り消せません。')) return;
+    
+    try {
+      setIsDeletingPost(true);
+      const response = await apiClient.deletePost(postId!);
+      
+      if (response.data) {
+        navigate('/', { replace: true });
+      } else {
+        alert('削除に失敗しました: ' + (response.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('削除に失敗しました');
+    } finally {
+      setIsDeletingPost(false);
+      setIsPostMenuOpen(false);
+    }
+  };
 
   useEffect(() => {
     if (postId) {
@@ -91,10 +130,11 @@ export const PostDetailPage = () => {
     }
   }, [postId]);
 
-  // userが変更されたときにいいね状態を取得
+  // userが変更されたときにいいね・ブックマーク状態を取得
   useEffect(() => {
     if (postId && user) {
       fetchLikeStatus();
+      fetchBookmarkStatus();
     }
   }, [postId, user]);
 
@@ -138,6 +178,40 @@ export const PostDetailPage = () => {
       }
     } catch (error) {
       console.error('Error fetching like status:', error);
+    }
+  };
+
+  const fetchBookmarkStatus = async () => {
+    try {
+      const response = await apiClient.getBookmarkStatus(postId!);
+      if (response.data) {
+        setIsBookmarked(response.data.bookmarked);
+      }
+    } catch (error) {
+      console.error('Error fetching bookmark status:', error);
+    }
+  };
+
+  const handleToggleBookmark = async () => {
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
+
+    try {
+      if (isBookmarked) {
+        const response = await apiClient.removeBookmark(postId!);
+        if (response.data) {
+          setIsBookmarked(false);
+        }
+      } else {
+        const response = await apiClient.addBookmark(postId!);
+        if (response.data) {
+          setIsBookmarked(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling bookmark:', error);
     }
   };
 
@@ -264,16 +338,6 @@ export const PostDetailPage = () => {
     }
   }, [post?.country?.id, postId]);
 
-  const getArticleImageUrl = (title: string): string => {
-    const lowerTitle = title.toLowerCase();
-    if (lowerTitle.includes('イタリア')) return 'https://images.unsplash.com/photo-1498522544924-8fcd7e24b7bf?auto=format&fit=crop&w=1200&q=80';
-    if (lowerTitle.includes('ギリシャ')) return 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80';
-    if (lowerTitle.includes('日本')) return 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80';
-    if (lowerTitle.includes('タイ')) return 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1200&q=80';
-    if (lowerTitle.includes('シンガポール')) return 'https://images.unsplash.com/photo-1565963036838-a79638f67464?auto=format&fit=crop&w=1200&q=80';
-    
-    return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80';
-  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -311,7 +375,12 @@ export const PostDetailPage = () => {
     return views.toString();
   };
 
-  const images = post ? [getArticleImageUrl(post.title)] : [];
+  // 投稿の画像（添付画像があればそれを使用、なければ国の代表画像）
+  const images = post 
+    ? (post.images && post.images.length > 0 
+        ? post.images.map((img: string) => getFullImageUrl(img) || img)
+        : [getCountryBackgroundUrl(post.country.name)])
+    : [];
   const displayedComments = showAllComments ? comments : comments.slice(0, 5);
 
   if (loading) {
@@ -387,7 +456,7 @@ export const PostDetailPage = () => {
           {/* ヘッダー情報 */}
           <div className="flex items-center gap-3 mb-4 text-sm text-gray-600">
             <Link 
-              to={`/country/${encodeURIComponent(post.country.name)}`}
+              to={`/country/${post.country.code.toLowerCase()}`}
               className="flex items-center gap-1 hover:text-blue-600"
             >
               <span>{post.country.flag_emoji}</span>
@@ -411,7 +480,7 @@ export const PostDetailPage = () => {
           </h1>
 
           {/* 著者情報 */}
-          <div className="flex items-center gap-3 mb-6 pb-6 border-b border-gray-100">
+          <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-100">
             <Link to={`/user/${post.user.id}`} className="flex items-center gap-3">
               <img
                 src={getAvatarUrl(post.user.avatar_url, post.user.email, 40)}
@@ -420,6 +489,42 @@ export const PostDetailPage = () => {
               />
               <span className="font-medium text-gray-900">{post.user.name}</span>
             </Link>
+            
+            {/* 投稿の編集・削除メニュー */}
+            {canEditOrDeletePost() && (
+              <div className="relative" ref={postMenuRef}>
+                <button
+                  onClick={() => setIsPostMenuOpen(!isPostMenuOpen)}
+                  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <MoreHorizontal size={20} />
+                </button>
+                
+                {isPostMenuOpen && (
+                  <div className="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden z-20">
+                    <Link
+                      to={`/posts/${post.id}/edit`}
+                      className="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <Pencil size={16} />
+                      <span>編集</span>
+                    </Link>
+                    <button
+                      onClick={handleDeletePost}
+                      disabled={isDeletingPost}
+                      className="w-full flex items-center gap-2 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                    >
+                      {isDeletingPost ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : (
+                        <Trash2 size={16} />
+                      )}
+                      <span>{isDeletingPost ? '削除中...' : '削除'}</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* 本文 */}
@@ -449,8 +554,22 @@ export const PostDetailPage = () => {
               <div className="flex items-center gap-2 text-gray-500">
                 <MessageCircle size={22} />
                 <span className="text-sm">{comments.length}</span>
+              </div>
             </div>
-            </div>
+            
+            {/* ブックマークボタン */}
+            <button 
+              onClick={handleToggleBookmark}
+              className={`flex items-center gap-2 transition-colors ${
+                isBookmarked ? 'text-blue-500' : 'text-gray-500 hover:text-blue-500'
+              }`}
+              title={isBookmarked ? 'ブックマークを解除' : 'ブックマークに追加'}
+            >
+              <Bookmark 
+                size={22} 
+                className={isBookmarked ? "fill-current" : ""} 
+              />
+            </button>
           </div>
 
           {/* コメントセクション */}
@@ -620,13 +739,6 @@ export const PostDetailPage = () => {
               <h3 className="text-lg font-bold text-gray-900 mb-4">関連記事</h3>
             <div className="grid grid-cols-2 gap-4">
                 {relatedPosts.map((related) => {
-                  const getRelatedImageUrl = (title: string): string => {
-                    const lowerTitle = title.toLowerCase();
-                    if (lowerTitle.includes('イタリア')) return 'https://images.unsplash.com/photo-1498522544924-8fcd7e24b7bf?auto=format&fit=crop&w=400&q=80';
-                    if (lowerTitle.includes('ギリシャ')) return 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=400&q=80';
-                    return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80';
-                  };
-
                   return (
                 <Link 
                   key={related.id} 
@@ -634,7 +746,7 @@ export const PostDetailPage = () => {
                   className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow"
                 >
                   <div className="h-32 overflow-hidden">
-                        <img src={getRelatedImageUrl(related.title)} alt={related.title} className="w-full h-full object-cover" />
+                        <img src={getCountryBackgroundUrl(related.country.name)} alt={related.title} className="w-full h-full object-cover" />
                   </div>
                   <div className="p-3">
                     <h4 className="text-xs font-bold text-gray-800 mb-2 line-clamp-2">{related.title}</h4>

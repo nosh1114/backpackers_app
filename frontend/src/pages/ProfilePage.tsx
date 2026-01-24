@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { apiClient } from '../lib/api';
-import { User, Edit, Save, X, Camera, Plus, Mail } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { User, Edit, Save, X, Camera, Plus, Mail, Pencil, Trash2, MoreHorizontal, Bookmark } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface UserProfile {
   id: string;
@@ -29,6 +29,7 @@ interface Post {
 
 const ProfilePage: React.FC = () => {
   const { user, refreshUser } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -36,6 +37,11 @@ const ProfilePage: React.FC = () => {
   const [postsLoading, setPostsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [menuOpenPostId, setMenuOpenPostId] = useState<string | null>(null);
+  const [deletingPostId, setDeletingPostId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'posts' | 'bookmarks'>('posts');
+  const [bookmarkedPosts, setBookmarkedPosts] = useState<Post[]>([]);
+  const [bookmarksLoading, setBookmarksLoading] = useState(false);
 
   // フォーム状態
   const [formData, setFormData] = useState({
@@ -98,6 +104,28 @@ const ProfilePage: React.FC = () => {
     }
   }, [user]);
 
+  // ブックマークした投稿を取得
+  useEffect(() => {
+    const fetchBookmarks = async () => {
+      try {
+        setBookmarksLoading(true);
+        const response = await apiClient.getBookmarks();
+        
+        if (response.data) {
+          setBookmarkedPosts(response.data.posts);
+        }
+      } catch (err) {
+        console.error('ブックマークの取得に失敗しました:', err);
+      } finally {
+        setBookmarksLoading(false);
+      }
+    };
+
+    if (user && activeTab === 'bookmarks') {
+      fetchBookmarks();
+    }
+  }, [user, activeTab]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -146,6 +174,27 @@ const ProfilePage: React.FC = () => {
     setIsEditing(false);
     setError('');
     setSuccess('');
+  };
+
+  const handleDeletePost = async (postId: string) => {
+    if (!confirm('この投稿を削除しますか？この操作は取り消せません。')) return;
+    
+    try {
+      setDeletingPostId(postId);
+      const response = await apiClient.deletePost(postId);
+      
+      if (response.data) {
+        setUserPosts(userPosts.filter(p => p.id !== postId));
+        setSuccess('投稿を削除しました');
+      } else {
+        setError('削除に失敗しました: ' + (response.error || 'Unknown error'));
+      }
+    } catch (err) {
+      setError('削除に失敗しました');
+    } finally {
+      setDeletingPostId(null);
+      setMenuOpenPostId(null);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -312,11 +361,37 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        {/* 投稿一覧 */}
+        {/* 投稿・ブックマーク一覧 */}
         <div className="lg:col-span-2">
           <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">投稿一覧</h2>
-            {postsLoading ? (
+            {/* タブ */}
+            <div className="flex border-b border-gray-200 mb-6">
+              <button
+                onClick={() => setActiveTab('posts')}
+                className={`flex items-center gap-2 px-4 py-3 font-medium text-sm border-b-2 transition-colors ${
+                  activeTab === 'posts'
+                    ? 'text-blue-600 border-blue-600'
+                    : 'text-gray-500 border-transparent hover:text-gray-700'
+                }`}
+              >
+                <Plus size={18} />
+                投稿一覧
+              </button>
+              <button
+                onClick={() => setActiveTab('bookmarks')}
+                className={`flex items-center gap-2 px-4 py-3 font-medium text-sm border-b-2 transition-colors ${
+                  activeTab === 'bookmarks'
+                    ? 'text-blue-600 border-blue-600'
+                    : 'text-gray-500 border-transparent hover:text-gray-700'
+                }`}
+              >
+                <Bookmark size={18} />
+                ブックマーク
+              </button>
+            </div>
+            
+            {/* 投稿一覧タブ */}
+            {activeTab === 'posts' && (postsLoading ? (
               <div className="flex justify-center items-center py-8">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
               </div>
@@ -334,7 +409,72 @@ const ProfilePage: React.FC = () => {
               <div className="space-y-4">
                 {userPosts.map((post) => (
                   <div key={post.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{post.title}</h3>
+                    <div className="flex items-start justify-between mb-2">
+                      <Link to={`/posts/${post.id}`} className="flex-1">
+                        <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors">{post.title}</h3>
+                      </Link>
+                      <div className="relative ml-2">
+                        <button
+                          onClick={() => setMenuOpenPostId(menuOpenPostId === post.id ? null : post.id)}
+                          className="p-1 text-gray-400 hover:text-gray-600 rounded transition-colors"
+                        >
+                          <MoreHorizontal size={18} />
+                        </button>
+                        {menuOpenPostId === post.id && (
+                          <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden z-10">
+                            <Link
+                              to={`/posts/${post.id}/edit`}
+                              className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                            >
+                              <Pencil size={14} />
+                              <span>編集</span>
+                            </Link>
+                            <button
+                              onClick={() => handleDeletePost(post.id)}
+                              disabled={deletingPostId === post.id}
+                              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                            >
+                              <Trash2 size={14} />
+                              <span>{deletingPostId === post.id ? '削除中...' : '削除'}</span>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <Link to={`/posts/${post.id}`}>
+                      <p className="text-gray-600 mb-3">
+                        {post.content.length > 150 
+                          ? `${post.content.substring(0, 150)}...` 
+                          : post.content
+                        }
+                      </p>
+                      <div className="flex items-center justify-between text-sm text-gray-500">
+                        <span>{formatDate(post.created_at)}</span>
+                        <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                          {post.country_code}
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            ))}
+
+            {/* ブックマーク一覧タブ */}
+            {activeTab === 'bookmarks' && (bookmarksLoading ? (
+              <div className="flex justify-center items-center py-8">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+              </div>
+            ) : bookmarkedPosts.length === 0 ? (
+              <div className="text-center py-8">
+                <Bookmark className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">ブックマークした投稿がありません</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {bookmarkedPosts.map((post) => (
+                  <Link key={post.id} to={`/posts/${post.id}`} className="block border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors mb-2">{post.title}</h3>
                     <p className="text-gray-600 mb-3">
                       {post.content.length > 150 
                         ? `${post.content.substring(0, 150)}...` 
@@ -347,10 +487,10 @@ const ProfilePage: React.FC = () => {
                         {post.country_code}
                       </span>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
-            )}
+            ))}
           </div>
         </div>
       </div>

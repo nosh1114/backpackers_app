@@ -58,16 +58,15 @@ export function CountryPage() {
   const [categorySearchQuery, setCategorySearchQuery] = useState('')
   const categoryPopupRef = useRef<HTMLDivElement>(null)
 
-  // decodedとは？
-  // decodedはエンコードされた文字列をデコードするための関数
-  const decodedCountry = country ? decodeURIComponent(country) : ''
+  // パスから取得した国コード
+  const countryCode = country?.toLowerCase() || ''
 
   useEffect(() => {
-    if (decodedCountry) {
+    if (countryCode) {
       fetchCountryData()
     }
     fetchCategories()
-  }, [decodedCountry])
+  }, [countryCode])
 
   useEffect(() => {
     if (countryData) {
@@ -108,9 +107,9 @@ export function CountryPage() {
     try {
       const response = await apiClient.getCountries()
       if (response.data) {
-        const country = response.data.countries.find(c => c.name === decodedCountry)
-        if (country) {
-          setCountryData(country)
+        const foundCountry = response.data.countries.find(c => c.code.toLowerCase() === countryCode)
+        if (foundCountry) {
+          setCountryData(foundCountry)
         }
       }
     } catch (error) {
@@ -177,7 +176,7 @@ export function CountryPage() {
             <div className="flex items-center space-x-4">
               <span className="text-4xl flex-shrink-0">{countryData?.flag_emoji || '🌍'}</span>
               <div className="min-w-0">
-                <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 truncate">{decodedCountry}</h1>
+                <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 truncate">{countryData?.name || country}</h1>
                 <p className="text-gray-600 mt-1 text-sm lg:text-base">
                   {pagination ? `${pagination.total_count}件の投稿` : '投稿を読み込み中...'}
                 </p>
@@ -415,7 +414,7 @@ export function CountryPage() {
             <p className="text-gray-600 mb-6">
               {searchQuery || selectedCategory
                 ? '検索条件やフィルターを変更して再度お試しください'
-                : `${decodedCountry}の最初の投稿をしてみませんか？`
+                : `${countryData?.name || country}の最初の投稿をしてみませんか？`
               }
             </p>
           </div>

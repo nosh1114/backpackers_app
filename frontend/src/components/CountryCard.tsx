@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Calendar } from 'lucide-react'
 
 interface CountryCardProps {
+  code: string
   country: string
   flagEmoji?: string
   tipCount: number
@@ -15,7 +16,7 @@ interface CountryCardProps {
   }>
 }
 
-export function CountryCard({ country, flagEmoji, tipCount, lastPostDate, recentTips }: CountryCardProps) {
+export function CountryCard({ code, country, flagEmoji, tipCount, lastPostDate, recentTips }: CountryCardProps) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     const now = new Date()
@@ -29,7 +30,7 @@ export function CountryCard({ country, flagEmoji, tipCount, lastPostDate, recent
   }
 
   return (
-    <Link to={`/country/${encodeURIComponent(country)}`}>
+    <Link to={`/country/${code.toLowerCase()}`}>
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md hover:border-primary-200 transition-all duration-300 transform hover:-translate-y-1 group">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
