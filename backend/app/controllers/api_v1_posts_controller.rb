@@ -5,6 +5,14 @@ class ApiV1PostsController < ApplicationController
     posts = Post.includes(:user, :country, :comments, :likes)
     posts = posts.where(country_id: params[:country_id]) if params[:country_id].present?
     
+    # 特集記事フィルター
+    if params[:featured].present?
+      featured_value = params[:featured].to_s.downcase
+      if featured_value == 'true' || featured_value == '1'
+        posts = posts.where(featured: true)
+      end
+    end
+    
     # カテゴリーフィルター（複数対応）
     if params[:category].present?
       # category[]形式の配列パラメータまたは単一のcategoryパラメータに対応

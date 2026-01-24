@@ -56,7 +56,10 @@ export function CountryPage() {
   } | null>(null)
   const [isCategoryPopupOpen, setIsCategoryPopupOpen] = useState(false)
   const [categorySearchQuery, setCategorySearchQuery] = useState('')
+  const categoryContainerRef = useRef<HTMLDivElement>(null)
   const categoryPopupRef = useRef<HTMLDivElement>(null)
+  const categoryButtonRef = useRef<HTMLButtonElement>(null)
+  const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null)
 
   // パスから取得した国コード
   const countryCode = country?.toLowerCase() || ''
@@ -78,8 +81,17 @@ export function CountryPage() {
   // カテゴリーポップアップの外側クリックで閉じる
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (categoryPopupRef.current && !categoryPopupRef.current.contains(event.target as Node)) {
+      const target = event.target as Node
+      if (
+        categoryPopupRef.current && 
+        !categoryPopupRef.current.contains(target) &&
+        categoryButtonRef.current &&
+        !categoryButtonRef.current.contains(target) &&
+        categoryContainerRef.current &&
+        !categoryContainerRef.current.contains(target)
+      ) {
         setIsCategoryPopupOpen(false)
+        setPopupPosition(null)
       }
     }
 
@@ -156,6 +168,7 @@ export function CountryPage() {
     setPage(1)
     setIsCategoryPopupOpen(false)
     setCategorySearchQuery('')
+    setPopupPosition(null)
   }
 
   const handleSortChange = (newSort: 'recent' | 'popular') => {
@@ -220,9 +233,19 @@ export function CountryPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
             {/* カテゴリーフィルター（ポップアップ形式） */}
-            <div className="relative" ref={categoryPopupRef}>
+            <div className="relative" ref={categoryContainerRef}>
               <button
-                onClick={() => setIsCategoryPopupOpen(!isCategoryPopupOpen)}
+                ref={categoryButtonRef}
+                onClick={() => {
+                  if (categoryButtonRef.current) {
+                    const rect = categoryButtonRef.current.getBoundingClientRect()
+                    setPopupPosition({
+                      top: rect.bottom + window.scrollY + 8,
+                      left: rect.left + window.scrollX
+                    })
+                  }
+                  setIsCategoryPopupOpen(!isCategoryPopupOpen)
+                }}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedCategory
                     ? 'bg-blue-600 text-white hover:bg-blue-700'
@@ -232,21 +255,28 @@ export function CountryPage() {
                 <Filter className="h-4 w-4" />
                 <span>{selectedCategory || 'カテゴリー'}</span>
                 {selectedCategory && (
-                  <button
+                  <div
                     onClick={(e) => {
                       e.stopPropagation()
                       handleCategoryChange('')
                     }}
-                    className="ml-1 hover:bg-blue-700 rounded-full p-0.5"
+                    className="ml-1 hover:bg-blue-700 rounded-full p-0.5 cursor-pointer"
                   >
                     <X className="h-3 w-3" />
-                  </button>
+                  </div>
                 )}
               </button>
 
               {/* ポップアップ */}
-              {isCategoryPopupOpen && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+              {isCategoryPopupOpen && popupPosition && (
+                <div 
+                  ref={categoryPopupRef}
+                  className="fixed w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+                  style={{
+                    top: `${popupPosition.top}px`,
+                    left: `${popupPosition.left}px`
+                  }}
+                >
                   {/* 検索ボックス */}
                   <div className="p-3 border-b border-gray-200">
                     <div className="relative">

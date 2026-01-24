@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, ArrowLeft, X, ChevronRight } from 'lucide-react';
+import { Search, ArrowLeft, X, ChevronRight, Clock, TrendingUp } from 'lucide-react';
 import { apiClient } from '../lib/api';
 import { SearchResultCard } from '../components/SearchResultCard';
 
@@ -25,6 +25,16 @@ interface Post {
   view_count?: number;
 }
 
+interface Country {
+  id: number;
+  code: string;
+  name: string;
+  flag_emoji: string;
+}
+
+const SEARCH_HISTORY_KEY = 'search_history';
+const MAX_HISTORY_ITEMS = 10;
+
 export const SearchPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -34,19 +44,46 @@ export const SearchPage = () => {
   const [isSearched, setIsSearched] = useState(!!initialQuery);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // モックのサジェストデータ
-  const suggestions = [
-    'シンガポール',
-    'シドニー',
-    'シカゴ',
-    'シエラレオネ',
-    'シャワー',
-    '日本',
-    'タイ',
-    'アメリカ'
-  ];
+  // 検索履歴をローカルストレージから読み込む
+  useEffect(() => {
+    const savedHistory = localStorage.getItem(SEARCH_HISTORY_KEY);
+    if (savedHistory) {
+      try {
+        setSearchHistory(JSON.parse(savedHistory));
+      } catch (e) {
+        console.error('検索履歴の読み込みに失敗しました:', e);
+      }
+    }
+  }, []);
+
+  // 国名とカテゴリーを取得
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      try {
+        const [countriesRes, categoriesRes] = await Promise.all([
+          apiClient.getCountries(),
+          apiClient.getPostCategories()
+        ]);
+        
+        if (countriesRes.data?.countries) {
+          setCountries(countriesRes.data.countries);
+        }
+        if (categoriesRes.data?.categories) {
+          setCategories(categoriesRes.data.categories);
+        }
+      } catch (error) {
+        console.error('サジェストデータの取得に失敗しました:', error);
+      }
+    };
+    
+    fetchSuggestions();
+  }, []);
 
   useEffect(() => {
     if (initialQuery) {
@@ -58,9 +95,25 @@ export const SearchPage = () => {
     }
   }, []);
 
-  const handleSearch = async (searchQuery: string = query) => {
-    // 
+  // 検索履歴に追加
+  const addToHistory = (searchQuery: string) => {
     if (!searchQuery.trim()) return;
+    
+    const trimmedQuery = searchQuery.trim();
+    const newHistory = [
+      trimmedQuery,
+      ...searchHistory.filter(item => item !== trimmedQuery)
+    ].slice(0, MAX_HISTORY_ITEMS);
+    
+    setSearchHistory(newHistory);
+    localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(newHistory));
+  };
+
+  const handleSearch = async (searchQuery: string = query) => {
+    if (!searchQuery.trim()) return;
+    
+    // 検索履歴に追加
+    addToHistory(searchQuery);
     
     // loadingをtrueにする
     setLoading(true);
@@ -99,10 +152,53 @@ export const SearchPage = () => {
     }
   };
 
-  // 
+  // サジェスト候補を生成
+  const suggestions = useMemo(() => {
+    const lowerQuery = query.toLowerCase();
+    const results: Array<{ type: 'country' | 'category' | 'history'; text: string; icon?: React.ReactNode }> = [];
+    
+    // 検索履歴
+    searchHistory
+      .filter(item => !query || item.toLowerCase().includes(lowerQuery))
+      .forEach(item => {
+        results.push({ type: 'history', text: item, icon: <Clock size={16} className="text-gray-400" /> });
+      });
+    
+    // 国名
+    countries
+      .filter(country => !query || country.name.toLowerCase().includes(lowerQuery))
+      .slice(0, 5)
+      .forEach(country => {
+        results.push({ type: 'country', text: country.name, icon: <span>{country.flag_emoji}</span> });
+      });
+    
+    // カテゴリー
+    categories
+      .filter(cat => !query || cat.toLowerCase().includes(lowerQuery))
+      .slice(0, 3)
+      .forEach(cat => {
+        results.push({ type: 'category', text: cat, icon: <TrendingUp size={16} className="text-gray-400" /> });
+      });
+    
+    // 重複を削除
+    const uniqueResults = results.filter((item, index, self) => 
+      index === self.findIndex(t => t.text === item.text)
+    );
+    
+    return uniqueResults.slice(0, 10);
+  }, [query, countries, categories, searchHistory]);
+
   const handleSuggestionClick = (suggestion: string) => {
     setQuery(suggestion);
     handleSearch(suggestion);
+  };
+
+  // 検索履歴を削除
+  const removeFromHistory = (item: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const newHistory = searchHistory.filter(h => h !== item);
+    setSearchHistory(newHistory);
+    localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(newHistory));
   };
 
   // 検索ワードをクリア
@@ -111,6 +207,23 @@ export const SearchPage = () => {
     setIsSearched(false);
     setPosts([]);
     inputRef.current?.focus();
+  };
+
+  // 入力変更時のデバウンス処理
+  const handleQueryChange = (value: string) => {
+    setQuery(value);
+    
+    // デバウンスタイマーをクリア
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    
+    // 入力が空の場合は検索結果をクリア
+    if (!value.trim()) {
+      setIsSearched(false);
+      setPosts([]);
+      return;
+    }
   };
 
   return (
@@ -126,7 +239,7 @@ export const SearchPage = () => {
              ref={inputRef}
              className="bg-transparent w-full outline-none text-base placeholder-gray-400"
              value={query}
-             onChange={(e) => setQuery(e.target.value)}
+             onChange={(e) => handleQueryChange(e.target.value)}
              onKeyDown={handleKeyDown}
              placeholder="検索キーワードを入力"
            />
@@ -149,22 +262,40 @@ export const SearchPage = () => {
         {!isSearched ? (
           // 検索入力時（サジェスト画面）
           <div className="py-2">
-            {/* フィルタリングしたサジェストを表示 */}
-            {suggestions
-              .filter(s => !query || s.toLowerCase().includes(query.toLowerCase()))
-              .map((suggestion, index) => (
-              <div 
-                key={index}
-                onClick={() => handleSuggestionClick(suggestion)}
-                className="flex items-center justify-between px-6 py-4 border-b border-gray-50 cursor-pointer active:bg-gray-50"
-              >
-                <div className="flex items-center gap-4">
-                  <Search size={18} className="text-gray-400" />
-                  <span className="font-medium text-gray-900">{suggestion}</span>
+            {suggestions.length > 0 ? (
+              suggestions.map((suggestion, index) => (
+                <div 
+                  key={`${suggestion.type}-${suggestion.text}-${index}`}
+                  onClick={() => handleSuggestionClick(suggestion.text)}
+                  className="flex items-center justify-between px-6 py-4 border-b border-gray-50 cursor-pointer active:bg-gray-50 hover:bg-gray-50"
+                >
+                  <div className="flex items-center gap-4 flex-1 min-w-0">
+                    {suggestion.icon || <Search size={18} className="text-gray-400 shrink-0" />}
+                    <span className="font-medium text-gray-900 truncate">{suggestion.text}</span>
+                    {suggestion.type === 'history' && (
+                      <button
+                        onClick={(e) => removeFromHistory(suggestion.text, e)}
+                        className="ml-auto text-gray-300 hover:text-gray-500 p-1"
+                      >
+                        <X size={14} />
+                      </button>
+                    )}
+                  </div>
+                  {suggestion.type !== 'history' && (
+                    <ChevronRight size={18} className="text-gray-300 shrink-0" />
+                  )}
                 </div>
-                <ChevronRight size={18} className="text-gray-300" />
+              ))
+            ) : query ? (
+              <div className="px-6 py-8 text-center text-gray-400">
+                <p>候補が見つかりませんでした</p>
               </div>
-            ))}
+            ) : (
+              <div className="px-6 py-4">
+                <p className="text-sm text-gray-500 mb-2">検索候補</p>
+                <p className="text-xs text-gray-400">キーワードを入力すると候補が表示されます</p>
+              </div>
+            )}
           </div>
         ) : (
           // 検索結果画面

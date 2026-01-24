@@ -392,16 +392,15 @@ export function PostEditPage() {
               </div>
               <div className="flex items-center gap-2">
                 {category && (
-                  <button
-                    type="button"
+                  <div
                     onClick={(e) => {
                       e.stopPropagation();
                       setCategory('');
                     }}
-                    className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+                    className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
                   >
                     <X className="w-4 h-4" />
-                  </button>
+                  </div>
                 )}
                 <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isCategoryDropdownOpen ? 'rotate-180' : ''}`} />
               </div>

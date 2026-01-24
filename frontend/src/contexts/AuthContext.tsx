@@ -8,6 +8,7 @@ interface User {
   bio?: string
   avatar_url?: string
   admin?: boolean
+  email_confirmed?: boolean
 }
 
 interface AuthContextType {

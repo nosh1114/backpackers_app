@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   post '/api/v1/auth/signup', to: 'api_v1_auth#signup'
   post '/api/v1/auth/password_reset', to: 'api_v1_auth#request_password_reset'
   post '/api/v1/auth/password_reset/confirm', to: 'api_v1_auth#reset_password'
+  post '/api/v1/auth/confirm_email', to: 'api_v1_auth#confirm_email'
+  post '/api/v1/auth/resend_confirmation', to: 'api_v1_auth#resend_confirmation'
   
   get '/api/v1/users', to: 'api_v1_users#index'
   get '/api/v1/users/profile', to: 'api_v1_users#profile'  # 具体的なルートを先に定義

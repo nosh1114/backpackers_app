@@ -4,6 +4,7 @@ import { HomePage } from './pages/HomePage'
 import { AuthPage } from './pages/AuthPage'
 import ProfilePage from './pages/ProfilePage'
 import PasswordResetPage from './pages/PasswordResetPage'
+import { ConfirmEmailPage } from './pages/ConfirmEmailPage'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import './index.css'
 import { Layout } from './components/Layout/Layout'
@@ -43,7 +44,13 @@ function App() {
           } />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/password-reset" element={<PasswordResetPage />} />
+          <Route path="/confirm-email" element={<ConfirmEmailPage />} />
           <Route path="/posts" element={
+            <Layout>
+              <PostsPage />
+            </Layout>
+          } />
+          <Route path="/featured" element={
             <Layout>
               <PostsPage />
             </Layout>

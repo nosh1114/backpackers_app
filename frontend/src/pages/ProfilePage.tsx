@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { apiClient } from '../lib/api';
+import { apiClient, getFullImageUrl } from '../lib/api';
 import { User, Edit, Save, X, Camera, Plus, Mail, Pencil, Trash2, MoreHorizontal, Bookmark } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { getCountryImageUrl } from '../lib/countryImages';
 
 interface UserProfile {
   id: string;
@@ -18,7 +19,16 @@ interface Post {
   id: string;
   title: string;
   content: string;
-  country_code: string;
+  category?: string;
+  images?: string[];
+  country?: {
+    id: number;
+    code: string;
+    name: string;
+    flag_emoji: string;
+    image_url?: string;
+  };
+  country_code?: string;
   created_at: string;
   user: {
     id: string;
@@ -85,12 +95,13 @@ const ProfilePage: React.FC = () => {
     const fetchUserPosts = async () => {
       try {
         setPostsLoading(true);
-        const response = await apiClient.getPosts({ page: 1, per_page: 10 });
-        
-        if (response.data) {
-          // 現在のユーザーの投稿のみをフィルタリング
-          const currentUserPosts = response.data.posts.filter(post => post.user.id === user?.id);
-          setUserPosts(currentUserPosts);
+        if (user?.id) {
+          const response = await apiClient.getUserPosts(user.id, { page: 1, per_page: 10 });
+          
+          if (response.data) {
+            console.log('投稿データ:', response.data.posts);
+            setUserPosts(response.data.posts);
+          }
         }
       } catch (err) {
         console.error('投稿の取得に失敗しました:', err);
@@ -112,6 +123,7 @@ const ProfilePage: React.FC = () => {
         const response = await apiClient.getBookmarks();
         
         if (response.data) {
+          console.log('ブックマークデータ:', response.data.posts);
           setBookmarkedPosts(response.data.posts);
         }
       } catch (err) {
@@ -204,6 +216,24 @@ const ProfilePage: React.FC = () => {
       month: 'long',
       day: 'numeric'
     });
+  };
+
+  // 投稿の画像URLを取得（優先順位: 記事の画像 > 国の画像 > デフォルト）
+  const getPostImageUrl = (post: Post): string => {
+    // 1. 記事に添付された画像があればそれを使う
+    if (post.images && post.images.length > 0 && post.images[0]) {
+      return getFullImageUrl(post.images[0]) || post.images[0];
+    }
+    // 2. 国の画像（DBから）
+    if (post.country?.image_url) {
+      return post.country.image_url;
+    }
+    // 3. 国名からフォールバック
+    if (post.country?.name) {
+      return getCountryImageUrl(post.country.name);
+    }
+    // 4. デフォルト画像
+    return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80';
   };
 
   if (loading) {
@@ -408,53 +438,71 @@ const ProfilePage: React.FC = () => {
             ) : (
               <div className="space-y-4">
                 {userPosts.map((post) => (
-                  <div key={post.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                    <div className="flex items-start justify-between mb-2">
-                      <Link to={`/posts/${post.id}`} className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors">{post.title}</h3>
-                      </Link>
-                      <div className="relative ml-2">
-                        <button
-                          onClick={() => setMenuOpenPostId(menuOpenPostId === post.id ? null : post.id)}
-                          className="p-1 text-gray-400 hover:text-gray-600 rounded transition-colors"
-                        >
-                          <MoreHorizontal size={18} />
-                        </button>
-                        {menuOpenPostId === post.id && (
-                          <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden z-10">
-                            <Link
-                              to={`/posts/${post.id}/edit`}
-                              className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                            >
-                              <Pencil size={14} />
-                              <span>編集</span>
+                  <div key={post.id} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                    <div className="flex h-40">
+                      {/* 画像セクション */}
+                      <div className="w-1/3 relative flex-shrink-0 overflow-hidden">
+                        <img 
+                          src={getPostImageUrl(post)} 
+                          alt={post.title} 
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                      
+                      {/* コンテンツセクション */}
+                      <div className="w-2/3 p-4 flex flex-col justify-between min-w-0">
+                        <div className="flex-1 min-h-0 overflow-hidden">
+                          <div className="flex items-start justify-between gap-2 mb-2">
+                            <Link to={`/posts/${post.id}`} className="flex-1 min-w-0">
+                              <h3 className="text-base font-semibold text-gray-900 hover:text-blue-600 transition-colors line-clamp-2 leading-tight">{post.title}</h3>
                             </Link>
-                            <button
-                              onClick={() => handleDeletePost(post.id)}
-                              disabled={deletingPostId === post.id}
-                              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
-                            >
-                              <Trash2 size={14} />
-                              <span>{deletingPostId === post.id ? '削除中...' : '削除'}</span>
-                            </button>
+                            <div className="relative flex-shrink-0">
+                              <button
+                                onClick={() => setMenuOpenPostId(menuOpenPostId === post.id ? null : post.id)}
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded transition-colors"
+                              >
+                                <MoreHorizontal size={18} />
+                              </button>
+                              {menuOpenPostId === post.id && (
+                                <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden z-10">
+                                  <Link
+                                    to={`/posts/${post.id}/edit`}
+                                    className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                  >
+                                    <Pencil size={14} />
+                                    <span>編集</span>
+                                  </Link>
+                                  <button
+                                    onClick={() => handleDeletePost(post.id)}
+                                    disabled={deletingPostId === post.id}
+                                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                                  >
+                                    <Trash2 size={14} />
+                                    <span>{deletingPostId === post.id ? '削除中...' : '削除'}</span>
+                                  </button>
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        )}
+                          <Link to={`/posts/${post.id}`}>
+                            <p className="text-gray-600 text-sm line-clamp-2 mb-3 leading-relaxed">
+                              {post.content}
+                            </p>
+                          </Link>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs pt-2 border-t border-gray-100 flex-wrap">
+                          {post.category && (
+                            <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded-full font-medium truncate max-w-[120px]">
+                              {post.category}
+                            </span>
+                          )}
+                          <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium truncate max-w-[120px]">
+                            {post.country?.name || post.country_code}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    <Link to={`/posts/${post.id}`}>
-                      <p className="text-gray-600 mb-3">
-                        {post.content.length > 150 
-                          ? `${post.content.substring(0, 150)}...` 
-                          : post.content
-                        }
-                      </p>
-                      <div className="flex items-center justify-between text-sm text-gray-500">
-                        <span>{formatDate(post.created_at)}</span>
-                        <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                          {post.country_code}
-                        </span>
-                      </div>
-                    </Link>
                   </div>
                 ))}
               </div>
@@ -473,19 +521,37 @@ const ProfilePage: React.FC = () => {
             ) : (
               <div className="space-y-4">
                 {bookmarkedPosts.map((post) => (
-                  <Link key={post.id} to={`/posts/${post.id}`} className="block border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                    <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors mb-2">{post.title}</h3>
-                    <p className="text-gray-600 mb-3">
-                      {post.content.length > 150 
-                        ? `${post.content.substring(0, 150)}...` 
-                        : post.content
-                      }
-                    </p>
-                    <div className="flex items-center justify-between text-sm text-gray-500">
-                      <span>{formatDate(post.created_at)}</span>
-                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                        {post.country_code}
-                      </span>
+                  <Link key={post.id} to={`/posts/${post.id}`} className="block border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                    <div className="flex h-40">
+                      {/* 画像セクション */}
+                      <div className="w-1/3 relative flex-shrink-0 overflow-hidden">
+                        <img 
+                          src={getPostImageUrl(post)} 
+                          alt={post.title} 
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                      
+                      {/* コンテンツセクション */}
+                      <div className="w-2/3 p-4 flex flex-col justify-between min-w-0">
+                        <div className="flex-1 min-h-0 overflow-hidden">
+                          <h3 className="text-base font-semibold text-gray-900 hover:text-blue-600 transition-colors line-clamp-2 mb-2 leading-tight">{post.title}</h3>
+                          <p className="text-gray-600 text-sm line-clamp-2 mb-3 leading-relaxed">
+                            {post.content}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs pt-2 border-t border-gray-100 flex-wrap">
+                          {post.category && (
+                            <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded-full font-medium truncate max-w-[120px]">
+                              {post.category}
+                            </span>
+                          )}
+                          <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium truncate max-w-[120px]">
+                            {post.country?.name || post.country_code}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </Link>
                 ))}
