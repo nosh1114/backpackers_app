@@ -222,9 +222,9 @@ export function CreatePostPage() {
       }
 
       // ファイル形式チェック
-      const acceptableTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      const acceptableTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
       if (!acceptableTypes.includes(file.type)) {
-        errors.push(`${file.name}はサポートされていない形式です（JPEG、PNG、GIF、WebPのみ）`);
+        errors.push(`${file.name}はサポートされていない形式です（JPEG、PNG、GIF、WebP、HEICのみ）`);
         continue;
       }
 
@@ -362,7 +362,7 @@ export function CreatePostPage() {
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/jpeg,image/png,image/gif,image/webp"
+              accept="image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif"
               multiple
               onChange={handleImageSelect}
               className="hidden"
