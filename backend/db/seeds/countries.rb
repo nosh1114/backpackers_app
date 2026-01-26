@@ -198,10 +198,10 @@ countries_data = [
 puts "Creating #{countries_data.length} countries with flag emojis..."
 
 countries_data.each do |country_data|
-  Country.find_or_create_by(code: country_data[:code]) do |country|
-    country.name = country_data[:name]
-    country.flag_emoji = country_data[:flag_emoji]
-  end
+  country = Country.find_or_initialize_by(code: country_data[:code])
+  country.name = country_data[:name]
+  country.flag_emoji = country_data[:flag_emoji]
+  country.save!
 end
 
 puts "✅ #{Country.count} countries created successfully with flag emojis!"

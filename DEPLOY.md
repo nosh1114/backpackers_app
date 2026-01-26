@@ -261,7 +261,7 @@ CLOUDFLARE_R2_ENDPOINT=https://<アカウントID>.r2.cloudflarestorage.com
 - **Branch**: `main`
 - **Root Directory**: `backend`
 - **Runtime**: `Ruby`
-- **Build Command**: `bundle install && bundle exec rails db:migrate`
+- **Build Command**: `bundle install && bundle exec rails db:migrate && bundle exec rails db:seed`
 - **Start Command**: `bundle exec puma -C config/puma.rb`
 
 **環境変数（S3使用の場合）:**
