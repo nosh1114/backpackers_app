@@ -180,7 +180,11 @@ function App() {
             </Layout>
           } />
           {/* 404ページ - すべての未定義のルートにマッチ */}
-          <Route path="*" element={<NotFoundPage />} />
+          <Route path="*" element={
+            <Layout>
+              <NotFoundPage />
+            </Layout>
+          } />
         </Routes>
       </Router>
     </AuthProvider>
