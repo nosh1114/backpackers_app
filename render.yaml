@@ -38,15 +38,20 @@ services:
   #   databaseName: backpackers_app_production
   #   user: backpackers_app
 
-  # フロントエンド（Static Site）
+  # フロントエンド（Web Service - SPAルーティング対応）
+  # serveパッケージを使用して、すべてのルートをindex.htmlにリダイレクト
+  # これにより、直接URLアクセス（外部リンク、ブックマーク、SEO）でも正しく動作します
   - type: web
     name: backpackers-app-frontend
-    env: static
+    env: node
+    plan: free
     buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
+    startCommand: cd frontend && npm run start
     envVars:
       - key: VITE_API_BASE_URL
         sync: false
       - key: VITE_BACKEND_URL
         sync: false
+      - key: PORT
+        value: 10000
 

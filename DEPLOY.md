@@ -376,7 +376,7 @@ openssl rand -hex 32
 
 ## 🎨 ステップ4: Renderでフロントエンドをデプロイ
 
-1. 「New +」→「Static Site」を選択
+1. 「New +」→「Web Service」を選択
 2. GitHubリポジトリを接続
 3. 以下の設定を入力：
 
@@ -384,13 +384,21 @@ openssl rand -hex 32
 - **Name**: `backpackers-app-frontend`
 - **Branch**: `main`
 - **Root Directory**: `frontend`
+- **Runtime**: `Node`
 - **Build Command**: `npm install && npm run build`
-- **Publish Directory**: `dist`
+- **Start Command**: `npm run start`
 
 **環境変数:**
 ```
 VITE_API_BASE_URL=https://backpackers-app-backend.onrender.com/api/v1
 VITE_BACKEND_URL=https://backpackers-app-backend.onrender.com
+PORT=10000
+```
+
+**重要: SPAルーティングの自動対応**
+- `serve`パッケージを使用して、すべてのルートを自動的に`index.html`にリダイレクト
+- 直接URLアクセス（例: `/posts`、`/post`）、外部リンク、ブックマーク、SEOでも正しく動作します
+- 手動設定は不要です
 ```
 
 **注意**: フロントエンドのURLが確定したら、バックエンドの `FRONTEND_URL` 環境変数を更新してください。
