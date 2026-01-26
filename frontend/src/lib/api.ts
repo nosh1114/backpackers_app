@@ -1,5 +1,5 @@
-const API_BASE_URL = 'http://localhost:3000/api/v1';
-const BACKEND_URL = 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
 
 // 相対パスの画像URLをフルURLに変換するヘルパー
 export const getFullImageUrl = (url: string | undefined): string | undefined => {

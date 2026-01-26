@@ -1,0 +1,52 @@
+services:
+  # バックエンド（Rails API）
+  - type: web
+    name: backpackers-app-backend
+    env: ruby
+    plan: free
+    buildCommand: cd backend && bundle install && bundle exec rails db:migrate
+    startCommand: cd backend && bundle exec puma -C config/puma.rb
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+        # Neonを使用する場合: NeonのConnection Stringを設定
+        # RenderのPostgreSQLを使用する場合: fromDatabaseを使用
+      - key: FRONTEND_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_REGION
+        value: ap-northeast-1
+      - key: AWS_S3_BUCKET
+        sync: false
+
+  # データベース（PostgreSQL）
+  # ⚠️ 注意: Renderの無料PostgreSQLは90日で削除される可能性があります
+  # 推奨: Neon（https://neon.tech/）を使用してください（無料、永続的）
+  # Neonを使用する場合、このセクションは削除またはコメントアウトしてください
+  # - type: pspg
+  #   name: backpackers-app-db
+  #   plan: free
+  #   databaseName: backpackers_app_production
+  #   user: backpackers_app
+
+  # フロントエンド（Static Site）
+  - type: web
+    name: backpackers-app-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        sync: false
+      - key: VITE_BACKEND_URL
+        sync: false
+
