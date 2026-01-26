@@ -22,6 +22,117 @@ load Rails.root.join('db', 'seeds', 'countries.rb')
 puts "📌 Loading country images..."
 load Rails.root.join('db', 'seeds', 'country_images.rb')
 
+# 3. エリアの作成（必須データ）
+puts "📌 Creating areas..."
+areas = [
+  { name: 'アジア' },
+  { name: 'ヨーロッパ' },
+  { name: '北アメリカ' },
+  { name: '南アメリカ' },
+  { name: 'アフリカ' },
+  { name: 'オセアニア' }
+]
+
+areas.each do |area_data|
+  Area.find_or_create_by(name: area_data[:name])
+end
+puts "✅ #{Area.count} areas created successfully!"
+
+# 4. 主要国にエリアを割り当て（必須データ）
+puts "📌 Assigning areas to countries..."
+asia = Area.find_by(name: 'アジア')
+europe = Area.find_by(name: 'ヨーロッパ')
+north_america = Area.find_by(name: '北アメリカ')
+south_america = Area.find_by(name: '南アメリカ')
+africa = Area.find_by(name: 'アフリカ')
+oceania = Area.find_by(name: 'オセアニア')
+
+# 主要国にエリアを割り当て
+country_area_mapping = {
+  # アジア
+  '日本' => asia,
+  '韓国' => asia,
+  '中国' => asia,
+  'タイ' => asia,
+  'ベトナム' => asia,
+  'インド' => asia,
+  'インドネシア' => asia,
+  'フィリピン' => asia,
+  'マレーシア' => asia,
+  'シンガポール' => asia,
+  'ラオス' => asia,
+  'ネパール' => asia,
+  'バングラデシュ' => asia,
+  'カンボジア' => asia,
+  'ミャンマー' => asia,
+  'モンゴル' => asia,
+  'スリランカ' => asia,
+  '台湾' => asia,
+  '香港' => asia,
+  
+  # ヨーロッパ
+  'フランス' => europe,
+  'イタリア' => europe,
+  'スペイン' => europe,
+  'ドイツ' => europe,
+  'イギリス' => europe,
+  'オランダ' => europe,
+  'スイス' => europe,
+  'オーストリア' => europe,
+  'チェコ' => europe,
+  'ポーランド' => europe,
+  'ハンガリー' => europe,
+  'ポルトガル' => europe,
+  'ギリシャ' => europe,
+  'クロアチア' => europe,
+  'アイスランド' => europe,
+  'ノルウェー' => europe,
+  'スウェーデン' => europe,
+  'フィンランド' => europe,
+  'デンマーク' => europe,
+  'アイルランド' => europe,
+  'ロシア' => europe,
+  'トルコ' => europe,
+  
+  # 北アメリカ
+  'アメリカ合衆国' => north_america,
+  'カナダ' => north_america,
+  'メキシコ' => north_america,
+  
+  # 南アメリカ
+  'ブラジル' => south_america,
+  'アルゼンチン' => south_america,
+  'チリ' => south_america,
+  'ペルー' => south_america,
+  'ボリビア' => south_america,
+  'コロンビア' => south_america,
+  'エクアドル' => south_america,
+  
+  # アフリカ
+  'エジプト' => africa,
+  '南アフリカ' => africa,
+  'モロッコ' => africa,
+  'ケニア' => africa,
+  'ジンバブエ' => africa,
+  'ザンビア' => africa,
+  'ボツワナ' => africa,
+  'ナミビア' => africa,
+  'タンザニア' => africa,
+  
+  # オセアニア
+  'オーストラリア' => oceania,
+  'ニュージーランド' => oceania,
+  'フィジー' => oceania
+}
+
+country_area_mapping.each do |country_name, area|
+  country = Country.find_by(name: country_name)
+  if country && area
+    country.update(area: area)
+  end
+end
+puts "✅ Assigned areas to #{country_area_mapping.keys.length} countries!"
+
 # サンプルユーザーとダミーデータの作成（開発環境のみ）
 if Rails.env.development?
   # サンプルユーザーの作成
