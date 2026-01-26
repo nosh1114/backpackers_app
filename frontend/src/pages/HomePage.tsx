@@ -76,12 +76,22 @@ export function HomePage() {
           imageUrl: country.image_url,
           tipCount: country.tip_count,
           lastPostDate: country.last_post_date,
-          recentTips: country.recent_tips?.map((tip: { title: string; category: string }, tipIndex: number) => ({
-            id: index * 1000 + tipIndex,
+          recentTips: country.recent_tips?.map((tip: { 
+            id: number;
+            title: string; 
+            category: string;
+            author_name: string;
+            author_avatar_url?: string;
+            author_email?: string;
+            created_at: string;
+          }) => ({
+            id: tip.id,
             title: tip.title,
             category: tip.category,
-            author_name: 'ユーザー',
-            created_at: new Date().toISOString()
+            author_name: tip.author_name,
+            author_avatar_url: tip.author_avatar_url,
+            author_email: tip.author_email,
+            created_at: tip.created_at
           })) || []
         }))
         

@@ -64,22 +64,18 @@ export function CountryScrollSection({
             <div className="p-3">
               <h3 className="font-bold text-sm text-gray-800 mb-1">{country.country}</h3>
               <div className="flex items-center mt-1">
-                <div className="flex -space-x-2 mr-2">
-                  {country.recentTips.slice(0, 2).map((tip) => (
-                    <img 
-                      key={tip.id}
-                      src={getAvatarUrl(tip.author_avatar_url, tip.author_email, 20)}
-                      alt={tip.author_name}
-                      className="w-5 h-5 rounded-full border border-white object-cover"
-                    />
-                  ))}
-                  {country.recentTips.length === 0 && (
-                    <>
-                      <div className="w-5 h-5 rounded-full bg-gray-200 border border-white"></div>
-                      <div className="w-5 h-5 rounded-full bg-gray-200 border border-white"></div>
-                    </>
-                  )}
-                </div>
+                {country.tipCount > 0 && country.recentTips.length > 0 && (
+                  <div className="flex -space-x-2 mr-2">
+                    {country.recentTips.slice(0, 2).map((tip) => (
+                      <img 
+                        key={tip.id}
+                        src={getAvatarUrl(tip.author_avatar_url, tip.author_email, 20)}
+                        alt={tip.author_name}
+                        className="w-5 h-5 rounded-full border border-white object-cover"
+                      />
+                    ))}
+                  </div>
+                )}
                 <span className="text-[10px] text-gray-500">{country.tipCount} Posts</span>
               </div>
             </div>
