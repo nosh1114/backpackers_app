@@ -146,9 +146,9 @@ class Post < ApplicationRecord
     end
 
     images.each do |image|
-      # ファイルサイズ制限（2MB）
-      if image.blob.byte_size > 2.megabytes
-        errors.add(:images, '画像は1枚あたり2MB以下にしてください')
+      # ファイルサイズ制限（5MB）
+      if image.blob.byte_size > 5.megabytes
+        errors.add(:images, '画像は1枚あたり5MB以下にしてください')
       end
 
       # ファイル形式制限

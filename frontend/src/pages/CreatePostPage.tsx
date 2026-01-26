@@ -215,9 +215,9 @@ export function CreatePostPage() {
         break;
       }
 
-      // ファイルサイズチェック（2MB）
-      if (file.size > 2 * 1024 * 1024) {
-        errors.push(`${file.name}は2MB以下にしてください`);
+      // ファイルサイズチェック（5MB）
+      if (file.size > 5 * 1024 * 1024) {
+        errors.push(`${file.name}は5MB以下にしてください`);
         continue;
       }
 
@@ -400,7 +400,7 @@ export function CreatePostPage() {
               ))}
             </div>
             <p className="text-xs text-gray-500 mt-2">
-              ※ JPEG、PNG、GIF、WebP形式（1枚あたり2MBまで、最大5枚）
+              ※ JPEG、PNG、GIF、WebP形式（1枚あたり5MBまで、最大5枚）
             </p>
           </div>
 
