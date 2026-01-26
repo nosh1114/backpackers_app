@@ -56,8 +56,15 @@ Rails.application.configure do
   config.cache_store = :solid_cache_store
 
   # Replace the default in-process and non-durable queuing backend for Active Job.
-  config.active_job.queue_adapter = :solid_queue
-  config.solid_queue.connects_to = { database: { writing: :queue } }
+  # 本番環境では同期的に実行（SolidQueueのテーブルが不要）
+  # 画像分析などのジョブを同期的に実行
+  config.active_job.queue_adapter = :inline
+  # config.active_job.queue_adapter = :solid_queue
+  # config.solid_queue.connects_to = { database: { writing: :queue } }
+
+  # Active Storageの画像分析を無効化（SolidQueueのテーブルが不要なため）
+  # 画像のメタデータ（幅、高さなど）は必須ではないため、無効化しても問題ありません
+  config.active_storage.analyze_on_upload = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

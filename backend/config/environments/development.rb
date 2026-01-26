@@ -45,6 +45,9 @@ Rails.application.configure do
   # Active Job を同期的に実行（開発環境用）
   config.active_job.queue_adapter = :inline
 
+  # Active Storageの画像分析を無効化（SolidQueueのテーブルが不要なため）
+  config.active_storage.analyze_on_upload = false
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
