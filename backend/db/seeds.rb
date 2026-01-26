@@ -38,100 +38,73 @@ areas.each do |area_data|
 end
 puts "✅ #{Area.count} areas created successfully!"
 
-# 4. 主要国にエリアを割り当て（必須データ）
+# 4. すべての国にエリアを割り当て（必須データ・ISOコードベース）
 puts "📌 Assigning areas to countries..."
-asia = Area.find_by(name: 'アジア')
-europe = Area.find_by(name: 'ヨーロッパ')
-north_america = Area.find_by(name: '北アメリカ')
-south_america = Area.find_by(name: '南アメリカ')
-africa = Area.find_by(name: 'アフリカ')
-oceania = Area.find_by(name: 'オセアニア')
+load Rails.root.join('db', 'seeds', 'country_areas.rb')
 
-# 主要国にエリアを割り当て
-country_area_mapping = {
-  # アジア
-  '日本' => asia,
-  '韓国' => asia,
-  '中国' => asia,
-  'タイ' => asia,
-  'ベトナム' => asia,
-  'インド' => asia,
-  'インドネシア' => asia,
-  'フィリピン' => asia,
-  'マレーシア' => asia,
-  'シンガポール' => asia,
-  'ラオス' => asia,
-  'ネパール' => asia,
-  'バングラデシュ' => asia,
-  'カンボジア' => asia,
-  'ミャンマー' => asia,
-  'モンゴル' => asia,
-  'スリランカ' => asia,
-  '台湾' => asia,
-  '香港' => asia,
-  
-  # ヨーロッパ
-  'フランス' => europe,
-  'イタリア' => europe,
-  'スペイン' => europe,
-  'ドイツ' => europe,
-  'イギリス' => europe,
-  'オランダ' => europe,
-  'スイス' => europe,
-  'オーストリア' => europe,
-  'チェコ' => europe,
-  'ポーランド' => europe,
-  'ハンガリー' => europe,
-  'ポルトガル' => europe,
-  'ギリシャ' => europe,
-  'クロアチア' => europe,
-  'アイスランド' => europe,
-  'ノルウェー' => europe,
-  'スウェーデン' => europe,
-  'フィンランド' => europe,
-  'デンマーク' => europe,
-  'アイルランド' => europe,
-  'ロシア' => europe,
-  'トルコ' => europe,
-  
-  # 北アメリカ
-  'アメリカ合衆国' => north_america,
-  'カナダ' => north_america,
-  'メキシコ' => north_america,
-  
-  # 南アメリカ
-  'ブラジル' => south_america,
-  'アルゼンチン' => south_america,
-  'チリ' => south_america,
-  'ペルー' => south_america,
-  'ボリビア' => south_america,
-  'コロンビア' => south_america,
-  'エクアドル' => south_america,
-  
-  # アフリカ
-  'エジプト' => africa,
-  '南アフリカ' => africa,
-  'モロッコ' => africa,
-  'ケニア' => africa,
-  'ジンバブエ' => africa,
-  'ザンビア' => africa,
-  'ボツワナ' => africa,
-  'ナミビア' => africa,
-  'タンザニア' => africa,
-  
-  # オセアニア
-  'オーストラリア' => oceania,
-  'ニュージーランド' => oceania,
-  'フィジー' => oceania
+# エリアオブジェクトを取得
+areas_hash = {
+  'アジア' => Area.find_by!(name: 'アジア'),
+  'ヨーロッパ' => Area.find_by!(name: 'ヨーロッパ'),
+  '北アメリカ' => Area.find_by!(name: '北アメリカ'),
+  '南アメリカ' => Area.find_by!(name: '南アメリカ'),
+  'アフリカ' => Area.find_by!(name: 'アフリカ'),
+  'オセアニア' => Area.find_by!(name: 'オセアニア')
 }
 
-country_area_mapping.each do |country_name, area|
-  country = Country.find_by(name: country_name)
-  if country && area
-    country.update(area: area)
+# 割り当て失敗を記録
+failed_assignments = []
+assigned_count = 0
+
+# ISOコードベースで割り当て（重複・漏れを防ぐ）
+COUNTRY_AREA_MAPPING.each do |country_code, area_name|
+  country = Country.find_by(code: country_code)
+  area = areas_hash[area_name]
+  
+  if country.nil?
+    failed_assignments << { code: country_code, reason: 'Country not found' }
+    next
   end
+  
+  if area.nil?
+    failed_assignments << { code: country_code, reason: "Area '#{area_name}' not found" }
+    next
+  end
+  
+  country.update!(area: area)
+  assigned_count += 1
 end
-puts "✅ Assigned areas to #{country_area_mapping.keys.length} countries!"
+
+# 失敗があればエラーを発生させる（検知可能にする）
+if failed_assignments.any?
+  error_message = "Failed to assign areas to #{failed_assignments.length} countries:\n"
+  failed_assignments.each do |failure|
+    error_message += "  - #{failure[:code]}: #{failure[:reason]}\n"
+  end
+  raise error_message
+end
+
+puts "✅ Assigned areas to #{assigned_count} countries!"
+
+# 5. 検証：すべての国にエリアが割り当てられているか確認
+puts "📌 Verifying area assignments..."
+countries_without_area = Country.left_joins(:area).where(areas: { id: nil })
+if countries_without_area.any?
+  missing_countries = countries_without_area.pluck(:code, :name)
+  error_message = "❌ CRITICAL: #{missing_countries.length} countries without area assignment:\n"
+  missing_countries.each do |code, name|
+    error_message += "  - #{code} (#{name})\n"
+  end
+  raise error_message
+end
+
+# 6. 検証：期待される国数と一致するか確認
+actual_count = Country.count
+if actual_count != EXPECTED_COUNTRY_COUNT
+  raise "❌ CRITICAL: Expected #{EXPECTED_COUNTRY_COUNT} countries, but found #{actual_count} countries!"
+end
+
+puts "✅ Verification passed: All #{actual_count} countries have area assignments!"
 
 # サンプルユーザーとダミーデータの作成（開発環境のみ）
 if Rails.env.development?
@@ -215,7 +188,30 @@ else
   puts "⏭️  Skipping dummy data (production mode)"
 end
 
+# 7. 最終検証：countries.rbとcountry_areas.rbの整合性確認
+puts "📌 Verifying consistency between countries.rb and country_areas.rb..."
+
+# countries.rbから国コードを取得（DBから取得する方法に変更）
+defined_country_codes = Country.pluck(:code).to_set
+mapped_country_codes = COUNTRY_AREA_MAPPING.keys.to_set
+
+# マッピングに含まれていない国を検出
+missing_in_mapping = defined_country_codes - mapped_country_codes
+if missing_in_mapping.any?
+  missing_names = Country.where(code: missing_in_mapping.to_a).pluck(:name, :code).map { |n, c| "#{n} (#{c})" }
+  raise "❌ CRITICAL: #{missing_in_mapping.length} countries in database are missing from country_areas.rb:\n  #{missing_names.join(', ')}"
+end
+
+# マッピングに含まれているが、DBに存在しない国を検出
+extra_in_mapping = mapped_country_codes - defined_country_codes
+if extra_in_mapping.any?
+  raise "❌ CRITICAL: #{extra_in_mapping.length} countries in country_areas.rb are missing from database:\n  #{extra_in_mapping.to_a.sort.join(', ')}"
+end
+
+puts "✅ Consistency check passed: All countries are properly mapped!"
+
 puts "🎉 Seeding completed!"
 puts "📊 Total users: #{User.count}"
 puts "📊 Total posts: #{Post.count}"
 puts "📊 Total countries: #{Country.count}"
+puts "📊 Countries with area: #{Country.joins(:area).count} / #{Country.count}"
