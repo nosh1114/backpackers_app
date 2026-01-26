@@ -56,8 +56,19 @@ class Post < ApplicationRecord
   def image_urls
     return [] unless images.attached?
     images.map do |image|
-      Rails.application.routes.url_helpers.rails_blob_url(image, only_path: true)
-    end
+      begin
+        # 本番環境（S3使用）ではフルURLを返す
+        if Rails.env.production? && image.service.is_a?(ActiveStorage::Service::S3Service)
+          image.service.url(image.key, expires_in: 1.hour, disposition: :inline, filename: image.filename.to_s)
+        else
+          # 開発環境では相対パスを返す
+          Rails.application.routes.url_helpers.rails_blob_url(image, only_path: true)
+        end
+      rescue => e
+        Rails.logger.error "Failed to generate image URL: #{e.message}"
+        nil
+      end
+    end.compact
   end
 
   private

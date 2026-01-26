@@ -140,39 +140,46 @@ class ApiV1PostsController < ApplicationController
   end
 
   def create
-    post = current_user.posts.build(post_params)
-    
-    if post.save
-      render json: {
-        post: {
-          id: post.id,
-          title: post.title,
-          content: post.content,
-          category: post.category,
-          featured: post.featured || false,
-          images: post.image_urls,
-          country: {
-            id: post.country.id,
-            code: post.country.code,
-            name: post.country.name,
-            flag_emoji: post.country.flag_emoji,
-            image_url: post.country.image_url
-          },
-          user: {
-            id: post.user.id,
-            name: post.user.name,
-            avatar_url: post.user.avatar_url,
-            email: post.user.email
-          },
-          view_count: post.view_count || 0,
-          likes_count: post.likes_count || 0,
-          comments_count: post.comments.count,
-          created_at: post.created_at,
-          updated_at: post.updated_at
-        }
-      }, status: :created
-    else
-      render json: { errors: post.errors.full_messages }, status: :unprocessable_entity
+    begin
+      post = current_user.posts.build(post_params)
+      
+      if post.save
+        render json: {
+          post: {
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            category: post.category,
+            featured: post.featured || false,
+            images: post.image_urls,
+            country: post.country ? {
+              id: post.country.id,
+              code: post.country.code,
+              name: post.country.name,
+              flag_emoji: post.country.flag_emoji,
+              image_url: post.country.image_url
+            } : nil,
+            user: {
+              id: post.user.id,
+              name: post.user.name,
+              avatar_url: post.user.avatar_url,
+              email: post.user.email
+            },
+            view_count: post.view_count || 0,
+            likes_count: post.likes_count || 0,
+            comments_count: post.comments.count,
+            created_at: post.created_at,
+            updated_at: post.updated_at
+          }
+        }, status: :created
+      else
+        Rails.logger.error "Post creation failed: #{post.errors.full_messages.join(', ')}"
+        render json: { errors: post.errors.full_messages }, status: :unprocessable_entity
+      end
+    rescue => e
+      Rails.logger.error "Post creation error: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      render json: { error: '投稿の作成に失敗しました', details: e.message }, status: :internal_server_error
     end
   end
 
