@@ -84,11 +84,19 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
+  # DATABASE_URL環境変数が設定されている場合、Railsが自動的にそれを使用します
+  # NeonやRenderのPostgreSQLを使用する場合、DATABASE_URLを設定してください
+  # 例: postgresql://user:password@host:port/database
+  
+  # DATABASE_URLが設定されていない場合のフォールバック設定
   primary: &primary_production
     <<: *default
-    database: backpackers_app_production
-    username: backpackers_app
-    password: <%= ENV["BACKPACKERS_APP_DATABASE_PASSWORD"] %>
+    url: <%= ENV["DATABASE_URL"] if ENV["DATABASE_URL"].present? %>
+    database: <%= ENV.fetch("DATABASE_NAME", "backpackers_app_production") %>
+    username: <%= ENV.fetch("DATABASE_USERNAME", "backpackers_app") %>
+    password: <%= ENV.fetch("DATABASE_PASSWORD", "") %>
+    host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
+    port: <%= ENV.fetch("DATABASE_PORT", "5432") %>
   cache:
     <<: *primary_production
     database: backpackers_app_production_cache

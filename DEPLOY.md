@@ -108,6 +108,13 @@ cd backend
 cat config/master.key
 ```
 
+**⚠️ 重要: RAILS_MASTER_KEYの設定時の注意点:**
+1. Renderダッシュボードの「Environment」タブで環境変数を追加
+2. **Key**: `RAILS_MASTER_KEY`
+3. **Value**: `config/master.key`の内容を**そのまま**コピー（余分なスペースや改行を入れない）
+4. 例: `384d97754b259f6646ddef68ba11daaa`（32文字の16進数）
+5. 設定後、必ず「Save Changes」をクリック
+
 **JWT_SECRETの生成:**
 ```bash
 # ランダムな文字列を生成
@@ -319,10 +326,40 @@ Renderは自動的にSSL証明書を発行・更新します（Let's Encrypt）�
 
 ## 🐛 トラブルシューティング
 
+### RAILS_MASTER_KEYエラー（`ArgumentError: key must be 16 bytes`）
+
+**エラーメッセージ:**
+```
+ArgumentError: key must be 16 bytes
+        cipher.key = @secret
+```
+
+**原因:**
+- `RAILS_MASTER_KEY`環境変数が正しく設定されていない
+- 値に余分なスペースや改行が含まれている
+- 値が間違ってコピーされている
+
+**解決方法:**
+1. ローカルでマスターキーを確認:
+   ```bash
+   cd backend
+   cat config/master.key
+   ```
+2. Renderダッシュボードで環境変数を確認:
+   - 「Environment」タブを開く
+   - `RAILS_MASTER_KEY`が存在するか確認
+   - 値が32文字の16進数（例: `384d97754b259f6646ddef68ba11daaa`）であることを確認
+3. 環境変数を再設定:
+   - `RAILS_MASTER_KEY`を削除して再追加
+   - 値は`config/master.key`の内容を**そのまま**コピー（スペースや改行を入れない）
+   - 「Save Changes」をクリック
+4. サービスを再デプロイ
+
 ### データベース接続エラー
 
 - `DATABASE_URL` 環境変数が正しく設定されているか確認
 - データベースサービスが起動しているか確認
+- NeonのConnection Stringが正しいか確認
 
 ### CORSエラー
 
@@ -333,6 +370,7 @@ Renderは自動的にSSL証明書を発行・更新します（Let's Encrypt）�
 
 - ログを確認: Renderダッシュボードの「Logs」タブ
 - ローカルでビルドが成功するか確認
+- 環境変数がすべて正しく設定されているか確認
 
 ---
 
