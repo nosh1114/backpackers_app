@@ -30,6 +30,7 @@ import { ContactPage } from './pages/ContactPage'
 import { PrivacyPage } from './pages/PrivacyPage'
 import { TermsPage } from './pages/TermsPage'
 import { GuidelinesPage } from './pages/GuidelinesPage'
+import { NotFoundPage } from './pages/NotFoundPage'
 
 function App() {
   return (
@@ -178,6 +179,8 @@ function App() {
               <GuidelinesPage />
             </Layout>
           } />
+          {/* 404ページ - すべての未定義のルートにマッチ */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
     </AuthProvider>

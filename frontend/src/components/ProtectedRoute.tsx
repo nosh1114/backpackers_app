@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
@@ -10,6 +10,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAuthenticated, loading } = useAuth()
   const location = useLocation()
 
+  // ローディング中はローディング画面を表示
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-600 flex items-center justify-center">
@@ -21,10 +22,12 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     )
   }
 
+  // 認証されていない場合はログインページにリダイレクト
   if (!isAuthenticated) {
     // ログイン後に元のページにリダイレクトするため、現在のパスを保存
     return <Navigate to="/auth" state={{ from: location }} replace />
   }
 
+  // 認証されている場合は子コンポーネントを表示
   return <>{children}</>
 } 
