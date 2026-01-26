@@ -6,6 +6,7 @@ class ApiV1AuthController < ApplicationController
     user = User.find_by(email: email)
     
     if user&.authenticate(password)
+      # メール未確認の場合は警告を返す（ログインは許可）
       token = JwtService.generate_token(user)
       render json: {
         token: token,
@@ -15,8 +16,10 @@ class ApiV1AuthController < ApplicationController
           email: user.email,
           bio: user.bio,
           avatar_url: user.avatar_url,
-          admin: user.admin?
-        }
+          admin: user.admin?,
+          email_confirmed: user.email_confirmed?
+        },
+        warning: user.email_confirmed? ? nil : 'メールアドレスが未確認です。確認メールを送信してください。'
       }
     else
       render json: { error: 'メールアドレスまたはパスワードが正しくありません' }, status: :unauthorized
@@ -28,6 +31,14 @@ class ApiV1AuthController < ApplicationController
     user = User.new(user_params)
     
     if user.save
+      # 確認メールを送信（after_commitで送信されるが、念のため明示的に送信）
+      begin
+        user.send_confirmation_email_async
+      rescue => e
+        Rails.logger.error "Failed to send confirmation email: #{e.message}"
+        # メール送信エラーでもユーザー作成は成功させる
+      end
+      
       token = JwtService.generate_token(user)
       render json: {
         token: token,
@@ -37,8 +48,10 @@ class ApiV1AuthController < ApplicationController
           email: user.email,
           bio: user.bio,
           avatar_url: user.avatar_url,
-          admin: user.admin?
-        }
+          admin: user.admin?,
+          email_confirmed: false
+        },
+        message: '登録が完了しました。確認メールをお送りしましたので、メールアドレスを確認してください。'
       }, status: :created
     else
       render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
@@ -55,19 +68,17 @@ class ApiV1AuthController < ApplicationController
     user = User.find_by(email: email)
     
     if user
-      user.generate_password_reset_token!
-      # 本番環境ではメールを送信するが、今は開発用にトークンを返す
-      # TODO: ActionMailerでメール送信を実装
-      Rails.logger.info "Password reset token for #{email}: #{user.reset_password_token}"
+      user.send_password_reset_email!
+      Rails.logger.info "Password reset email sent to #{email}"
       
       render json: { 
-        message: 'パスワードリセットの手続きを開始しました。',
+        message: 'パスワードリセットのメールを送信しました。メールをご確認ください。',
         # 開発環境のみトークンを返す（本番では削除）
         token: Rails.env.development? ? user.reset_password_token : nil
       }
     else
       # セキュリティのため、ユーザーが存在しなくても同じメッセージを返す
-      render json: { message: 'パスワードリセットの手続きを開始しました。' }
+      render json: { message: 'パスワードリセットのメールを送信しました。メールをご確認ください。' }
     end
   end
 
@@ -111,6 +122,61 @@ class ApiV1AuthController < ApplicationController
     else
       render json: { error: user.errors.full_messages.join(', ') }, status: :unprocessable_entity
     end
+  end
+
+  # メールアドレス確認
+  def confirm_email
+    token = params[:token]
+
+    if token.blank?
+      return render json: { error: 'トークンが必要です' }, status: :bad_request
+    end
+
+    user = User.find_by(confirmation_token: token)
+
+    if user.nil?
+      return render json: { error: '無効なトークンです' }, status: :bad_request
+    end
+
+    if user.email_confirmed?
+      return render json: { message: 'メールアドレスは既に確認済みです' }
+    end
+
+    if user.confirmation_expired?
+      return render json: { error: 'トークンの有効期限が切れています。確認メールを再送してください' }, status: :bad_request
+    end
+
+    user.confirm_email!
+    render json: { message: 'メールアドレスが確認されました。ログインしてください。' }
+  end
+
+  # 確認メール再送
+  def resend_confirmation
+    email = params[:email]
+
+    if email.blank?
+      return render json: { error: 'メールアドレスを入力してください' }, status: :bad_request
+    end
+
+    user = User.find_by(email: email)
+
+    if user.nil?
+      # セキュリティのため、ユーザーが存在しなくても同じメッセージを返す
+      return render json: { message: '確認メールを再送しました。メールをご確認ください。' }
+    end
+
+    if user.email_confirmed?
+      return render json: { error: 'メールアドレスは既に確認済みです' }, status: :bad_request
+    end
+
+    user.resend_confirmation_email!
+    Rails.logger.info "Confirmation email resent to #{email}"
+    
+    render json: { 
+      message: '確認メールを再送しました。メールをご確認ください。',
+      # 開発環境のみトークンを返す（本番では削除）
+      token: Rails.env.development? ? user.confirmation_token : nil
+    }
   end
 
   private

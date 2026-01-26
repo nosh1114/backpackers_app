@@ -59,7 +59,15 @@ export function FeaturedArticlesSection({
 }: FeaturedArticlesSectionProps) {
   return (
     <section>
-      <h2 className="text-lg font-bold text-gray-800 mb-4">{title}</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-bold text-gray-800">{title}</h2>
+        <Link 
+          to="/featured"
+          className="text-xs text-blue-500 font-bold hover:text-blue-700 transition-colors"
+        >
+          一覧を見る →
+        </Link>
+      </div>
       <div className="grid grid-cols-2 gap-4">
         {articles.map((article) => (
           <Link
@@ -76,7 +84,7 @@ export function FeaturedArticlesSection({
               />
             </div>
             <div className="p-3">
-              <h3 className="text-xs font-bold text-gray-800 mb-2 line-clamp-2">{article.title}</h3>
+              <h3 className="text-sm font-bold text-gray-800 mb-2 line-clamp-2 min-h-[2.5rem]">{article.title}</h3>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-1">
                   {article.user?.avatar_url ? (
@@ -90,7 +98,7 @@ export function FeaturedArticlesSection({
                   ) : (
                     <div className="w-4 h-4 rounded-full bg-gray-300"></div>
                   )}
-                  <span className="text-[10px] text-gray-500">
+                  <span className="text-[10px] text-gray-500 truncate max-w-[60px]">
                     {article.user?.name || 'ユーザー'}
                   </span>
                 </div>

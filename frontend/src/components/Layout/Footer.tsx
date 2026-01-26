@@ -14,8 +14,8 @@ export function Footer() {
               <span className="font-bold text-xl">バックパッカーTIPS</span>
             </div>
             <p className="text-gray-300 mb-4 leading-relaxed">
-              世界中のバックパッカーが集まる情報共有プラットフォーム。
-              リアルな旅の体験と知恵を共有し、より良い旅を創造しましょう。
+              世界中のバックパッカーが集まる情報共有サイト。
+              実際の旅で役立つリアルな情報を共有しています。
             </p>
             <div className="flex items-center space-x-1 text-gray-400">
               <span>Made with</span>

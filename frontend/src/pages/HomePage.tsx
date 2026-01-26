@@ -124,20 +124,7 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen">
-      {/* Post Form Section - Always visible for logged in users */}
-      
-      {/* Country Scroll Section */}
-      {!loading && countries.length > 0 && (
-        <div className="bg-white border-b border-gray-200">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <CountryScrollSection 
-              countries={countries.slice(0, 10)} 
-              title="人気の国"
-            />
-          </div>
-        </div>
-      )}
-
+      {/* Post Form Section - Always visible for logged in users */}     
       {/* Area Section */}
       <AreaSection title="エリアで探す" />
 
@@ -160,6 +147,18 @@ export function HomePage() {
                 },
               }))}
               title="特集記事"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Country Scroll Section */}
+      {!loading && countries.length > 0 && (
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <CountryScrollSection 
+              countries={countries.slice(0, 10)} 
+              title="人気の国"
             />
           </div>
         </div>

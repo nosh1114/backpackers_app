@@ -1,0 +1,42 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景を透明に -->
+  
+  <!-- 金色の円 -->
+  <circle
+    cx="50"
+    cy="50"
+    r="48"
+    fill="none"
+    stroke="#D4AF37"
+    stroke-width="4"
+  />
+  
+  <!-- 紙飛行機 -->
+  <g transform="translate(50, 50) rotate(45)">
+    <!-- 本体（金色） -->
+    <path
+      d="M -20 -5 L 0 -25 L 20 -5 L 0 0 Z"
+      fill="#D4AF37"
+    />
+    <!-- 折り目（青） -->
+    <path
+      d="M 0 -25 L 0 0"
+      stroke="#1E40AF"
+      stroke-width="3"
+      fill="none"
+    />
+    <path
+      d="M -20 -5 L 0 0"
+      stroke="#1E40AF"
+      stroke-width="2"
+      fill="none"
+    />
+    <path
+      d="M 20 -5 L 0 0"
+      stroke="#1E40AF"
+      stroke-width="2"
+      fill="none"
+    />
+  </g>
+</svg>
+

@@ -7,7 +7,24 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:5174', 'http://127.0.0.1:5174' # Viteのデフォルトポート
+    # 開発環境
+    origins_env = [
+      'http://localhost:5173',
+      'http://127.0.0.1:5173',
+      'http://localhost:5174',
+      'http://127.0.0.1:5174'
+    ]
+    
+    # 本番環境（環境変数から取得）
+    if ENV['FRONTEND_URL'].present?
+      origins_env << ENV['FRONTEND_URL']
+    end
+    
+    # Renderの無料プランでは自動でURLが生成される
+    # 例: https://backpackers-app-frontend.onrender.com
+    # このURLは後で設定します
+    
+    origins origins_env
 
     resource '*',
       headers: :any,

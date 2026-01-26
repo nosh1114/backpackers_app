@@ -21,7 +21,8 @@ class ApiV1BookmarksController < ApplicationController
             id: post.country.id,
             code: post.country.code,
             name: post.country.name,
-            flag_emoji: post.country.flag_emoji
+            flag_emoji: post.country.flag_emoji,
+            image_url: post.country.image_url
           },
           user: {
             id: post.user.id,

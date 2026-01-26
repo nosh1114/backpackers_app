@@ -1,5 +1,5 @@
-const API_BASE_URL = 'http://localhost:3000/api/v1';
-const BACKEND_URL = 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
 
 // 相対パスの画像URLをフルURLに変換するヘルパー
 export const getFullImageUrl = (url: string | undefined): string | undefined => {
@@ -149,6 +149,7 @@ class ApiClient {
     country_id?: number;
     category?: string | string[];
     sort?: 'recent' | 'popular';
+    featured?: boolean;
   }) {
     const queryParams = new URLSearchParams();
     if (params?.page) queryParams.append('page', params.page.toString());
@@ -162,6 +163,7 @@ class ApiClient {
       }
     }
     if (params?.sort) queryParams.append('sort', params.sort);
+    if (params?.featured !== undefined) queryParams.append('featured', params.featured.toString());
 
     const endpoint = `/posts${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
     return this.request<{ 
@@ -417,6 +419,22 @@ class ApiClient {
         password, 
         password_confirmation: passwordConfirmation 
       }),
+    });
+  }
+
+  // メール確認
+  async confirmEmail(token: string) {
+    return this.request<{ message: string }>('/auth/confirm_email', {
+      method: 'POST',
+      body: JSON.stringify({ token }),
+    });
+  }
+
+  // 確認メール再送
+  async resendConfirmation(email: string) {
+    return this.request<{ message: string; token?: string }>('/auth/resend_confirmation', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
     });
   }
 

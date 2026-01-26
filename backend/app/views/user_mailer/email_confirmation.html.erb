@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .logo { font-size: 24px; font-weight: bold; color: #2563eb; }
+    .content { background: #f9fafb; padding: 30px; border-radius: 8px; }
+    .button { display: inline-block; background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+    .button:hover { background: #059669; }
+    .footer { text-align: center; margin-top: 30px; font-size: 12px; color: #6b7280; }
+    .highlight { background: #dbeafe; padding: 15px; border-radius: 6px; margin: 20px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">🎒 Backpacker Tips</div>
+    </div>
+    
+    <div class="content">
+      <h2><%= @user.name %>さん、ようこそ！</h2>
+      
+      <p>Backpacker Tipsへのご登録ありがとうございます！</p>
+      
+      <p>アカウントを有効化するために、以下のボタンをクリックしてメールアドレスを確認してください：</p>
+      
+      <p style="text-align: center;">
+        <a href="<%= @confirmation_url %>" class="button">メールアドレスを確認</a>
+      </p>
+      
+      <p>または、以下のURLをブラウザにコピー＆ペーストしてください：</p>
+      <p style="word-break: break-all; font-size: 12px; color: #6b7280;">
+        <%= @confirmation_url %>
+      </p>
+      
+      <div class="highlight">
+        <strong>🌍 Backpacker Tipsでできること：</strong>
+        <ul style="margin: 10px 0; padding-left: 20px;">
+          <li>世界中の旅行者の生の情報をチェック</li>
+          <li>あなたの旅の経験を共有</li>
+          <li>旅仲間とつながる</li>
+        </ul>
+      </div>
+      
+      <p style="font-size: 14px; color: #6b7280;">
+        ※このリンクは24時間で有効期限が切れます
+      </p>
+    </div>
+    
+    <div class="footer">
+      <p>このメールは自動送信されています。返信はできません。</p>
+      <p>&copy; <%= Time.current.year %> Backpacker Tips</p>
+    </div>
+  </div>
+</body>
+</html>

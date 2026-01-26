@@ -296,6 +296,22 @@ export function AdminPage() {
     }
   };
 
+  const handleToggleFeatured = async (postId: number, currentFeatured: boolean) => {
+    try {
+      const response = await apiClient.updateAdminPost(postId.toString(), {
+        featured: !currentFeatured
+      });
+      if (response.data) {
+        fetchPosts();
+      } else {
+        alert('特集の更新に失敗しました: ' + (response.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error toggling featured:', error);
+      alert('特集の更新に失敗しました');
+    }
+  };
+
   const handleDeleteUser = async (userId: number) => {
     if (!confirm('本当に削除しますか？')) return;
 
@@ -791,9 +807,17 @@ export function AdminPage() {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
-                            {post.featured ? (
-                              <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">特集</span>
-                            ) : '-'}
+                            <button
+                              onClick={() => handleToggleFeatured(post.id, post.featured || false)}
+                              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                                post.featured
+                                  ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+                                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                              }`}
+                              title={post.featured ? '特集を解除' : '特集に設定'}
+                            >
+                              {post.featured ? '特集' : '通常'}
+                            </button>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {formatDate(post.created_at)}
