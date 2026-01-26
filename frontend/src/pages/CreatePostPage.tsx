@@ -215,16 +215,16 @@ export function CreatePostPage() {
         break;
       }
 
-      // ファイルサイズチェック（2MB）
-      if (file.size > 2 * 1024 * 1024) {
-        errors.push(`${file.name}は2MB以下にしてください`);
+      // ファイルサイズチェック（5MB）
+      if (file.size > 5 * 1024 * 1024) {
+        errors.push(`${file.name}は5MB以下にしてください`);
         continue;
       }
 
       // ファイル形式チェック
-      const acceptableTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      const acceptableTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
       if (!acceptableTypes.includes(file.type)) {
-        errors.push(`${file.name}はサポートされていない形式です（JPEG、PNG、GIF、WebPのみ）`);
+        errors.push(`${file.name}はサポートされていない形式です（JPEG、PNG、GIF、WebP、HEICのみ）`);
         continue;
       }
 
@@ -362,7 +362,7 @@ export function CreatePostPage() {
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/jpeg,image/png,image/gif,image/webp"
+              accept="image/jpeg,image/png,image/gif,image/webp,image/heic,image/heif"
               multiple
               onChange={handleImageSelect}
               className="hidden"
@@ -400,7 +400,7 @@ export function CreatePostPage() {
               ))}
             </div>
             <p className="text-xs text-gray-500 mt-2">
-              ※ JPEG、PNG、GIF、WebP形式（1枚あたり2MBまで、最大5枚）
+              ※ JPEG、PNG、GIF、WebP形式（1枚あたり5MBまで、最大5枚）
             </p>
           </div>
 

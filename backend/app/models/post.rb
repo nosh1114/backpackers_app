@@ -11,6 +11,9 @@ class Post < ApplicationRecord
   
   # 画像のバリデーション
   validate :validate_images
+  
+  # 画像アップロード後に自動的に圧縮
+  after_commit :compress_images, on: [:create, :update]
 
   # カテゴリー定数
   CATEGORIES = %w[
@@ -100,6 +103,18 @@ class Post < ApplicationRecord
 
   private
 
+  # 画像を圧縮
+  def compress_images
+    return unless images.attached?
+
+    images.each do |image|
+      next unless image.blob.persisted?
+
+      # バックグラウンドジョブで圧縮（パフォーマンス向上のため）
+      ImageCompressionJob.perform_later(image.blob.id)
+    end
+  end
+
   # 画像のバリデーション
   def validate_images
     return unless images.attached?
@@ -110,15 +125,15 @@ class Post < ApplicationRecord
     end
 
     images.each do |image|
-      # ファイルサイズ制限（2MB）
-      if image.blob.byte_size > 2.megabytes
-        errors.add(:images, '画像は1枚あたり2MB以下にしてください')
+      # ファイルサイズ制限（5MB）
+      if image.blob.byte_size > 5.megabytes
+        errors.add(:images, '画像は1枚あたり5MB以下にしてください')
       end
 
       # ファイル形式制限
-      acceptable_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+      acceptable_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif']
       unless acceptable_types.include?(image.blob.content_type)
-        errors.add(:images, 'JPEG、PNG、GIF、WebP形式の画像のみアップロードできます')
+        errors.add(:images, 'JPEG、PNG、GIF、WebP、HEIC形式の画像のみアップロードできます')
       end
     end
   end
