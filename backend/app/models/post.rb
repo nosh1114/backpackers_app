@@ -80,11 +80,11 @@ class Post < ApplicationRecord
         if is_s3_configured && (is_s3_service || has_url_method)
           # S3のフルURLを返す（CORS設定が必要）
           # Rails 8.0.2ではcontent_typeパラメータが必要
+          # filenameパラメータは省略可能（ActiveStorageが自動的にimage.filenameを使用）
           url = image.service.url(
             image.key,
             expires_in: 1.hour,
             disposition: :inline,
-            filename: image.filename.to_s,
             content_type: image.blob.content_type
           )
           Rails.logger.info "Post#image_urls: Generated S3 URL: #{url}"
