@@ -120,9 +120,7 @@ export const SearchPage = () => {
     // 検索結果の画面に遷移する
     setIsSearched(true);
     try {
-      console.log('検索実行:', searchQuery);
       const response = await apiClient.searchPosts(searchQuery);
-      console.log('検索レスポンス:', response);
       
       if (response.error) {
         console.error('検索エラー:', response.error);
@@ -132,10 +130,8 @@ export const SearchPage = () => {
       
       if (response.data) {
         const filteredPosts = response.data.posts || [];
-        console.log('検索結果数:', filteredPosts.length);
         setPosts(filteredPosts);
       } else {
-        console.log('データなし');
         setPosts([]);
       }
     } catch (error) {

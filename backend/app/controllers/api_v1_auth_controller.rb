@@ -27,7 +27,6 @@ class ApiV1AuthController < ApplicationController
   end
 
   def signup
-    Rails.logger.debug "Signup params: #{params.inspect}"
     user = User.new(user_params)
     
     if user.save

@@ -229,9 +229,6 @@ class ApiV1PostsController < ApplicationController
   end
 
   def search
-    Rails.logger.debug "検索パラメータ: #{params.inspect}"
-    Rails.logger.debug "検索キーワード: #{params[:q]}"
-    
     # 検索クエリが空の場合は空配列を返す
     if params[:q].blank?
       render json: { posts: [] }
@@ -244,8 +241,6 @@ class ApiV1PostsController < ApplicationController
                 .where('posts.title ILIKE ? OR posts.content ILIKE ? OR countries.name ILIKE ?', 
                        search_term, search_term, search_term)
                 .order(created_at: :desc)
-    
-    Rails.logger.debug "検索結果数: #{posts.count}"
     
     render json: {
       posts: posts.map do |post|

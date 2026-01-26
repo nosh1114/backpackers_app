@@ -19,6 +19,22 @@ amazon:
   region: <%= ENV.fetch("AWS_REGION", "ap-northeast-1") %>
   bucket: <%= ENV.fetch("AWS_S3_BUCKET") { "" } %>
 
+# Cloudflare R2 configuration (S3互換)
+# 一時的に無効化（必要に応じてコメントアウトを解除）
+# 環境変数から設定を読み取ります:
+# - CLOUDFLARE_R2_ACCESS_KEY_ID
+# - CLOUDFLARE_R2_SECRET_ACCESS_KEY
+# - CLOUDFLARE_R2_BUCKET
+# - CLOUDFLARE_R2_ENDPOINT (例: https://<アカウントID>.r2.cloudflarestorage.com)
+# r2:
+#   service: S3
+#   access_key_id: <%= ENV.fetch("CLOUDFLARE_R2_ACCESS_KEY_ID") { "" } %>
+#   secret_access_key: <%= ENV.fetch("CLOUDFLARE_R2_SECRET_ACCESS_KEY") { "" } %>
+#   region: "auto"  # R2は"auto"を使用
+#   bucket: <%= ENV.fetch("CLOUDFLARE_R2_BUCKET") { "" } %>
+#   endpoint: <%= ENV.fetch("CLOUDFLARE_R2_ENDPOINT") { "" } %>
+#   force_path_style: true  # R2では必須
+
 # Remember not to checkin your GCS keyfile to a repository
 # google:
 #   service: GCS

@@ -19,8 +19,16 @@ Rails.application.configure do
   # config.asset_host = "http://assets.example.com"
 
   # Store uploaded files on AWS S3 (see config/storage.yml for options).
-  # 環境変数が設定されている場合はS3を使用、なければローカルを使用
-  config.active_storage.service = ENV["AWS_S3_BUCKET"].present? ? :amazon : :local
+  # 優先順位: S3 > ローカル
+  # R2は一時的に無効化（必要に応じてコメントアウトを解除）
+  # if ENV["CLOUDFLARE_R2_BUCKET"].present?
+  #   config.active_storage.service = :r2
+  # elsif ENV["AWS_S3_BUCKET"].present?
+  if ENV["AWS_S3_BUCKET"].present?
+    config.active_storage.service = :amazon
+  else
+    config.active_storage.service = :local
+  end
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   config.assume_ssl = true

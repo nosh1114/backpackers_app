@@ -29,14 +29,6 @@ export function AuthPage() {
     setError('')
     setSuccess('')
 
-    // デバッグログを追加
-    console.log('=== FORM DEBUG ===')
-    console.log('Name:', name)
-    console.log('Email:', email)
-    console.log('Password:', password)
-    console.log('Password Confirmation:', passwordConfirmation)
-    console.log('==================')
-
     try {
       if (mode === 'signup') {
         if (!validateSignup()) return

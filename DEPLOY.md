@@ -24,7 +24,22 @@ git push -u origin main
 
 ---
 
-## 🗄️ ステップ2: AWS S3バケット作成
+## 🗄️ ステップ2: 画像ストレージの設定
+
+**重要**: AWS S3には**「常に無料」の無料枠**があります（12ヶ月限定ではありません）。ただし、無料枠の範囲を超えると課金されます。無料枠を超えた場合、またはより大きな無料枠が必要な場合は、以下の代替案を検討してください：
+
+### オプションA: AWS S3（常に無料の無料枠あり）
+
+**無料枠（永続的・常に無料）:**
+- 5GBのストレージ
+- 20,000回のGETリクエスト/月
+- 2,000回のPUTリクエスト/月
+- **注意**: 無料枠は永続的ですが、この範囲を超えると課金されます
+
+**無料枠を超えた場合のコスト:**
+- ストレージ: $0.023/GB/月（5GB超分）
+- GETリクエスト: $0.0004/1,000リクエスト（20,000回超分）
+- PUTリクエスト: $0.005/1,000リクエスト（2,000回超分）
 
 1. AWSアカウントを作成（まだの場合）: https://aws.amazon.com/
 2. AWSコンソールにログイン
@@ -65,6 +80,170 @@ git push -u origin main
    - **アクセス権限**: 「既存のポリシーを直接アタッチ」→ `AmazonS3FullAccess` を選択
    - 作成後、**アクセスキーID**と**シークレットアクセスキー**をコピー（後で使用）
 
+### 2.1 S3のコスト制限設定（重要）
+
+無料枠を超えないように、以下の設定を行います：
+
+#### A. バケットのバージョニングを無効化
+
+1. S3バケットを開く
+2. 「プロパティ」タブを開く
+3. 「バケットのバージョニング」セクションで「無効」を選択
+4. 保存
+
+#### B. ライフサイクルポリシーで古いファイルを削除
+
+1. S3バケットを開く
+2. 「管理」タブを開く
+3. 「ライフサイクルルールを作成」をクリック
+4. 以下の設定を入力：
+
+**ルール名**: `delete-old-files`
+
+**ルールスコープ**: 「このルールをバケット内のすべてのオブジェクトに適用」
+
+**アクション**: 「現在のバージョンの有効期限」にチェック
+- **オブジェクトの有効期限（日数）**: `365`（1年経過したファイルを削除）
+
+**保存**
+
+#### C. CloudWatchでアラームを設定（無料枠接近時に通知）
+
+1. CloudWatchコンソールに移動
+2. 「アラーム」→「アラームの作成」をクリック
+3. 「メトリクスを選択」をクリック
+4. 「S3」→「バケットメトリクス」を選択
+5. バケット名を選択し、以下のメトリクスを設定：
+
+**アラーム1: ストレージサイズ**
+- **メトリクス**: `BucketSizeBytes`
+- **統計**: `Average`
+- **期間**: `1日`
+- **条件**: `>= 4GB`（無料枠5GBの80%で警告）
+- **通知**: メールアドレスを設定
+
+**アラーム2: GETリクエスト数（オプション）**
+- **メトリクス**: `GetRequests`（S3のリクエストメトリクス）
+- **統計**: `Sum`
+- **期間**: `1ヶ月`
+- **条件**: `>= 16000`（無料枠20,000回の80%で警告）
+- **通知**: メールアドレスを設定
+
+**注意**: GETリクエスト数の監視は、CloudWatchの請求メトリクスで確認することもできます。
+
+#### D. バケットポリシーでアップロードサイズを制限（追加の安全策）
+
+既にアプリ側で2MB制限がありますが、S3側でも制限を追加：
+
+1. S3バケットを開く
+2. 「アクセス許可」タブを開く
+3. 「バケットポリシー」を編集
+4. 以下のポリシーを追加（既存のポリシーに追加）：
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::backpackers-app-images/*"
+    },
+    {
+      "Sid": "DenyLargeUploads",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::backpackers-app-images/*",
+      "Condition": {
+        "NumericGreaterThan": {
+          "aws:ContentLength": "2097152"
+        }
+      }
+    }
+  ]
+}
+```
+
+**注意**: このポリシーは2MB（2,097,152バイト）を超えるアップロードを拒否します。
+
+---
+
+### オプションB: Cloudflare R2（推奨・永続的に無料枠あり）
+
+**無料枠（永続的）:**
+- 10GBのストレージ
+- 100万回の読み取り/月
+- 100万回の書き込み/月
+- **無料枠は永続的で、12ヶ月制限なし**
+
+**設定手順:**
+
+1. **Cloudflareアカウントを作成**: https://www.cloudflare.com/
+   - 無料アカウントでOK
+
+2. **R2ダッシュボードに移動**
+   - Cloudflareダッシュボード → 「R2」をクリック
+   - 「Get started」をクリック（初回のみ）
+
+3. **バケットを作成**
+   - 「Create bucket」をクリック
+   - **バケット名**: `backpackers-app-images`（一意の名前）
+   - **リージョン**: `Asia Pacific (Tokyo)` または `Asia Pacific (Singapore)`
+   - 「Create bucket」をクリック
+
+4. **APIトークンを作成**
+   - R2ダッシュボード → 「Manage R2 API Tokens」をクリック
+   - 「Create API token」をクリック
+   - **トークン名**: `backpackers-app-r2-token`
+   - **権限**: 「Object Read & Write」を選択
+   - 「Create API token」をクリック
+   - **重要**: 表示された**Access Key ID**と**Secret Access Key**をコピー（後で使用、再表示不可）
+
+5. **アカウントIDを確認**
+   - R2ダッシュボードの右上に表示されている**アカウントID**をコピー
+   - または、Cloudflareダッシュボードの右上から確認
+
+6. **バケットのパブリックアクセスを設定（画像を公開するため）**
+   - 作成したバケットを開く
+   - 「Settings」タブを開く
+   - 「Public access」セクションで「Allow Access」を有効化
+   - または、カスタムドメインを設定（推奨）
+
+**環境変数（Render）:**
+```
+CLOUDFLARE_R2_ACCESS_KEY_ID=<R2アクセスキーID（ステップ4で取得）>
+CLOUDFLARE_R2_SECRET_ACCESS_KEY=<R2シークレットアクセスキー（ステップ4で取得）>
+CLOUDFLARE_R2_BUCKET=backpackers-app-images
+CLOUDFLARE_R2_ENDPOINT=https://<アカウントID>.r2.cloudflarestorage.com
+```
+
+**エンドポイントURLの例:**
+- アカウントIDが`abc123def456`の場合: `https://abc123def456.r2.cloudflarestorage.com`
+
+**注意**: 
+- コードは既にR2に対応済みです（`config/storage.yml`と`config/environments/production.rb`を更新済み）
+- 環境変数を設定するだけで、自動的にR2が使用されます
+- S3の環境変数（`AWS_*`）は削除するか、設定しないでください
+
+---
+
+### オプションC: Renderのローカルストレージ（一時的な解決策）
+
+**メリット:**
+- 無料
+- 設定不要
+
+**デメリット:**
+- 再デプロイ時に画像が消える可能性
+- 永続的ではない
+
+**設定:**
+- 環境変数`AWS_S3_BUCKET`と`CLOUDFLARE_R2_BUCKET`を設定しない（または空にする）
+- アプリは自動的にローカルストレージを使用
+
 ---
 
 ## 🔧 ステップ3: Renderでバックエンドをデプロイ
@@ -85,17 +264,41 @@ git push -u origin main
 - **Build Command**: `bundle install && bundle exec rails db:migrate`
 - **Start Command**: `bundle exec puma -C config/puma.rb`
 
-**環境変数:**
+**環境変数（S3使用の場合）:**
 ```
 RAILS_ENV=production
 RAILS_MASTER_KEY=<Rails credentialsのマスターキー>
 DATABASE_URL=<NeonのConnection String（ステップ3.2で設定）>
-FRONTEND_URL=https://backpackers-app-frontend.onrender.com
+FRONTEND_URL=https://backpackers-app.onrender.com
 JWT_SECRET=<ランダムな文字列>
 AWS_ACCESS_KEY_ID=<AWS IAMユーザーのアクセスキーID>
 AWS_SECRET_ACCESS_KEY=<AWS IAMユーザーのシークレットアクセスキー>
 AWS_REGION=ap-northeast-1
 AWS_S3_BUCKET=backpackers-app-images
+```
+
+**環境変数（Cloudflare R2使用の場合）:**
+```
+RAILS_ENV=production
+RAILS_MASTER_KEY=<Rails credentialsのマスターキー>
+DATABASE_URL=<NeonのConnection String（ステップ3.2で設定）>
+FRONTEND_URL=https://backpackers-app.onrender.com
+JWT_SECRET=<ランダムな文字列>
+CLOUDFLARE_ACCOUNT_ID=<CloudflareアカウントID>
+CLOUDFLARE_R2_ACCESS_KEY_ID=<R2アクセスキーID>
+CLOUDFLARE_R2_SECRET_ACCESS_KEY=<R2シークレットアクセスキー>
+CLOUDFLARE_R2_BUCKET=backpackers-app-images
+CLOUDFLARE_R2_ENDPOINT=https://<アカウントID>.r2.cloudflarestorage.com
+```
+
+**環境変数（ローカルストレージ使用の場合）:**
+```
+RAILS_ENV=production
+RAILS_MASTER_KEY=<Rails credentialsのマスターキー>
+DATABASE_URL=<NeonのConnection String（ステップ3.2で設定）>
+FRONTEND_URL=https://backpackers-app.onrender.com
+JWT_SECRET=<ランダムな文字列>
+# AWS関連の環境変数は設定しない（ローカルストレージを使用）
 ```
 
 **注意**: 
@@ -326,6 +529,39 @@ Renderは自動的にSSL証明書を発行・更新します（Let's Encrypt）�
 
 ## 🐛 トラブルシューティング
 
+### CORSエラー（`Access-Control-Allow-Origin header is not present`）
+
+**エラーメッセージ:**
+```
+Access to fetch at 'https://backpackers-app-backend.onrender.com/api/v1/...' 
+from origin 'https://backpackers-app.onrender.com' has been blocked by CORS policy: 
+Response to preflight request doesn't pass access control check: 
+No 'Access-Control-Allow-Origin' header is present on the requested resource.
+```
+
+**原因:**
+- バックエンドの`FRONTEND_URL`環境変数が正しく設定されていない
+- CORS設定でフロントエンドのURLが許可されていない
+
+**解決方法:**
+1. Renderダッシュボードでバックエンドサービスを開く
+2. 「Environment」タブを開く
+3. `FRONTEND_URL`環境変数を確認または追加：
+   - Key: `FRONTEND_URL`
+   - Value: `https://backpackers-app.onrender.com`（実際のフロントエンドURL）
+4. 「Save Changes」をクリック
+5. サービスを再デプロイ
+
+**確認:**
+- フロントエンドのURLが`https://backpackers-app.onrender.com`の場合、`FRONTEND_URL`にそのURLを設定
+- カスタムドメイン（`bappa.jp`）を使用する場合、`FRONTEND_URL=https://bappa.jp`を設定
+
+**注意:**
+- CORS設定（`backend/config/initializers/cors.rb`）は、`FRONTEND_URL`環境変数と、明示的に許可されたURL（`backpackers-app.onrender.com`など）を読み込みます
+- 環境変数を設定した後、必ずサービスを再デプロイしてください
+
+---
+
 ### RAILS_MASTER_KEYエラー（`ArgumentError: key must be 16 bytes`）
 
 **エラーメッセージ:**
@@ -527,11 +763,34 @@ ArgumentError: key must be 16 bytes
 - 自動スケーリング（使用時のみ課金）
 - **90日制限なし、永続的**
 
-**AWS S3の無料枠:**
+**AWS S3の無料枠（常に無料・永続的）:**
 - 5GBのストレージ
-- 20,000回のGETリクエスト
-- 2,000回のPUTリクエスト
-- 通常の使用量では無料枠内で収まります
+- 20,000回のGETリクエスト/月
+- 2,000回のPUTリクエスト/月
+- **注意**: 無料枠は永続的ですが、この範囲を超えると課金されます（約$0.023/GB/月）
+
+**Cloudflare R2の無料枠（永続的・推奨）:**
+- 10GBのストレージ
+- 100万回の読み取り/月
+- 100万回の書き込み/月
+- **無料枠は永続的で、12ヶ月制限なし**
+
+**S3のコスト制限設定（重要）:**
+上記の「ステップ2.1 S3のコスト制限設定」を参照して、以下の設定を行ってください：
+- バケットのバージョニングを無効化
+- ライフサイクルポリシーで1年以上経過したファイルを自動削除
+- CloudWatchアラームで無料枠の80%に達したら通知
+- バケットポリシーで2MBを超えるアップロードを拒否（アプリ側でも2MB制限あり）
+
+**無料枠を超えた場合のコスト:**
+- ストレージ: $0.023/GB/月（5GB超分）
+- GETリクエスト: $0.0004/1,000リクエスト（20,000回超分）
+- PUTリクエスト: $0.005/1,000リクエスト（2,000回超分）
+
+**例**: 10GB使用、30,000回のGETリクエストの場合:
+- ストレージ: (10GB - 5GB) × $0.023 = $0.115/月
+- GETリクエスト: (30,000 - 20,000) / 1,000 × $0.0004 = $0.004/月
+- **合計: 約$0.12/月（約18円）**
 
 **収益化開始時（有料プラン - Render継続）:**
 - バックエンド: $7/月（Render）

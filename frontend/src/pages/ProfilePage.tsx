@@ -99,7 +99,6 @@ const ProfilePage: React.FC = () => {
           const response = await apiClient.getUserPosts(user.id, { page: 1, per_page: 10 });
           
           if (response.data) {
-            console.log('投稿データ:', response.data.posts);
             setUserPosts(response.data.posts);
           }
         }
@@ -123,7 +122,6 @@ const ProfilePage: React.FC = () => {
         const response = await apiClient.getBookmarks();
         
         if (response.data) {
-          console.log('ブックマークデータ:', response.data.posts);
           setBookmarkedPosts(response.data.posts);
         }
       } catch (err) {
