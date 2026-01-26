@@ -2,6 +2,7 @@ import { Heart, MessageCircle, User, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getCountryImageUrl } from '../lib/countryImages';
 import { getFullImageUrl } from '../lib/api';
+import { getAvatarUrl } from '../lib/gravatar';
 
 interface Post {
   id: number;
@@ -110,17 +111,11 @@ export function PostCard({ post }: PostCardProps) {
           {/* フッター（ユーザー情報と統計） */}
           <div className="flex items-center justify-between pt-3 border-t border-gray-100 flex-shrink-0">
             <div className="flex items-center gap-2 min-w-0 flex-shrink">
-              {post.user.avatar_url ? (
-                <img
-                  src={post.user.avatar_url}
-                  alt={post.user.name}
-                  className="w-6 h-6 rounded-full object-cover flex-shrink-0"
-                />
-              ) : (
-                <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
-                  <User className="h-3 w-3 text-gray-500" />
-                </div>
-              )}
+              <img
+                src={getAvatarUrl(post.user.avatar_url, undefined, 24)}
+                alt={post.user.name}
+                className="w-6 h-6 rounded-full object-cover flex-shrink-0"
+              />
               <span className="text-xs text-gray-600 truncate">{post.user.name}</span>
             </div>
 

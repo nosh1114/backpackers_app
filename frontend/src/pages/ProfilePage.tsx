@@ -4,6 +4,7 @@ import { apiClient, getFullImageUrl } from '../lib/api';
 import { User, Edit, Save, X, Camera, Plus, Mail, Pencil, Trash2, MoreHorizontal, Bookmark } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getCountryImageUrl } from '../lib/countryImages';
+import { getAvatarUrl } from '../lib/gravatar';
 
 interface UserProfile {
   id: string;
@@ -355,16 +356,12 @@ const ProfilePage: React.FC = () => {
             ) : (
               <div className="space-y-4">
                 <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                    {profile?.avatar_url ? (
-                      <img
-                        src={profile.avatar_url}
-                        alt={profile.name}
-                        className="w-16 h-16 rounded-full object-cover"
-                      />
-                    ) : (
-                      <User className="h-8 w-8 text-blue-600" />
-                    )}
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center overflow-hidden">
+                    <img
+                      src={getAvatarUrl(profile?.avatar_url, profile?.email, 64)}
+                      alt={profile?.name || 'Profile'}
+                      className="w-16 h-16 rounded-full object-cover"
+                    />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">{profile?.name}</h3>

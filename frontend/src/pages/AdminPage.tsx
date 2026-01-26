@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Search, Edit, Trash2, Users, FileText, Eye, Mail, Check, Clock, ChevronDown, X, MapPin, Luggage, Smartphone, Plane, UtensilsCrossed, Bed, Zap } from 'lucide-react';
 import { apiClient } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
+import { getAvatarUrl } from '../lib/gravatar';
 
 // カテゴリのアイコンマッピング
 const categoryIconMap: Record<string, React.ReactNode> = {
@@ -943,19 +944,11 @@ export function AdminPage() {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{adminUser.id}</td>
                           <td className="px-6 py-4 text-sm">
                             <div className="flex items-center gap-3">
-                              {adminUser.avatar_url ? (
-                                <img
-                                  src={adminUser.avatar_url}
-                                  alt={adminUser.name}
-                                  className="w-8 h-8 rounded-full object-cover"
-                                />
-                              ) : (
-                                <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                                  <span className="text-sm font-medium text-gray-600">
-                                    {adminUser.name.charAt(0)}
-                                  </span>
-                                </div>
-                              )}
+                              <img
+                                src={getAvatarUrl(adminUser.avatar_url, adminUser.email, 32)}
+                                alt={adminUser.name}
+                                className="w-8 h-8 rounded-full object-cover"
+                              />
                               <span className="font-medium text-gray-900">{adminUser.name}</span>
                             </div>
                           </td>

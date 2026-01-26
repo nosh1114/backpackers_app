@@ -4,6 +4,7 @@ import { User, Edit, Plus } from 'lucide-react';
 import { PostCard } from '../components/PostCard';
 import { apiClient } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
+import { getAvatarUrl } from '../lib/gravatar';
 
 interface UserData {
   id: number;
@@ -156,17 +157,11 @@ export function UserPage() {
           <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
             {/* Avatar */}
             <div className="flex-shrink-0">
-              {user.avatar_url ? (
-                <img
-                  src={user.avatar_url}
-                  alt={user.name}
-                  className="w-24 h-24 rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center">
-                  <User className="h-12 w-12 text-gray-500" />
-                </div>
-              )}
+              <img
+                src={getAvatarUrl(user.avatar_url, user.email, 96)}
+                alt={user.name}
+                className="w-24 h-24 rounded-full object-cover"
+              />
             </div>
 
             {/* User Info */}

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { User, LogOut, Menu, X, Search, Globe, FolderOpen, PenSquare, Shield } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
+import { getAvatarUrl } from '../../lib/gravatar'
 
 const Header: React.FC = () => {
   const { user, signOut, isAuthenticated } = useAuth()
@@ -48,20 +49,13 @@ const Header: React.FC = () => {
             {/* プロフィール画像 - スマホ・PC両方で表示 */}
             <Link to="/profile" className="flex items-center">
               {isAuthenticated && user ? (
-                user.avatar_url ? (
-                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-300 overflow-hidden border-2 border-white shadow-sm">
-                    <img
-                      src={user.avatar_url}
-                      alt={user.name || 'profile'}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-8 h-8 md:w-10 md:h-10 bg-gray-300 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
-                    {/* 今後userのアイコンを表示する */}
-                    <User className="h-4 w-4 md:h-5 md:w-5 text-gray-600" />
-                  </div>
-                )
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-300 overflow-hidden border-2 border-white shadow-sm">
+                  <img
+                    src={getAvatarUrl(user.avatar_url, user.email, 40)}
+                    alt={user.name || 'profile'}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               ) : (
                 <div className="w-8 h-8 md:w-10 md:h-10 bg-gray-300 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
                   <User className="h-4 w-4 md:h-5 md:w-5 text-gray-600" />

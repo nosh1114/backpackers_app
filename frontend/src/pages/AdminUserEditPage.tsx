@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Save, Loader2, Edit, Eye, Calendar, FileText } from 'lucide-react';
 import { apiClient } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
+import { getAvatarUrl } from '../lib/gravatar';
 
 interface UserPost {
   id: number;
@@ -161,19 +162,11 @@ export function AdminUserEditPage() {
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div className="flex items-center gap-4">
-              {targetUser.avatar_url ? (
-                <img
-                  src={targetUser.avatar_url}
-                  alt={targetUser.name}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                  <span className="text-lg font-medium text-gray-600">
-                    {targetUser.name.charAt(0)}
-                  </span>
-                </div>
-              )}
+              <img
+                src={getAvatarUrl(targetUser.avatar_url, targetUser.email, 48)}
+                alt={targetUser.name}
+                className="w-12 h-12 rounded-full object-cover"
+              />
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">ユーザーを編集</h1>
                 <p className="text-gray-600 text-sm mt-1">

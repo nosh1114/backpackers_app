@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import { getCountryImageUrl } from '../lib/countryImages';
 import { getFullImageUrl } from '../lib/api';
+import { getAvatarUrl } from '../lib/gravatar';
 
 interface SearchResultCardProps {
   post: {
@@ -73,13 +74,13 @@ export function SearchResultCard({ post }: SearchResultCardProps) {
           </div>
           <div className="flex justify-between items-center mt-2">
             <div className="flex items-center gap-1.5">
-              {post.user.avatar_url ? (
-                <div className="w-5 h-5 rounded-full bg-gray-200 overflow-hidden">
-                  <img src={post.user.avatar_url} alt={post.user.name} className="w-full h-full object-cover" />
-                </div>
-              ) : (
-                <div className="w-5 h-5 rounded-full bg-gray-200"></div>
-              )}
+              <div className="w-5 h-5 rounded-full bg-gray-200 overflow-hidden">
+                <img 
+                  src={getAvatarUrl(post.user.avatar_url, undefined, 20)} 
+                  alt={post.user.name} 
+                  className="w-full h-full object-cover" 
+                />
+              </div>
               <span className="text-xs text-gray-500">{post.user.name}</span>
             </div>
             <div className="flex items-center gap-1 text-gray-400">

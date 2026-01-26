@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import { getCountryImageUrl } from '../lib/countryImages';
+import { getAvatarUrl } from '../lib/gravatar';
 
 interface Article {
   id: number;
@@ -87,17 +88,13 @@ export function FeaturedArticlesSection({
               <h3 className="text-sm font-bold text-gray-800 mb-2 line-clamp-2 min-h-[2.5rem]">{article.title}</h3>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-1">
-                  {article.user?.avatar_url ? (
-                    <div className="w-4 h-4 rounded-full bg-gray-300 overflow-hidden">
-                      <img 
-                        src={article.user.avatar_url} 
-                        className="w-full h-full object-cover rounded-full" 
-                        alt={article.user.name || 'user'} 
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                  )}
+                  <div className="w-4 h-4 rounded-full bg-gray-300 overflow-hidden">
+                    <img 
+                      src={getAvatarUrl(article.user?.avatar_url, undefined, 16)} 
+                      className="w-full h-full object-cover rounded-full" 
+                      alt={article.user?.name || 'user'} 
+                    />
+                  </div>
                   <span className="text-[10px] text-gray-500 truncate max-w-[60px]">
                     {article.user?.name || 'ユーザー'}
                   </span>
