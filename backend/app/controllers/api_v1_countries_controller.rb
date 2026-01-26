@@ -19,9 +19,31 @@ class ApiV1CountriesController < ApplicationController
   end
 
   def stats
-    countries = Country.ordered.includes(posts: :user).map do |country|
-      posts = country.posts
-      recent_posts = posts.order(created_at: :desc).limit(2)
+    # N+1クエリを避けるため、事前に統計情報を取得
+    country_stats = Post.group(:country_id)
+                        .select('country_id, COUNT(*) as tip_count, MAX(created_at) as last_post_date')
+                        .index_by(&:country_id)
+    
+    # すべての投稿を一度に取得して、Ruby側でグループ化（N+1を完全に回避）
+    # 各カ国ごとに最新2件のみを保持
+    all_posts = Post.includes(:user)
+                     .order(created_at: :desc)
+                     .to_a
+    
+    recent_posts_by_country = {}
+    all_posts.each do |post|
+      country_id = post.country_id
+      next unless country_id
+      
+      recent_posts_by_country[country_id] ||= []
+      if recent_posts_by_country[country_id].length < 2
+        recent_posts_by_country[country_id] << post
+      end
+    end
+
+    countries = Country.ordered.map do |country|
+      stats = country_stats[country.id]
+      recent_posts = recent_posts_by_country[country.id] || []
       
       {
         id: country.id,
@@ -29,8 +51,8 @@ class ApiV1CountriesController < ApplicationController
         name: country.name,
         flag_emoji: country.flag_emoji,
         image_url: country.image_url || DEFAULT_IMAGE_URL,
-        tip_count: posts.count,
-        last_post_date: posts.maximum(:created_at) || country.created_at,
+        tip_count: stats&.tip_count.to_i,
+        last_post_date: stats&.last_post_date || country.created_at,
         recent_tips: recent_posts.map do |post|
           {
             id: post.id,

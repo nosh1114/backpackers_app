@@ -2,7 +2,7 @@ class ApiV1PostsController < ApplicationController
   before_action :authenticate_user, except: [:index, :show, :search, :categories]
 
   def index
-    posts = Post.includes(:user, :country, :comments, :likes)
+    posts = Post.includes(:user, :country, :likes, :comments)
     posts = posts.where(country_id: params[:country_id]) if params[:country_id].present?
     
     # 特集記事フィルター
@@ -69,8 +69,8 @@ class ApiV1PostsController < ApplicationController
             email: post.user.email
           },
           view_count: post.view_count || 0,
-          likes_count: post.likes_count || post.likes.count,
-          comments_count: post.comments.count,
+          likes_count: post.likes_count || post.likes.load.size,
+          comments_count: post.comments.load.size,
           created_at: post.created_at,
           updated_at: post.updated_at
         }
