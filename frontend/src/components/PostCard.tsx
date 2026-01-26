@@ -47,14 +47,27 @@ export function PostCard({ post }: PostCardProps) {
   const getPostImageUrl = (): string => {
     // 1. 投稿に添付された画像があればそれを使う
     if (post.images && post.images.length > 0 && post.images[0]) {
-      return getFullImageUrl(post.images[0]) || post.images[0];
+      const imageUrl = getFullImageUrl(post.images[0]);
+      if (imageUrl) return imageUrl;
     }
     // 2. 旧imgフィールド（互換性のため）
-    if (post.img) return post.img;
+    if (post.img) {
+      const imageUrl = getFullImageUrl(post.img);
+      if (imageUrl) return imageUrl;
+      return post.img; // フルURLの場合はそのまま返す
+    }
     // 3. 国の画像（DBから）
-    if (post.country?.image_url) return post.country.image_url;
+    if (post.country?.image_url) {
+      const imageUrl = getFullImageUrl(post.country.image_url);
+      if (imageUrl) return imageUrl;
+      return post.country.image_url; // フルURLの場合はそのまま返す
+    }
     // 4. 国名からフォールバック
-    return getCountryImageUrl(post.country.name, 400);
+    if (post.country?.name) {
+      return getCountryImageUrl(post.country.name, 400);
+    }
+    // 5. デフォルト画像
+    return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80';
   };
 
   // ビュー数をフォーマット

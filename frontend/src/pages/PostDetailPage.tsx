@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Heart, Eye, MessageCircle, Send, MoreHorizontal, Pencil, Trash2, Loader2, X, Check, Bookmark } from 'lucide-react';
-import { getCountryBackgroundUrl } from '../lib/countryImages';
+import { getCountryBackgroundUrl, getCountryImageUrl } from '../lib/countryImages';
 import { apiClient, getFullImageUrl } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 import { getAvatarUrl } from '../lib/gravatar';
@@ -24,12 +24,14 @@ interface Post {
   content: string;
   category?: string;
   featured?: boolean;
+  img?: string;
   images?: string[];
   country: {
     id: number;
     code: string;
     name: string;
     flag_emoji: string;
+    image_url?: string;
   };
   user: {
     id: number;
@@ -144,6 +146,8 @@ export const PostDetailPage = () => {
       const response = await apiClient.getPost(postId!, countView);
       
       if (response.data) {
+        console.log('PostDetailPage: API response:', response.data);
+        console.log('PostDetailPage: post.images:', response.data.post.images);
         setPost(response.data.post);
         setLikesCount(response.data.post.likes_count || 0);
       }
@@ -378,8 +382,25 @@ export const PostDetailPage = () => {
   // 投稿の画像（添付画像があればそれを使用、なければ国の代表画像）
   const images = post 
     ? (post.images && post.images.length > 0 
-        ? post.images.map((img: string) => getFullImageUrl(img) || img)
-        : [getCountryBackgroundUrl(post.country.name)])
+        ? (() => {
+            console.log('PostDetailPage: post.images exists, length:', post.images.length);
+            console.log('PostDetailPage: post.images:', post.images);
+            const processed = post.images
+              .map((img: string) => {
+                const fullUrl = getFullImageUrl(img);
+                console.log('PostDetailPage: Processing image:', img, '->', fullUrl);
+                return fullUrl || img;
+              })
+              .filter((img: string | undefined): img is string => !!img && img.trim() !== '');
+            console.log('PostDetailPage: Processed images:', processed);
+            return processed;
+          })()
+        : (() => {
+            console.log('PostDetailPage: No images attached, using country fallback');
+            return post.country?.name 
+              ? [getCountryBackgroundUrl(post.country.name)]
+              : ['https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80'];
+          })())
     : [];
   const displayedComments = showAllComments ? comments : comments.slice(0, 5);
 
@@ -739,6 +760,33 @@ export const PostDetailPage = () => {
               <h3 className="text-lg font-bold text-gray-900 mb-4">関連記事</h3>
             <div className="grid grid-cols-2 gap-4">
                 {relatedPosts.map((related) => {
+                  // 関連記事の画像を取得（投稿画像がなければ国の代表画像）
+                  const getRelatedPostImageUrl = (): string => {
+                    // 1. 投稿に添付された画像があればそれを使う
+                    if (related.images && related.images.length > 0 && related.images[0]) {
+                      const imageUrl = getFullImageUrl(related.images[0]);
+                      if (imageUrl) return imageUrl;
+                    }
+                    // 2. 旧imgフィールド（互換性のため）
+                    if (related.img) {
+                      const imageUrl = getFullImageUrl(related.img);
+                      if (imageUrl) return imageUrl;
+                      return related.img; // フルURLの場合はそのまま返す
+                    }
+                    // 3. 国の画像（DBから）
+                    if (related.country?.image_url) {
+                      const imageUrl = getFullImageUrl(related.country.image_url);
+                      if (imageUrl) return imageUrl;
+                      return related.country.image_url; // フルURLの場合はそのまま返す
+                    }
+                    // 4. 国名からフォールバック
+                    if (related.country?.name) {
+                      return getCountryImageUrl(related.country.name, 400);
+                    }
+                    // 5. デフォルト画像
+                    return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80';
+                  };
+
                   return (
                 <Link 
                   key={related.id} 
@@ -746,7 +794,7 @@ export const PostDetailPage = () => {
                   className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow"
                 >
                   <div className="h-32 overflow-hidden">
-                        <img src={getCountryBackgroundUrl(related.country.name)} alt={related.title} className="w-full h-full object-cover" />
+                        <img src={getRelatedPostImageUrl()} alt={related.title} className="w-full h-full object-cover" />
                   </div>
                   <div className="p-3">
                     <h4 className="text-xs font-bold text-gray-800 mb-2 line-clamp-2">{related.title}</h4>

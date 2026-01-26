@@ -29,13 +29,22 @@ interface SearchResultCardProps {
 const getPostImageUrl = (post: SearchResultCardProps['post']): string => {
   // 1. 記事に添付された画像があればそれを使う
   if (post.images && post.images.length > 0 && post.images[0]) {
-    // 相対パスの場合はフルURLに変換
-    return getFullImageUrl(post.images[0]) || post.images[0];
+    const imageUrl = getFullImageUrl(post.images[0]);
+    if (imageUrl) return imageUrl;
+    // getFullImageUrlがundefinedを返した場合、元のURLがフルURLの可能性がある
+    if (post.images[0].startsWith('http://') || post.images[0].startsWith('https://')) {
+      return post.images[0];
+    }
   }
   
   // 2. 国の画像（DBから）を使う
   if (post.country?.image_url) {
-    return post.country.image_url;
+    const imageUrl = getFullImageUrl(post.country.image_url);
+    if (imageUrl) return imageUrl;
+    // フルURLの場合はそのまま返す
+    if (post.country.image_url.startsWith('http://') || post.country.image_url.startsWith('https://')) {
+      return post.country.image_url;
+    }
   }
   
   // 3. 国名からフォールバック画像を取得

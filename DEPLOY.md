@@ -73,6 +73,33 @@ git push -u origin main
 }
 ```
 
+**CORS設定（画像表示に必須）:**
+バケット作成後、以下のCORS設定を追加：
+
+1. S3バケットを開く
+2. 「アクセス許可」タブを開く
+3. 「Cross-origin resource sharing (CORS)」セクションで「編集」をクリック
+4. 以下の設定を追加：
+
+```json
+[
+  {
+    "AllowedHeaders": ["*"],
+    "AllowedMethods": ["GET", "HEAD"],
+    "AllowedOrigins": [
+      "https://backpackers-app.onrender.com",
+      "https://backpackers-app-frontend.onrender.com",
+      "https://bappa.jp",
+      "https://www.bappa.jp",
+      "http://localhost:5173",
+      "http://localhost:5174"
+    ],
+    "ExposeHeaders": [],
+    "MaxAgeSeconds": 3000
+  }
+]
+```
+
 6. IAMユーザーを作成（S3アクセス用）:
    - IAMコンソール → 「ユーザー」→「ユーザーを追加」
    - **ユーザー名**: `backpackers-app-s3-user`

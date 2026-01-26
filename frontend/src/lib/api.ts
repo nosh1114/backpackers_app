@@ -2,14 +2,19 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
 
 // 相対パスの画像URLをフルURLに変換するヘルパー
-export const getFullImageUrl = (url: string | undefined): string | undefined => {
-  if (!url) return undefined;
+export const getFullImageUrl = (url: string | undefined | null): string | undefined => {
+  // undefined、null、空文字列の場合はundefinedを返す
+  if (!url || url.trim() === '') return undefined;
+  
   // すでにフルURL（httpで始まる）の場合はそのまま返す
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url;
   }
+  
   // 相対パスの場合はバックエンドURLを付加
-  return `${BACKEND_URL}${url}`;
+  // 相対パスが/で始まらない場合は/を追加
+  const path = url.startsWith('/') ? url : `/${url}`;
+  return `${BACKEND_URL}${path}`;
 };
 
 interface ApiResponse<T> {

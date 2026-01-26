@@ -53,22 +53,52 @@ class Post < ApplicationRecord
   end
 
   # 画像URLを取得
+  # 環境に応じて適切なURLを返す:
+  # - 本番環境（S3使用）: S3のフルURLを返す（例: https://bucket.s3.amazonaws.com/...）
+  # - 本番環境（ローカルストレージ）: フルURLを返す（例: https://backpackers-app-backend.onrender.com/rails/active_storage/...）
+  # - 開発環境（ローカルストレージ）: 相対パスを返す（例: /rails/active_storage/...）
+  #   フロントエンドのgetFullImageUrlが相対パスをフルURLに変換する
   def image_urls
     return [] unless images.attached?
-    images.map do |image|
+    
+    Rails.logger.debug "Post#image_urls: images.attached? = #{images.attached?}, images.count = #{images.count}"
+    
+    urls = images.map do |image|
       begin
-        # 本番環境（S3使用）ではフルURLを返す
-        if Rails.env.production? && image.service.is_a?(ActiveStorage::Service::S3Service)
-          image.service.url(image.key, expires_in: 1.hour, disposition: :inline, filename: image.filename.to_s)
+        # S3を使用している場合（本番環境でAWS_S3_BUCKETが設定されている場合）
+        # image.service.class.nameでチェック（ActiveStorage::Service::S3Serviceがrequire: falseのため）
+        service_class_name = image.service.class.name
+        if service_class_name == 'ActiveStorage::Service::S3Service' || service_class_name.include?('S3Service')
+          # S3のフルURLを返す（CORS設定が必要）
+          url = image.service.url(image.key, expires_in: 1.hour, disposition: :inline, filename: image.filename.to_s)
+          Rails.logger.debug "Post#image_urls: Generated S3 URL: #{url}"
+          url
         else
-          # 開発環境では相対パスを返す
-          Rails.application.routes.url_helpers.rails_blob_url(image, only_path: true)
+          # ローカルストレージの場合
+          if Rails.env.production?
+            # 本番環境ではフルURLを返す
+            # BACKEND_URL環境変数が設定されている場合はそれを使用、なければFRONTEND_URLから推測
+            backend_url = ENV['BACKEND_URL'] || ENV['FRONTEND_URL']&.gsub(/\/$/, '') || 'https://backpackers-app-backend.onrender.com'
+            relative_path = Rails.application.routes.url_helpers.rails_blob_url(image, only_path: true)
+            url = "#{backend_url}#{relative_path}"
+            Rails.logger.debug "Post#image_urls: Generated production local URL: #{url}"
+            url
+          else
+            # 開発環境では相対パスを返す（フロントエンドのgetFullImageUrlがVITE_BACKEND_URLを付加してフルURLに変換）
+            url = Rails.application.routes.url_helpers.rails_blob_url(image, only_path: true)
+            Rails.logger.debug "Post#image_urls: Generated development local URL: #{url}"
+            url
+          end
         end
       rescue => e
         Rails.logger.error "Failed to generate image URL: #{e.message}"
+        Rails.logger.error e.backtrace.join("\n")
         nil
       end
     end.compact
+    
+    Rails.logger.debug "Post#image_urls: Returning #{urls.length} URLs: #{urls.inspect}"
+    urls
   end
 
   private
